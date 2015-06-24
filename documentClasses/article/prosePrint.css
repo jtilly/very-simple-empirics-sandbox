@@ -1,0 +1,104 @@
+<!--prosePrint-->
+<style type="text/css">
+
+/* The sheet for styling prose mode's print view closely resembles that for its screen view in that it is primarily concerned with font sizes. However, most of the font sizes are expressed in points rather than in ems. The other important differences between the two styles are
+\begin{itemize}
+\item Pagination rules ensure that some content appears on separate physical sheets when printing.
+\item The view has no running footer.\footnote{This is a problem if one wishes to satisfy some orginizations' classification directives for printed materials. Creating a footer for each page therefore is on our agenda for future improvements.}
+\item The view omits the table of contents.\footnote{Although web-deliverd articles frequently have tables of contents as navigation aids, their printed versions normally omit them.}
+\end{itemize}
+
+We begin as before with the choice of what to display. */
+div#frontMatter, div#bodyPages, div#footnotes{display:block;}
+div#tableOfContents, div#articleFooter, div#slideFrame, div#titleSlide, div#onlyCode{display:none;}
+div.excludefromtext, div.slideTitle, div.handoutFooter{display: none;}
+
+/* \subsection{Body Pages}
+
+We begin as before with the |bodyPages| division's default font size. We set this to the familiar LaTeX standard of 12pt.*/
+
+div#bodyPages{font-size:12pt;}
+/* The fontstack for displaying code looks too large in print also, so we reduce it by 20 percent everywhere. */
+div#bodyPages .texttt, div#bodyPages .displaycode, div#bodyPages .code, div#bodyPages .workingCode{font-size:0.8em;}
+
+/* The standard method for formatting hyperlinks in print given by Castro (fill in citation here) is to make the font color black and to place each one's URL after it in italics. We follow this advise by making all hyperlinks black. Hyperlinks referencing external content that display text other than the target URL have the |coveredURL| class. We print the underlying URL only after these.*/
+
+a{color: black;}
+a.coveredURL:after{content: " (" attr(href) ")"; font-style: italic;}
+
+/* In the |browse| view, the section and subsection headers were 66 percent and 33 percent larger than the accompanying text. We think that the print version looks better with these factors consierably increased to 100 percent and 50 percent. We make the same changes to the two special section headings preceeding any reference section(s) and the appendices.*/
+div#bodyPages h3.section, div#bodyPages div#bibliographyLabel, div#bodyPages div#appendixLabel{font-size: 24pt;}
+div#bodyPages h4.subsection{font-size: 18pt;}
+/* 
+To ensure that the browser does not reduce the size of the headers delimiting lower sectioning units, we set their font-size explicitly.
+*/
+div#bodyPages h5, div#bodyPages h6{font-size:12pt;}
+
+/* The ``special'' headers have the same content as in the screen view. */
+
+div#bodyPages span#bibliographyLabelAnchor:before{content: "References";}
+div#bodyPages span#appendixLabelAnchor:before{content: "Appendices";}
+
+/* Figures, Tables, and Boxes are centered in the article's printed version with no border and no text to either side of them. We use the CSS2 standard |page-break-inside:avoid| to tell the browser to avoid splitting their content across physical pages. Unfortunately, only Opera supports this rule. */
+div#bodyPages div.figure, div#bodyPages div.table, div#bodyPages div.box{display:block; width: 94%; 
+	      margin-left: 3%; margin-right: 3%; margin-bottom: 2%; padding: 3%;
+	      float: none; clear: none; page-break-inside:avoid;}
+
+/* We wish to start the first appendix and the list of references onto new pages. For this, we apply |page-break-before:always| to the |appendixLabel| and |bibliographyLabel| divisions. */
+div#bodyPages div#appendixLabel, div#bodyPages div#bibliographyLabel{page-break-before:always;}
+
+/* The list of references itself is allowed to span the entire page. Each entry has a hanging indent. */
+ul.bibliography {display: block; width: 94%;}
+ul.bibliography li{list-style: none; padding-bottom: 2pt; padding-left: 12pt; text-indent: -12pt; text-align: justify;}
+
+/* \subsection{The Front Matter} */
+
+/* The |frontMatter| serves as the article's title page. For this, we let it span the entire width of the paper and force a page break after its completion. We set its standard font size to be the same as that of ordinary text. */
+
+div#frontMatter{display:block; float: none; 
+		width: 94%; margin-left: auto; margin-right: auto; margin-bottom: 2%; padding: 3%;
+		page-break-after:always;
+		font-size:12pt;}
+div#frontMatter .texttt, div#frontMatter .displaycode, div#frontMatter .code, div#frontMatter .workingCode{font-size:0.8em;}
+
+/* We make the document's title the same size as a section heading. */
+div#frontMatter p#documentTitle{display:block;font-size: 36pt; text-align: center;}
+div#frontMatter p#documentTitle sup{font-size:20pt;}
+
+/* The font for the list of authors is the same as that for subsection headings. */
+div#frontMatter p#authorList{font-size:24pt; text-align: center;}
+div#frontMatter span.author{margin-left: 24pt; margin-right: 24pt;}
+div#frontMatter span.author sup{font-size:17pt;}
+
+/* As in the browse view, the |unionBugs| paragraph gets centered. We set each union bug's height to about four lines of ordinary text. */
+div#frontMatter p#unionBugs {display:block; text-align:center;}
+div#frontMatter p#unionBugs img.unionBug {height:86pt;}
+
+/* The date follows the union bugs. We set its fontsize equal to that for authors and center it. */
+div#frontMatter p#documentDate{display:block; font-size:24pt; text-align:center;}
+
+/* The style rule for the abstract is exactly the same as its counterpart from the browse view. */
+div#frontMatter p#documentAbstract{display:block; margin-left: 10%; margin-right: 10%; text-align:justify;}
+
+/* Last comes the table of thanks entries. Unlike in the browse view, we leave its font size the same as that of ordinary text. Its symbol entries get the same vertical alignment though.*/
+div#frontMatter td.thanks{text-align: justify;}
+div#frontMatter td.thankssymbol{vertical-align:top;} 
+
+/* The last rules for the |frontMatter| hide the same divisions that are hidden in browse view. */
+div#frontMatter p#doi, div#frontMatter p#documentCopyright, div#frontMatter p#classification{display:none;}
+
+/* \subsection{The Footnotes} 
+We style the footnotes division as a separate page of endnotes. Its header has the same size as a section heading.*/
+
+div#footnotes{page-break-before:always;}
+
+div#footnotesLabel{font-size: 24pt;}
+div#footnotes span#footnotesLabelAnchor:before{content: "Endnotes";}
+
+div#footnotes hr{display:none;} /* Remove the horizontal rule that separates the footnotes from the body pages in the browse view. */
+div#footnotes .texttt, div#footnotes .displaycode, div#footnotes .code, div#footnotes .workingCode{font-size:0.8em;}
+
+/* This concludes the style sheet for the article's printable version. */
+</style>
+
+

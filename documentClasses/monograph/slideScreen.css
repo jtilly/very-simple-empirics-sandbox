@@ -1,0 +1,122 @@
+<!--slideScreen-->
+<style type="text/css">
+/* For the screen view of slide mode, all of the top-level divisions but |slideFrame| are hidden. The Javascript places a clone of each slide within this frame on demand.*/
+div#frontMatter, div#bodyPages{display:none;}
+div#chapterFrame{display:none;} 
+div#slideFrame {display:block;}
+
+/* Recall that the Javascript function |createHandoutFooters()| places a slide-specific footer within each slide for printing. We must also hide these. */
+div.handoutFooter{display:none;}
+/* Since the screen view of slide mode is for projection on a screen, we set its default font size somewhat larger than that for the article mode. As always, we apply an adjustment to reduce the font size for code.*/
+
+div#slideFrame{font-size:2em;}
+div#slideFrame img.LargeLaTeX{display:inline;}
+div#slideFrame .texttt, div#slideFrame .code, div#slideFrame .displayCode, div#slideFrame .workingCode{font-size:0.8em;}
+/* The |slideFrame| has two child divisions, |slideHeader| and |slideFooter|. The slide header contains navigation controls while the slide footer contains the same information as the |articleFooter| plus a |slideCounter| division that keeps track of the slide show's progress. The header and footer are absolutely positioned. Their white background and positive |z-index| ensure that they cover any slide material behind them. We make them 1.5em and 4em high.*/
+div#slideHeader {position:absolute; top: 0; left: 0; 
+		width: 100%; height: 1.5em; padding-top: 0.25em; 
+		background: #FFF; z-index: 1;}
+div#slideFooter {position:fixed; top: auto; bottom: 0; left: 0; 
+		width: 100%; height: 4em; 
+		background: #FFF; z-index: 1;}
+/*
+\subsection{The Slide Header}
+
+The |slideHeader| contains a single direct decendant, the |slideNavigationBar| division. The Javascript code populates this with a copy of the same list used for the |tableOfContents| in article mode. We style this here so that it displays the section titles centered and in line with a font 25 percent larger than that for the slide's text. When a user hovers over one of the titles/links, its background changes to grey. Section numbering and all information about lower sectioning units is hidden. */
+
+div#slideFrame div#slideNavigationBar{position:relative; height:1.5em; overflow:hidden; font-size:1.25em; text-align:center;}
+div#slideFrame div#slideNavigationBar ul{display:inline; height:1.5em;white-space:nowrap;}
+div#slideFrame div#slideNavigationBar ul#frontMatterSlideNavigationList{font-size:0.4em;} /* Make the navigation list for the frontmatter chapter a little smaller. */
+div#slideFrame div#slideNavigationBar li{display:inline; padding-left:0.5em; padding-right:0.5em;}
+div#slideFrame div#slideNavigationBar li a:hover{background: #CCCCCC;}
+
+div#slideFrame div#slideNavigationBar span.sectionCapitalLetter,
+	       div#slideFrame div#slideNavigationBar span.sectionNumber,
+	       div#slideFrame div#slideNavigationBar span.subsectionNumber,
+	       div#slideFrame div#slideNavigationBar span.subsubsectionNumber{display:none;}
+div#slideFrame div#slideNavigationBar > ul > li > ul{display:none;}
+
+
+ul#frontMatterSlideNavigationList li+li.chapter span.chapterNumber{display:inline;margin-right:0.25em}
+ul#frontMatterSlideNavigationList li+li.chapter span.chapterNumber:before{content:"Chapter "}
+ul#frontMatterSlideNavigationList li+li.chapter span.chapterNumber:after{content:":"}
+
+ul#frontMatterSlideNavigationList li+li.chapterAppendix span.chapterCapitalLetter{display:inline;margin-right:0.25em}
+ul#frontMatterSlideNavigationList li+li.chapterAppendix span.chapterCapitalLetter:before{content:"Appendix "}
+ul#frontMatterSlideNavigationList li+li.chapterAppendix span.chapterCapitalLetter:after{content:":"}
+
+div#slideFrame span.chapter span.chapterNumber{display:inline;margin-right:0.25em;}
+div#slideFrame span.chapter span.chapterNumber:before{content:"Chapter ";}
+div#slideFrame span.chapter span.chapterNumber:after{content:":";}
+
+div#slideFrame span.chapterAppendix span.chapterCapitalLetter{display:inline;margin-right:0.25em}
+div#slideFrame span.chapterAppendix span.chapterCapitalLetter:before{content:"Appendix ";}
+div#slideFrame span.chapterAppendix span.chapterCapitalLetter:after{content:":";}
+
+/* Of course, nothing guarantees that the section headings will all fit into the space provided by |slideNavigationBar|. In this case, the default display would wrap the extra section headings onto additional lines. In the current context, this could cover slide material in unpredictable ways. We disable this default by forcing the section headings to remain on a single line. to accomplish this, we set |slideNavigationBar|'s height explicitly (so that it cannot grow) and specify that any overflow is to be hidden. */
+div#slideFrame div#slideNavigationBar{height:1.5em; overflow:hidden;}
+/* Although the navigation bar cannot now obscure the slide content, the original problem of inaccessible material remains unsolved. We address this displaying navigation control arrows which allow the user to scroll through the section headings. The Javascript function |processResizeWindow()| takes care of this. When the window becomes to small to fit the section headings, it places left and right arrows into the spans |slideNavigationLeftControlAnchor| and |slideNavigationRightControlAnchor|. We affix these to the extreme left and right sides of the |navigationBar|.  Their white background and |z-index| values ensure that they cover any section headings behind them. */
+
+span#slideNavigationRightControlAnchor{position:fixed; top:0; right:0; z-index:2; background-color:white;max-height:1.3em;}
+span#slideNavigationLeftControlAnchor{position:fixed; top: 0; left:0; z-index:2; background-color:white;max-height:1.3em;}
+/*
+\subsection{The Slide Footer}
+The slide footer's content is meant to be explanatory, not dominant. Therefore, we lower the default font size by 20 percent. */
+
+div#slideFrame div#slideFooter {font-size:0.8em;}
+/*
+The |slideFooter| division has one novel child element, the |slideCounter|. We position this in the center of the footer and towards its bottom. 
+*/
+div#slideFrame div#slideFooter div#slideCounter {position: absolute; width: 10%; left: 45%; bottom: 0.2em;text-align:center;}
+/* The remaining style rules for the footer resmeble those for the |articleFooter|. */
+div#slideFooterBibliographicInformation{position:absolute; left:2%; width:98%;text-align: left;}
+span#slideFooterTitle{font-style: italic;}
+span#slideFooterTitle sup{display:none;}
+span#slideFooterTitle{margin-left:1em; margin-right:1em;}
+
+span#slideFooterAuthorList{margin-left: 1em; margin-right: 1em;}
+span#slideFooterAuthorList span.author{margin-left:0.5em; margin-right: 0.5em;}
+span#slideFooterAuthorList sup{display:none;}
+span#slideFooterDate{font-style: italic;}
+
+div#slideFooterUnionBugs img.unionBug{width:4em;height:auto;}
+div#slideFooterUnionBugs{position:absolute; right:2%; bottom:0.2em;}
+
+div#slideFooterClassification{position:absolute; left:2%; bottom:0.2em; width: 40%;}
+div#slideFooterClassification{font-style:oblique; font-size:0.75em;text-align:justify;}
+/*
+\subsection{The Slide Content}
+
+We apply three rules to the content of the slides. The first styles any the output of any |\backslash{slidetitle}| command. If the slide has such a title, it will be the slide's first child and will be in a |slideTitle| division. We stretch this across the entire page and move the title itself off to the left so that it is not too dominant. */
+
+div.slideTitle{font-style:italic; font-size:1.27em; text-align:left;}
+div.slideTitle{display:block;left: 2%; width: 98%;z-index: 2;}
+/*
+The second rule pads the |slide| division so that
+\begin{itemize}
+\item its content does not abut either side, and
+\item the slide header will not obscure any of its content.
+\end{itemize}
+*/
+div.slide{padding-top: 2em; padding-left: 4%; padding-right: 4%;}
+
+/* Imported images that are appropriately sized for the article view look a little small in the slide itself. The third rule fixes this by setting image widths to 70 percent of the slide's width. */
+
+div#slideFrame img.image, div#slideFrame img.centeredimage{width:70%;} 
+/* The title slide made by |createTitleSlide()| requires several rules for styling the title, authors, union bugs, and date. */
+p.titleSlideTitle{font-size: 1.75em; text-align: left;margin-top:-2%} /* Set the size of the title, center it, and move it down a bit. */
+p.titleSlideTitle img.hugeLaTeX{display:inline;} /*Choose the size of any math images in the title. */
+p.titleSlideTitle sup{display:none;} /*Suppress any |thanks| symbol in the title.*/
+ 
+p.titleSlideAuthorList{font-size: 1.5em; text-align: right; margin-top: -1%} /* Set the size of the list of authors, center it, and move it up a bit. */
+p.titleSlideAuthorList span.author{margin-left: 1em; margin-right: 1em;} /* Space the authors out a bit. */
+p.titleSlideAuthorList sup{display:none;} /*Suppress any |thanks| symbols in the list of authors. */
+
+p.titleSlideCoverArt{text-align:center; margin-top:-3%;}
+p.titleSlideCoverArt img{border-style:solid;border-color:#08C;}
+
+
+/* The final rule suppresses the content of any |omitfromslide| division. */
+div.omitfromslide{display:none;}
+
+</style>

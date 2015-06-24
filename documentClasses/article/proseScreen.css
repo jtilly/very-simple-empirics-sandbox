@@ -1,0 +1,165 @@
+<!--proseScreen-->
+<style type="text/css">
+/* First, make the ``big-picture'' decisions of what to display and what to hide. At the top level, we display the |frontMatter|, the |bodyPages|, the |footnotes|, and the |tableOfContents| and |articleFooter| created by Javascript, and we hide the |slideFrame|, the |titleSlide|, and the |onlyCode| divisions.*/
+div#frontMatter, div#bodyPages, div.footnotes, div#tableOfContents, div#articleFooter{display:block;}
+div#slideFrame, div#titleSlide, div#onlyCode{display:none;}
+/* Beneath the top level, there are three division classes within |bodyPages| which we wish to hide. The first two come from the |compp| commands |\backslash{excludefromtext}| and |\backslash{slideTitle}|. Javascript creates the last one for the print view in slide mode. */
+div.excludefromtext, div.slideTitle, div.handoutFooter{display: none;}
+/* With the basic content choices made, we turn now to the actual styling of the top-level divisions' content. */
+
+/* \subsection{Body Page}
+In the browse view, the article fills one giant scrollable page. Within this, we place the article's primary content in the |bodyPages| division.  We need  
+\begin{itemize}
+\item to choose font sizes for the text, code, and sectioning headings; and
+\item to specify the placement and styling of figures, tables, and boxes.
+\end{itemize}
+We start with the default font size, which we set to 1.5em.*/
+div#bodyPages{font-size:1.5em;}
+/* The fontstacks set in |common.css| for inline code, displayed code, and working code look too large relative to the surrounding text. To fix this, we bring its font size down by 20 percent. */
+ul.tree > li > span.listitemcontent, div#bodyPages .texttt, div#bodyPages .displaycode, div#bodyPages .code, div#bodyPages .workingCode{font-size:0.8em;}
+/* Undo the font shrinkage for any child of a |ul.tree> li > span.listitemcontent| element. Otherwise the above rule compounds.*/
+ul.tree > li > span.listitemcontent > *{font-size: 1.25em;}
+/* The sectioning headers are the other elements requiring sizing. Those for sections and subsections are 66 percent and 33 percent larger than the text, while those for lower sectioning units share the text's font size.*/
+div#bodyPages h3{font-size: 1.66em;}
+div#bodyPages h4{font-size: 1.33em;}
+div#bodyPages h5{font-size: 1.0em;}
+
+/* The two other ``special'' section headings that preceed any reference section(s) and the appendices also require size choices. We make these the same size as an ordinary section. We also set their contents here.*/
+div#bodyPages div.bibliographyLabel{font-size:1.66em;}
+div#bodyPages span.bibliographyLabelAnchor:before{content: "References";}
+
+/* We float figures and tables to the right and give them a grey border to visually delineate them as separate ``pages.'' */
+div.figure, div.table {display:block; min-width: 40%; max-width: 60%; margin-left: 3%; margin-right: 5%; margin-bottom: 2%; margin-top: 2%; float: right; clear: right; border-style: solid; border-color: #CCCCCC; padding: 3%;}
+/* The final rules for the |bodyPages| format any bibliographic lists. In principle, there can be more than one of these, but in practice each article will have one after its text concludes. The bibliography entries do not look good if they are allowed to stretch across the entire screen, so we limit it to the screen's left seventyfive percent. We also give each bibliography item a hanging-indent using a negative |text-indent|. */
+
+ul.bibliography {display: block; width: 75%; margin-top:1.5em; padding-left:3em;}
+ul.bibliography li{list-style: none; 
+		padding-bottom: 0.25em; padding-left: 1em; 
+		text-indent: -1em;text-align: justify;}
+
+/* Finally, we add a large bottom margin to the |bodyPages| div itself so that the document footer covers none of its content. */
+div#bodyPages{margin-bottom: 10em;}
+
+/* \subsection{Boxes} */
+/* As of this point, the only styling boxes require is the same large bottom margin as given to |bodyPages|. */
+div.box{margin-bottom:10em;font-size:1.25em;}
+
+/* \subection{Appendices} */
+/* Give the same margin to any appendix, */
+/* \subsection{Front Matter} 
+Our goal is to style the |frontMatter| so that it resembles the title page of a standard LaTeX article. Towards this end, We display this as a block and (by default) shift it to the left-hand side. Just as with figures and tables, a light grey border marks it off. We set its default font size to the same as that for |bodyPages|, 1.5em.*/
+div#frontMatter{display:block; float: left; width: 45%; margin-left: 5%; margin-right: 3%; margin-bottom: 2%;  padding: 3%;border-style: solid; border-color: #CCCCCC;font-size:1.5em;}
+div#frontMatter img.smallLaTeX{display:inline;}
+/* Just as with the |bodyPages| division, we reduce the size of code in the front matter.*/
+div#frontMatter .texttt, div#frontMatter .displaycode, div#frontMatter .code, div#frontMatter .workingCode{font-size:0.8em;}
+/* The |frontMatter|'s first child is a paragraph containing the document's title. Obviously, we wish to center this and to give it the largest typeface in the document. We set that to be about twice the size of ordinary text. We also increase the size of footnote markers in the title.*/
+div#frontMatter p#documentTitle{display: block; font-size: 3em; text-align: center;}
+div#frontMatter p#documentTitle sup{font-size:0.6em;} 
+
+/* Below the title comes the list of authors. We choose a fontsize approximately the square root of the title's. However, we leave the markers for the footnotes at the same size. The margin around each author spaces them out. */
+
+div#frontMatter p#authorList{display:block; margin-top:1em; font-size:1.77em; text-align: center;}
+div#frontMatter p#authorList span.author{margin-left: 1em; margin-right: 1em;}
+div#frontMatter p#authorList span.author sup{font-size:0.6em;}
+
+/* Next come any union bugs in the |unionBugs| paragraph. We center them.*/
+div#frontMatter p#unionBugs {display:block; text-align:center;}
+
+/* The date follows the union bugs. We set its fontsize equal to that for authors and center it. */
+div#frontMatter p#documentDate{display:block; font-size:1.77em; text-align:center;}
+
+/* After the date comes the abstract. Recall that the Javascript function |beautifyFrontMatter()| places the word ``Abstract'' alone in a paragraph with centered text just above the abstract. The division-level rule for |font-size| sets this and the abstract itself to 1.5em. The abstract's only additional styling gives it comfortable margins and jusitifies its text. */
+div#frontMatter p#documentAbstract{display:block; margin-left: 10%; margin-right: 10%; text-align:justify;}
+
+/* A horizontal rule placed by |beautifyFrontMatter()| appears just below the abstract. The only remaining information to be displayed on our ``title page'' is the table of thanks entries. Since these are supposed to resemble footnotes, we set their font size to 1em, below that of the abstract. The |footnotesizeLaTeX| images look good with this choice. The final rule ensures that the thanks symbols remain aligned with the first lines of their corresponding entries when the entries get ``crunched'' onto multiple lines. */
+div#frontMatter td.thanks{font-size:1em; text-align: justify;}
+div#frontMatter td.thanks img.footnotesizeLaTeX{display:inline;}
+div#frontMatter td.thankssymbol{vertical-align:top;} /* Align the thanks symbol with the first line of information. */
+
+/* The |frontMatter|'s final style rules hide other information that either appears elsewhere in prose mode's screen view or might be relevant for other document classes.*/
+div#frontMatter p#doi, div#frontMatter p#documentCopyright, div#frontMatter p#classification {display:none;}
+
+/* \subsection{The Table of Contents} */
+/* In prose mode's screen view, the table of contents built by |createTableOfContents()| appears immediately to the right of the front matter. Like the front matter, a grey boundary delimits it as a separate ``page.'' We give it the same default font size as the |frontMatter|.*/
+
+div#tableOfContents {display:block; float: right; width: 30%; 
+		    margin-left: 3%; margin-right: 5%; margin-bottom: 2%;  padding: 1%; 
+		    border-style: solid; border-color: #CCCCCC;
+		    font-size:1.5em;}
+/* The next rule reduces the size of the font for code in the table of contents, as has already been done for the front matter and the body pages. Since this can contain neither displayed code nor working code, we omit rules to format those cases.*/
+div#frontMatter .texttt, div#tableOfContents .code{font-size:0.8em;}
+/*The table of contents is made up of a master list of the article's sections, each of which contains a list of their subsections. All of the list formatting from the common style sheet applies to these, but they require some additional formatting.
+\begin{itemize}
+\item We turn off the list's default bullets (letting the section enumerators do their work); */
+div#tableOfContents li{list-style-type: none;}
+/*\item place some space between the sections' numbers and their names;*/
+div#tableOfContents span.sectionName{margin-left: 0.5em}
+/* remove ordinary list items' bottom padding; */
+div#tableOfContents li{padding-bottom:0em;}
+/*\item visually distinguish between the entries corresponding to the regular text and those from the appendices. For this final task we
+	\begin{itemize}
+	\item Prefix each section-level appendix entry with ``Appendix'' and follow each of their enumerators with ``:''. */
+div#tableOfContents li.sectionAppendix > a > span.sectionCapitalLetter:before{content:"Appendix ";}
+div#tableOfContents li.sectionAppendix > a > span.sectionCapitalLetter:after{content:":";}
+/*	\item Put a gray horizontal line above the first appendix entry and put some space between the appendix entries and regular entries. */
+div#tableOfContents li.section+li.sectionAppendix{margin-top:1em;padding-top:0.5em;
+		border-top-style:solid;border-top-color:#CCCCCC;border-top-width:medium;}
+/*      \item Give appendix entries an oblique font. */
+div#tableOfContents li.sectionAppendix, 
+		    div#tableOfContents li.subsectionAppendix, 
+		    div#tableOfContents li.subsubsectionAppendix{font-style:oblique;}
+/*
+	\end{itemize}	    
+\end{itemize}
+*/
+
+/* \subsection{The Article's Footer} 
+
+Javascript creates the |articleFooter| division to display some of the information that would ordinarily go into a printed page's header and footer. We intend this to be always visible while browsing, so we position it absolutely at the bottom of the page as the reader/user scrolls. We make it about 3.5 lines high and stretch it across the page. The white background and  |z-index| greater than the default value of zero ensure that no part of the article below it shows through. The padding at the top separates the top line of text in the header from the last displayed line from the |bodyPages|.*/
+
+div#articleFooter {position:fixed; top:auto; bottom:0; left:0; 
+		  width: 100%;  height: 4em; 
+		  padding-top:1em; background: #FFF; z-index: 1;}
+
+/*We make the footer's default font size 20 percent smaller than that for the |bodyPages|.*/
+div#articleFooter{font-size:1.3em;}
+
+/* The |articleFooter|'s child |articleFooterBibliographicInformation| contains spans with the document title, authors, and date. We position this in the footer's upper left corner and let it horizontally extend 3/4 of the page. */
+
+div#articleFooterBibliographicInformation{position:absolute; left:2%; width:73%;}
+/* The |articleFooterTitle| contains the article's title. We set this in italics and supress any superscripted reference to the table of thanks entries. */
+
+div#articleFooter span#articleFooterTitle{font-style: italic;}
+div#articleFooter span#articleFooterTitle sup{display:none;}
+
+/* The |footerAuthorList| span contains the list of authors copied from the front matter. For the |articleFooter|, we give the |authorList| a 1em margin on either side to separate it from the title and date. We also cut the margins separating the authors from each other to 0.5em. As with the title, we suppress any superscripted reference to the table of thanks entries. */
+
+span#articleFooterAuthorList{margin-left: 1em; margin-right: 1em;}
+span#articleFooterAuthorList span.author{margin-left:0.5em; margin-right: 0.5em;}
+span#articleFooterAuthorList sup{display:none;} 
+
+/*We set the date in italics but otherwise leave it unchanged. */
+span#articleFooterDate{font-style: italic;}
+
+/* The |articleFooter|'s child |articleFooterClassification| division contains the contents of the |\backslash{classification}| command. We place this in the footer's lower-left corner. Since it is the virtual definition of ``the fine print'', we give it an oblique font and reduce its font size by 25 percent. */
+
+div#articleFooterClassification{position:absolute; left:2%; bottom:0.2em; width: 35%;}
+div#articleFooterClassification{font-style:oblique;font-size:0.75em;}
+
+/* The |articleFooterUnionBugs| division completes the |articleFooter|. It contains the front matter's union bugs. We position it to the extreme right. */
+div#articleFooterUnionBugs{position:absolute; right:2%; bottom:0.2em;}
+div#articleFooterUnionBugs img{width: auto; height: 4em;}
+/* \subsection{The Footnotes} 
+The final top-level division requiring styling is the |footnotes|. We set its font-size to be the same as that for the text preceed it with ``Footnotes''.*/
+div.footnotes div.footnotesLabel{font-size:1.66em;}
+div.footnotes span.footnotesLabelAnchor:before{content: "Footnotes";}
+div.footnotes table{margin-left:3em; margin-top:1.5em;}
+
+/* Just as with the table of thanks entries, we vertically align the each footnote number to the top of its row. */
+div.footnotes td.footnoteNumber{vertical-align:top;}
+
+/* subsection{Miscellany} */
+/* The |content of any |omitfromprose| divisions should be hidden. */
+div.omitfromprose{display:none;}
+
+</style>

@@ -1,0 +1,13 @@
+<!--codePrint-->
+<style type="text/css">
+/* The style sheet for the printable code listing is even simpler, because it does not have a footer. */
+div#frontMatter, div#tableOfContents, 
+		 div#bodyPages, div#footnotes, 
+		 div#slideFrame, div#titleSlide, 
+		 div#articleFooter{display:none;}
+div#onlyCode{display:block;}
+/* The font-size is set to 12pt.*/
+div#onlyCode{font-size:12pt;}
+/* The sheet's final rule starts each file with a new page when printing. */
+table.workingCode{page-break-after:always;}
+</style>

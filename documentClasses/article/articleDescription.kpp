@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\title{The |article| Document Class}
+\author{Jeffrey R. Campbell}
+\author{Ryan Peters}
+\unionbug{../../logo.jpg}
+
+
+\section{Introduction}
+
+A literate program created with the |article| document class offers the reader six distinct ways of viewing its content.
+\begin{enumerate}
+\item The full text can be viewed within the web browser's viewport.
+\item The full text can be printed from the browser.
+\item Slides created with the |slide| environment can be presented to an audience from the web brower's viewport.
+\item The same slides can be printed from the browser to form a handout.
+\item The code can be viewed by itself within the web browser's viewport.
+\item The code can printed from the browser.
+\end{enumerate}
+
+These six options are organized for the user into three \textit{modes} - prose, slide, and code -  and two \textit{views} - screen and print. Keyboard commands toggle between themodes and views.
+
+
+\section{The Javascript}
+The Javascript code that implements the article documentclass accomplishes nearly all of the tasks that make the document ``dynamic.'' These include
+	\begin{itemize}
+	\item Creating a table of contents with anchors to the corresponding section of the text.
+	\item Creating footers with bibliographic and information classification information.
+	\item Switching between article, code, and slide modes.
+	\item Switching between screen and print views.
+	\item Creating a title slide and a frame for the display of slides.
+	\item Redirecting references within the text for slide mode so that they link to the appropriate slide.
+	\end{itemize}
+
+With such a list, it should be no surprise that the Javascript code itself is quite long. Its execution can be usefully divided into two stages, \emph{document preparation} and \emph{document management}. In the first step, information in the document is parsed and used to assemble new document elements. For example, the document's sectioning structure is used to create a |ul| tag containing the table of contents. The second step processes \emph{most} of the reader's inputs during the reading process. We say ``most'' because the style sheets described in the next several sections also provide some functionality in this area.
+
+We begin the Javascript code's presentation  with the declarations of global variables and three basic event handlers, |window.onload|, |document.onkeydown|, and |window.onresize|. The functions called by the first correspond to the document preparation stage, while the last two implement document management. We organize the code's presentation by proceeding sequentially through these three event handlers and the functions they call.
+
+Since we include the javascript directly into the document's |.html| file, it comes embedded in a |script| tag. Its first lines define the three basic event handlers.
+\input{article.js}
+
+\section{The Common Style Sheet}
+
+The common style sheet implements styling of the ``low-level'' elements of an article. The mode-view specific style sheets mostly make ``higher-level'' choices that preserve the look-and-feel of the article while changing its content emphasis or targeted display. 
+
+\input[allcode]{common.css}
+
+\section{Screen View of Prose}
+   \input[allcode]{proseScreen.css}
+
+\section{Printable View of Prose}
+	\input{prosePrint.css}
