@@ -16,7 +16,7 @@ used in \cite{acty2014}.
 In this software package, we present \textsc{Matlab}  
 programs that implement the estimation algorithm introduced in 
 \cite{acty2014}. The Matlab code can be downloaded from 
-\url{https://github.com/jtilly/acty/archive/master.zip}{here}.
+\url{http://jtilly.io/acty/sandbox.zip}{here}.
    
 This package introduces \textsc{Matlab} code that  
 exemplifies how our econometric model can be implemented in practice. We  
