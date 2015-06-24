@@ -21,6 +21,7 @@ install:
 script:
 - cd ${TRAVIS_BUILD_DIR}
 - perl ~/komments/kpp.pl documentation.m
+- zip sandbox.zip *.m *.html
 after_failure:
 - "./travis-tool.sh dump_logs"
 after_success:
@@ -32,7 +33,8 @@ after_success:
 - git checkout gh-pages
 - git pull origin gh-pages
 - mv ${TRAVIS_BUILD_DIR}/documentation.m.html .
-- git add *.html
+- mv ${TRAVIS_BUILD_DIR}/sandbox.zip .
+- git add *.html *.zip
 - git commit -m "automatic travis update"
 - git push origin gh-pages
 notifications:
