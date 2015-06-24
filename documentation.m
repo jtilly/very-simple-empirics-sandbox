@@ -14,8 +14,8 @@ used in \cite{acty2014}.
 \end{abstract}   
    
 In this software package, we present \textsc{Matlab}  
-programs that implement the estimation algorithm introduced in \cite{acty2014}.  
-The paper is available \url{acty1.pdf}{here}. 
+programs that implement the estimation algorithm introduced in \url{acty1.pdf}{\cite{acty2014}}.  
+The Matlab code can be downloaded from \url{https://github.com/jtilly/acty/archive/master.zip}{here}.
    
 This package introduces \textsc{Matlab} code that  
 exemplifies how our econometric model can be implemented in practice. We  
