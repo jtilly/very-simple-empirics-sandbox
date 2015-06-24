@@ -15,14 +15,12 @@ used in \cite{acty2014}.
    
 In this software package, we present \textsc{Matlab}  
 programs that implement the estimation algorithm introduced in 
-\cite{acty2014}. The Matlab code can be downloaded from 
-\url{http://jtilly.io/acty/sandbox.zip}{here}.
-   
-This package introduces \textsc{Matlab} code that  
-exemplifies how our econometric model can be implemented in practice. We  
-show how to simulate a market level panel data set from our dynamic game.  
-We then implement the nested fixed point (NFXP) algorithm and estimate the  
-structural parameters from the simulated data. This code  
+\cite{acty2014}. The whole package can be downloaded from 
+\url{http://jtilly.io/acty/acty-sandbox.zip}{here}. This package introduces 
+\textsc{Matlab} code that   exemplifies how our econometric model can be 
+implemented in practice. We  show how to simulate a market level panel data 
+set from our dynamic game.  We then implement the nested fixed point (NFXP) 
+algorithm and estimate the  structural parameters from the simulated data. This code  
 is intended to serve as a platform for replication, experimentation, and  
 teaching. The code presented here is fully functional yet it focuses on the  
 essentials and demonstrates the ease with which our methodology can be  
