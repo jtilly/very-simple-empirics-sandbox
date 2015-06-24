@@ -6,13 +6,13 @@ env:
   global:
   - secure: U7+j2IUs5l07ZjoL2rfwFgHW9JDO1YucyDHzrfI3c0Rn4Jxk3B0o3stjCncaSOB6MdDT2ISXxNwkxWco6IEyu6dsQXQMkHEmDZo8qT6Za0/XrZmmiSXtPjRSV9Pw5lvCrq539IsCsueVr5ZQNUGAeUJnYm1dOssj1e10wS3Q2fYoqqsLt4p57t3aPvnW9cIKIrTITP+CWmMphCkXoncr25oLrqTz4VlUhepeIrbNS5d0dXcWMB3ffdOz1ftg7sqs6AI8+Q6xCXQ9KS6GpP82k9th2EuZxB23BKlZvJKHQSmovmP8IJBkWFM3uKaqpkiIu5So+WKVEJ116qZtokZqEz9gMUzPE1X8eHS2c3VGmWlCy+4WwVEplBM8A5F8BaWedPAND6TRDdFOcPQrarfZ4b1b8TLUV1i1c6spnji+k78nijqQWa60Zre3hlGvu1Du7vB4+G7PUB/0pplcw+VnsceYrKU+if5wLoLUh+OCjnvwZrYRpiXfv28jL78SX+Qx52qvgFDI2SD779ZMUEusyexA5FI2hNeKXATtmzON+LU8KoPUpJnyb0zga+eCmE6naHgOFo3IhAih9BOnezFiQWGWLJWahgHDIWnroC3m5vqQTEQ5MSN7loWi7xvwXtswwVRqbpLoYs0tW8uWYsivDi8oKmNKbSkA2JlLbawlygc=
 sudo: required
-before_install:
+install:
 - cd ~
 - git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git komments
 - cd komments
 - git checkout komments
 - git pull origin komments
-install:
+script:
 - cd ${TRAVIS_BUILD_DIR}
 - perl ~/komments/kpp.pl documentation.m
 after_failure:
