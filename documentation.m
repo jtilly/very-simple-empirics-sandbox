@@ -16,19 +16,15 @@ used in \cite{acty2014}.
 In this software package, we present \textsc{Matlab}  
 programs that implement the estimation algorithm introduced in 
 \cite{acty2014}. The whole package can be downloaded from 
-\url{http://jtilly.io/acty/acty-sandbox.zip}{here}. This package introduces 
-\textsc{Matlab} code that   exemplifies how our econometric model can be 
-implemented in practice. We  show how to simulate a market level panel data 
-set from our dynamic game.  We then implement the nested fixed point (NFXP) 
-algorithm and estimate the  structural parameters from the simulated data. This code  
-is intended to serve as a platform for replication, experimentation, and  
-teaching. The code presented here is fully functional yet it focuses on the  
-essentials and demonstrates the ease with which our methodology can be  
-applied in practice. The code can be executed in \textsc{Matlab} by running  
-the script \textbf{example.m}.  
-   
-\section{Sandbox}   
-  
+\url{http://jtilly.io/acty/acty-sandbox.zip}{here}. 
+We  show how to simulate a market level panel data set from our dynamic game.  
+We then implement the nested fixed point (NFXP) algorithm and estimate the  
+structural parameters from the simulated data. This code  is intended to 
+serve as a platform for replication, experimentation, and  teaching. The code 
+presented here is fully functional yet it focuses on the  essentials and 
+demonstrates the ease with which our methodology can be  applied in practice. 
+The code can be executed in \textsc{Matlab} by running the script \textbf{example.m}.  
+     
 This documentation is structured as follows. After discussing a collection 
 of recurring variable structures, we first introduce  
 the algorithm that computes the equilibrium value functions. This algorithm  
@@ -42,13 +38,13 @@ to generate data from the model. This is implemented by the function
 \textbf{example.m}, where we create a synthetic sample and estimate the  
 underlying primitives.  
  
-\subsection{Preliminaries}   
+\section{Preliminaries}   
  
 Throughout the Matlab code, the structures |Settings|, |Param|, and |Data| 
 play an important role. Since these structures show up in most if not all 
 functions to come, we introduce them here for further reference. 
  
-\subsubsection{|Settings|} 
+\subsection{|Settings|} 
  
 The structure |Settings| contains parameters that govern the execution of  
 the \textsc{Matlab}. All elements in  
@@ -117,7 +113,7 @@ which will be defined below.
  
 \end{itemize} 
  
-\subsubsection{|Param|} 
+\subsection{|Param|} 
  
 The structure |Param| contains the primitives of the model. 
  
@@ -161,7 +157,7 @@ during the Monte Carlo simulation.
  
 \end{itemize} 
  
-\subsubsection{|Data|} 
+\subsection{|Data|} 
  
 The structure |Data| contains the following elements. 
  
@@ -183,7 +179,7 @@ Monte Carlo simulation.
 \end{itemize} 
  
    
-\subsection{Equilibrium computation}   
+\section{Equilibrium computation}   
   
 This subsection explains how \textbf{valueFunctionIteration.m} can be used  
 to compute the unique Markov-perfect equilibrium of our dynamic game. The  
@@ -374,7 +370,7 @@ equation (\ref{vS_2}) in \textsc{Matlab}.
    
 \input[2..end]{valueFunctionIteration.m}   
    
-\subsection{Likelihood computation}   
+\section{Likelihood computation}   
   
 Before turning to the computation of the likelihood, we first review the  
 likelihood construction described in the paper. Suppose we have data for  
@@ -487,24 +483,24 @@ computed using the outer-product-of-the-gradient method. Since the FIML is
 asymptotically efficient, while the estimators in the first two steps are  
 not, we only discuss the computation of standard errors in the third step.  
    
-\subsubsection{\textbf{likelihoodStep1.m} - Estimating $\theta_C = \left(   
+\subsection{\textbf{likelihoodStep1.m} - Estimating $\theta_C = \left(   
 \mu, \sigma \right)$}    
   
   
 \input[2..end]{likelihoodStep1.m}   
    
-\subsubsection{\textbf{likelihoodStep2.m} - Estimating $\left(   
+\subsection{\textbf{likelihoodStep2.m} - Estimating $\left(   
 \theta_P,\theta_W \right) = \left( (k, \varphi), \omega \right)$}   
    
 This function computes the second step likelihood function.   
    
 \input[2..end]{likelihoodStep2.m}   
    
-\subsubsection{\textbf{likelihoodStep3.m} - Full Information Likelihood}   
+\subsection{\textbf{likelihoodStep3.m} - Full Information Likelihood}   
   
 \input[2..end]{likelihoodStep3.m}   
    
-\subsection{Data generating process}    
+\section{Data generating process}    
    
 Here we describe how to generate a synthetic sample with firms and  
 consumers for $\check r $ markets and $\check t $ time periods. The data  
@@ -524,22 +520,22 @@ synthetic data set.
    
 \end{itemize}   
    
-\subsubsection{\textbf{randomFirms.m}}   
+\subsection{\textbf{randomFirms.m}}   
   
 \input[2..end]{randomFirms.m}   
   
-\subsubsection{\textbf{mixingProbabilities.m}}   
+\subsection{\textbf{mixingProbabilities.m}}   
   
 \input[2..end]{mixingProbabilities.m}   
   
-\subsubsection{\textbf{dgp.m}}    
+\subsection{\textbf{dgp.m}}    
   
 \input[2..end]{dgp.m}    
    
 The next section discusses how the three likelihood functions and the data  
 generating function are used in the NFXP procedure.  
    
-\subsection{The example script: \textbf{example.m}}   
+\section{The example script: \textbf{example.m}}   
 \input[1..end]{example.m}   
    
    
