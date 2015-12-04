@@ -9,16 +9,16 @@
 % likelihood contributions |likeCont|, and the covariance matrix  
 % |covariance|. 
 
-function [ ll, se, likeCont, covariance] = likelihoodStep3( data , Settings, Param, estimates)
+function [ ll, se, likeCont, covariance] = likelihoodStep3(data, Settings, Param, estimates)
 
 % Create the transition probability matrix based on the estimates for |mu| 
 % and |sigma| which are stored as the last two elements in |estimates|. 
 % Then retrieve the vectors of likelihood contributions from the first two 
 % steps and compute the negative log likelihood function of the third step: 
 
-Param = markov(Param, Settings, estimates(end-1), estimates(end));
-[~,likeCont1] = likelihoodStep1( data , Settings, estimates(end-1:end));
-[~,likeCont2] = likelihoodStep2( data , Settings, Param, estimates(1:end-2));
+Param = markov(Param, Settings, estimates(end - 1), estimates(end));
+[~, likeCont1] = likelihoodStep1(data, Settings, estimates(end - 1:end));
+[~, likeCont2] = likelihoodStep2(data, Settings, Param, estimates(1:end - 2));
 ll = -sum(log(likeCont1) + log(likeCont2));
 
 % This completes the construction of the full information negative log 
@@ -57,7 +57,7 @@ epsilon = eye(length(estimates)) * Settings.fdStep;
 likeCont=likeCont1 .* likeCont2;
 
 % Now, given the likelihood contribution $\ell(\theta) \equiv 
-% \ell(\theta_j,\theta_{-j})$  we compute for each  parameter $\theta_j$ 
+% \ell(\theta_j, \theta_{-j})$  we compute for each  parameter $\theta_j$ 
 % the positively and negatively perturbed likelihood contributions 
 % $\ell(\theta_j+\epsilon,\theta_{-j})$ and 
 % $\ell(\theta_j-\epsilon,\theta_{-j})$. The gradients of the negative log 
@@ -65,27 +65,27 @@ likeCont=likeCont1 .* likeCont2;
 % differences:  
 %
 % \begin{equation}  
-% \frac{\partial \log \left( \ell \left( 
-% \theta \right) \right)}{\partial \theta_j} = \frac{\partial \log \left( 
-% \ell \left( \theta \right) \right)}{\partial \ell \left( \theta \right)} 
-% \cdot \frac{d \ell \left( \theta \right))}{d \theta_j} \approx 
-% \frac{\partial \log \left( \ell \left( \theta \right) \right)}{\partial 
-% \ell \left( \theta \right)} \cdot \frac{ \ell \left( 
-% \theta_j+\epsilon,\theta_{-j} \right) - \ell \left( 
+% \frac{\partial \log \left(\ell \left(
+% \theta \right) \right)}{\partial \theta_j} = \frac{\partial \log \left(
+% \ell \left(\theta \right) \right)}{\partial \ell \left(\theta \right)} 
+% \cdot \frac{d \ell \left(\theta \right))}{d \theta_j} \approx 
+% \frac{\partial \log \left(\ell \left(\theta \right) \right)}{\partial 
+% \ell \left(\theta \right)} \cdot \frac{ \ell \left(
+% \theta_j+\epsilon,\theta_{-j} \right) - \ell \left(
 % \theta_j-\epsilon,\theta_{-j} \right))}{2\epsilon}  
 % \end{equation} 
 %
 % The matrix of gradient contributions |gradCont| has  
-% $(\check t -1)\cdot \check r $ rows and one column for each 
+% $(\check t  - 1)\cdot \check r $ rows and one column for each 
 % parameter with respect to which we are differentiating the logged 
 % likelihood contributions. 
 
-gradCont = zeros(Settings.rCheck*(Settings.tCheck-1), length(estimates));
+gradCont = zeros(Settings.rCheck*(Settings.tCheck - 1), length(estimates));
 
-for j=1:length(estimates) 
-    [~,~,likeContribPlus] = likelihoodStep3(data , Settings, Param, estimates + epsilon(j,:) );
-    [~,~,likeContribMinus] = likelihoodStep3(data , Settings, Param, estimates - epsilon(j,:) );
-    gradCont(:,j) = (likeContribPlus-likeContribMinus)/(2*Settings.fdStep) ./ likeCont; 
+for j = 1:length(estimates) 
+    [~, ~, likeContribPlus] = likelihoodStep3(data, Settings, Param, estimates + epsilon(j, :) );
+    [~, ~, likeContribMinus] = likelihoodStep3(data, Settings, Param, estimates - epsilon(j, :) );
+    gradCont(:, j) = (likeContribPlus - likeContribMinus) / (2 * Settings.fdStep) ./ likeCont; 
 end
 
 % We now have the matrix |gradCont| where each column is the score with 
@@ -98,7 +98,7 @@ end
 
 Hessian = zeros(length(estimates));
 for iX=1:size(gradCont, 1)
-    Hessian = Hessian + gradCont(iX,:)' * gradCont(iX,:);
+    Hessian = Hessian + gradCont(iX, :)' * gradCont(iX, :);
 end
 
 % The covariance matrix can be obtained from inverting the Hessian. The 

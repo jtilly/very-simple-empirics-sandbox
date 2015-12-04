@@ -19,8 +19,8 @@ average realized fixed costs or the average realized entry costs.
 
 function Data = dgp(Settings, Param)
 
-N = NaN(Settings.tBurn + Settings.tCheck , Settings.rCheck); 
-C = NaN(Settings.tBurn + Settings.tCheck , Settings.rCheck); 
+N = NaN(Settings.tBurn + Settings.tCheck, Settings.rCheck); 
+C = NaN(Settings.tBurn + Settings.tCheck, Settings.rCheck); 
 
 % We now compute the post-survival equilibrium value functions using
 % \textbf{valueFuncrionIteration}:
@@ -29,7 +29,7 @@ vS = valueFunctionIteration(Settings,Param);
 % The cost shocks are iid across markets and periods, so we can draw them
 % all at once and store them in the matrix |W| which is of dimension
 % |Settings.tBurn + Settings.tCheck| by |Settings.rCheck|.
-W = Param.omega * randn(Settings.tBurn + Settings.tCheck, Settings.rCheck) -.5*Param.omega^2;
+W = Param.omega * randn(Settings.tBurn + Settings.tCheck, Settings.rCheck) -0.5 * Param.omega ^ 2;
 
 % Next, we draw an initial demand state from the ergodic distribution of
 % the demand process for each market using the \textbf{randomDiscr}
@@ -39,7 +39,7 @@ W = Param.omega * randn(Settings.tBurn + Settings.tCheck, Settings.rCheck) -.5*P
 
 C(1,:) = randomDiscr(repmat(Param.demand.ergDist, 1, Settings.rCheck)); 
 for t = 2 : Settings.tBurn + Settings.tCheck
-    C(t,:) = randomDiscr(Param.demand.transMat(C(t-1,:),:)');
+    C(t, :) = randomDiscr(Param.demand.transMat(C(t - 1, :), :)');
 end
 
 % The initial number of firms in each market is drawn randomly from a
@@ -54,15 +54,15 @@ end
 N(1,:) = randsample(Settings.nCheck, Settings.rCheck, true);
 
 for t = 2:Settings.tBurn+Settings.tCheck
-    N(t,:) = randomFirms(N(t-1,:)', C(t,:)', W(t,:)', Settings, Param, vS);
+    N(t, :) = randomFirms(N(t - 1, :)', C(t, :)', W(t, :)', Settings, Param, vS);
 end
 
 % Now we have the matrices |N|, |C|, and |W|; each of dimension
 % |Settings.tBurn + Settings.tCheck| by |Settings.rCheck|. From this, we store only the
 % last |Settings.tCheck| periods in the structure |Data|:
-Data.C = C(end-Settings.tCheck+1:end,:);
-Data.N = N(end-Settings.tCheck+1:end,:);
-Data.W = W(end-Settings.tCheck+1:end,:);
+Data.C = C((end - Settings.tCheck + 1):end, :);
+Data.N = N((end - Settings.tCheck + 1):end, :);
+Data.W = W((end - Settings.tCheck + 1):end, :);
 
 % This concludes the function \textbf{dgp.m}.
 end

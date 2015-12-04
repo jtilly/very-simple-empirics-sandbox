@@ -13,30 +13,29 @@ This software package lists and describes the programs
 used in \cite{acty2014}.   
 \end{abstract}   
    
-In this software package, we present \textsc{Matlab}  
-programs that implement the estimation algorithm introduced in 
-\cite{acty2014}. The whole package can be downloaded from 
-\url{http://jtilly.io/acty/acty-sandbox.zip}{here}. 
-We  show how to simulate a market level panel data set from our dynamic game.  
-We then implement the nested fixed point (NFXP) algorithm and estimate the  
-structural parameters from the simulated data. This code  is intended to 
-serve as a platform for replication, experimentation, and  teaching. The code 
-presented here is fully functional yet it focuses on the  essentials and 
-demonstrates the ease with which our methodology can be  applied in practice. 
-The code can be executed in \textsc{Matlab} by running the script \textbf{example.m}.  
+In this software package, we present \textsc{Matlab}   programs that implement 
+the estimation algorithm introduced in  \cite{acty2014}. The whole package can 
+be downloaded from  \url{http://jtilly.io/acty/acty-sandbox.zip}{here}. We 
+show how to simulate a market level panel data set from our dynamic game. We 
+then implement the nested fixed point (NFXP) algorithm and estimate the 
+structural parameters from the simulated data. This code is intended to serve 
+as a platform for replication, experimentation, and teaching. The code 
+presented here is fully functional yet it focuses on the essentials and 
+demonstrates the ease with which our methodology can be applied in practice. 
+The code can be executed in \textsc{Matlab} by running the script 
+\textbf{example.m}. 
      
-This documentation is structured as follows. After discussing a collection 
-of recurring variable structures, we first introduce  
-the algorithm that computes the equilibrium value functions. This algorithm  
-is implemented by the function \textbf{valueFunctionIteration.m}. We then  
-introduce the likelihood functions required for the three step estimation  
-procedure. These are implemented by the functions  
-\textbf{likelihoodStep1.m}, \textbf{likelihoodStep2.m}, and  
-\textbf{likelihoodStep3.m}. We then discuss all the necessary ingredients  
-to generate data from the model. This is implemented by the function  
-\textbf{dgp.m}. Lastly, we put all of the above together in  
-\textbf{example.m}, where we create a synthetic sample and estimate the  
-underlying primitives.  
+This documentation is structured as follows. After discussing a collection of 
+recurring variable structures, we first introduce the algorithm that 
+computes the equilibrium value functions. This algorithm is implemented by 
+the function \textbf{valueFunctionIteration.m}. We then introduce the 
+likelihood functions required for the three step estimation procedure. These 
+are implemented by the functions \textbf{likelihoodStep1.m}, 
+\textbf{likelihoodStep2.m}, and \textbf{likelihoodStep3.m}. We then discuss 
+all the necessary ingredients to generate data from the model. This is 
+implemented by the function \textbf{dgp.m}. Lastly, we put all of the above 
+together in \textbf{example.m}, where we create a synthetic sample and 
+estimate the underlying primitives. 
  
 \section{Preliminaries}   
  
@@ -47,9 +46,8 @@ functions to come, we introduce them here for further reference.
 \subsection{|Settings|} 
  
 The structure |Settings| contains parameters that govern the execution of  
-the \textsc{Matlab}. All elements in  
-|Settings| need to be defined by hand and remain constant throughout the  
-execution of the program. 
+the \textsc{Matlab}. All elements in  |Settings| need to be defined by hand 
+and remain constant throughout the  execution of the program. 
  
 \begin{itemize} 
  

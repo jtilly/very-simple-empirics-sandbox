@@ -2,7 +2,7 @@
 % The function \textbf{likelihoodStep2} requires the structures |Data|, 
 % |Settings|, and |Param|, and the vector |estimates| as inputs. It returns 
 % the scalar valued negative log-likelihood function |ll| and a column vector  
-% of length $\check r \times (\check t-1)$ containing the market-time-specific  
+% of length $\check r \times (\check t - 1)$ containing the market-time-specific  
 % likelihood contributions, |likeCont|. 
 
 function [ ll, likeCont] = likelihoodStep2(Data, Settings, Param, estimates)
@@ -27,10 +27,10 @@ Param.omega = Settings.estimates2omega(estimates);
 
 % Next we collect the transitions observed in the data and vectorize them. 
 % The column vectors |from|, |to|, and |demand| are all of length $(\check 
-% t-1) \check r$. 
+% t - 1) \check r$. 
 
 vec = @(x) x(:);
-from = vec(Data.N(1:Settings.tCheck-1, 1:Settings.rCheck));
+from = vec(Data.N(1:Settings.tCheck - 1, 1:Settings.rCheck));
 to = vec(Data.N(2:Settings.tCheck, 1:Settings.rCheck));
 demand = vec(Data.C(2:Settings.tCheck, 1:Settings.rCheck));
 
@@ -40,16 +40,16 @@ demand = vec(Data.C(2:Settings.tCheck, 1:Settings.rCheck));
 % \item \textbf{Case 1: Entry ($\mathbf{n'>n}$).} The likelihood  
 % contribution is  
 % \begin{equation}   
-% \mbox{Pr} \left( \overline w_E(n'+1, c) \leq W < \overline w_E(n', c)  
+% \mbox{Pr} \left( \overline w_E(n' + 1, c) \leq W < \overline w_E(n', c)  
 % \right) = \tilde \Phi \left[\log v_S(n',c)-\log (1+\varphi) \right]   
-% - \tilde \Phi \left[ \log v_S(n'+1,c) - \log(1+ \varphi) \right],  
+% - \tilde \Phi \left[ \log v_S(n' + 1,c) - \log(1+ \varphi) \right],  
 % \end{equation}  
 % which is the probability that the cost shock is such that $n'$ firms can  
-% be active post-entry but $n'+1$ cannot. Here and throughout we will  
+% be active post-entry but $n' + 1$ cannot. Here and throughout we will  
 % convert subscripts to linear indices using the Matlab function  
 % \url{http://www.mathworks.com/help/matlab/ref/sub2ind.html}{sub2ind}.  
 
-selectMarketsEntry = to>from;
+selectMarketsEntry = to > from;
 idx = sub2ind(size(pEntrySet), to(selectMarketsEntry), demand(selectMarketsEntry));
 llhContributions_Entry = zeros(size(from));
 llhContributions_Entry(selectMarketsEntry) = pEntrySet(idx);
@@ -61,23 +61,23 @@ llhContributions_Entry(selectMarketsEntry) = pEntrySet(idx);
 % 1 - \tilde \Phi\left[\log v_S(1,c)-\log (1+\varphi) \right]  
 % \end{equation}  
 
-selectMarketsStayAtZero = from==0 & to==0;
+selectMarketsStayAtZero = from == 0 & to == 0;
 llhContributions_StayAtZero = zeros(size(from));
-llhContributions_StayAtZero(selectMarketsStayAtZero) = 1-pEntry(1, demand(selectMarketsStayAtZero));
+llhContributions_StayAtZero(selectMarketsStayAtZero) = 1 - pEntry(1, demand(selectMarketsStayAtZero));
 
 % \item \textbf{Case 3: Number of firms stays the same at a non-zero number  
 % ($\mathbf{n'=n>0}$).} The likelihood contribution is  
 % \begin{equation}   
-% \mbox{Pr} \left( \overline w_S(n, c) \leq W < \overline w_E(n+1, c) \right)   
+% \mbox{Pr} \left( \overline w_S(n, c) \leq W < \overline w_E(n + 1, c) \right)   
 % = \tilde \Phi\left[\log v_S(n,c) \right]  
-%  - \tilde \Phi\left[\log v_S(n+1,c) - \log (1+\varphi) \right]  
+%  - \tilde \Phi\left[\log v_S(n + 1,c) - \log (1+\varphi) \right]  
 % \end{equation}  
 
-selectMarketsStayAtNonZero = (from>0 & from==to);
+selectMarketsStayAtNonZero = (from > 0 & from == to);
 llhContributions_StayAtNonZero = zeros(size(from));
 llhContributions_StayAtNonZero(selectMarketsStayAtNonZero) ...
 = pStay(sub2ind(size(pStay), from(selectMarketsStayAtNonZero), demand(selectMarketsStayAtNonZero)) )- ...
-  pEntry(sub2ind(size(pEntry), from(selectMarketsStayAtNonZero)+1, demand(selectMarketsStayAtNonZero)));
+  pEntry(sub2ind(size(pEntry), from(selectMarketsStayAtNonZero) + 1, demand(selectMarketsStayAtNonZero)));
 
 % \item \textbf{Case 4: All firms leave ($\mathbf{n'=0, n>0}$).} The  
 % likelihood contribution is  
@@ -87,8 +87,8 @@ llhContributions_StayAtNonZero(selectMarketsStayAtNonZero) ...
 % \end{equation}  
 
 llhContributions_AllLeave = zeros(size(from));
-selectMarketsAllLeave = (to==0 & from>0);
-llhContributions_AllLeave(selectMarketsAllLeave) = 1-pStay(1, demand(selectMarketsAllLeave));
+selectMarketsAllLeave = (to == 0 & from > 0);
+llhContributions_AllLeave(selectMarketsAllLeave) = 1 - pStay(1, demand(selectMarketsAllLeave));
 
 %{
 \item \textbf{Case 5: Mixed survival strategies ($\mathbf{n'\leq n}$).}   
@@ -103,7 +103,7 @@ binomial distribution function with success probability $a_S(n,c,w)$.
 The survival strategies are defined by the indifference condition   
 (equation (5) in the paper)  
 \begin{equation} \label{indifference} 
-\sum_{n'=1}^{n} {n-1 \choose n'-1}\; a_S^{n'-1} \left(1-a_S\right)^{n-n'}  
+\sum_{n'=1}^{n} {n - 1 \choose n' - 1}\; a_S^{n' - 1} \left(1-a_S\right)^{n-n'}  
 \left(- \exp(w)+v_{S}(n',c)\right)=0. 
 \end{equation}  
  
@@ -117,35 +117,35 @@ to the latter as $p$. Thus, for a given value of $p$, we need to find the
 value of $w$ such that $p = a_S(n,c,w)$.   
  
 Equation (\ref{indifference}) defines the   
-inverse $a_S^{-1}(p;c,n)$ for which  
+inverse $a_S^{ - 1}(p;c,n)$ for which  
  
 \begin{equation}  
-a_S^{-1}(a_S(n,c,w);c,n) = w.  
+a_S^{ - 1}(a_S(n,c,w);c,n) = w.  
 \end{equation}  
  
 This inverse function can be solved for analytically and it is given by  
  
 \begin{equation}  
-\underbrace{a_S^{-1}(p;c,n)}_{\textbf{aSinv}}  
-= \log \left(\underbrace{\sum_{n'=1}^{n} {n-1 \choose n'-1}  
-      p^{n'-1} \left(1-p\right)^{n-n'} v_{S}(n',c) }_{\textbf{expaSInv}}\right) 
+\underbrace{a_S^{ - 1}(p;c,n)}_{\textbf{aSinv}}  
+= \log \left(\underbrace{\sum_{n'=1}^{n} {n - 1 \choose n' - 1}  
+      p^{n' - 1} \left(1 - p\right)^{n-n'} v_{S}(n',c) }_{\textbf{expaSInv}}\right) 
 \end{equation}  
  
-Then note that $a_S^{-1}(1;c,n) = \log v_S(n,c)$ and $a_S^{-1}(0;c,n) = 
+Then note that $a_S^{ - 1}(1;c,n) = \log v_S(n,c)$ and $a_S^{ - 1}(0;c,n) = 
 \log v_S(1,c)$.  
 We can write the likelihood contribution as an integral over $p$:  
 \begin{equation}  
 \begin{split}  
-&\int_{1}^{0} {n \choose n'}  p^{n'} \left(1-p\right)^{n-n'}  
-      \times \frac{da_S^{-1}(p;c,n)}{dp}g_{W}\left[a_S^{-1}(p;c,n)\right]  
+&\int_{1}^{0} {n \choose n'}  p^{n'} \left(1 - p\right)^{n-n'}  
+      \times \frac{da_S^{ - 1}(p;c,n)}{dp}g_{W}\left[a_S^{ - 1}(p;c,n)\right]  
       dp \\  
-= &-\int_{0}^{1} {n \choose n'}  p^{n'} \left(1-p\right)^{n-n'}  
-      \times \frac{da_S^{-1}(p;c,n)}{dp}g_{W}\left[a_S^{-1}(p;c,n)\right]  
+= &-\int_{0}^{1} {n \choose n'}  p^{n'} \left(1 - p\right)^{n-n'}  
+      \times \frac{da_S^{ - 1}(p;c,n)}{dp}g_{W}\left[a_S^{ - 1}(p;c,n)\right]  
       dp \\  
 \approx &-\sum_{jX=1}^J {n \choose n'}  p_{jX}^{n'}  
-\left(1-p_{jX}\right)^{n-n'} \times  
-\underbrace{\underbrace{\frac{da_S^{-1}(p_{jX};c,n)}{dp}}_{\textbf{daSinvdP}}  
-\underbrace{g_{W}\left[a_S^{-1}(p_{jX};c,n)\right]}_{\textbf{normaSinv}}  
+\left(1 - p_{jX}\right)^{n-n'} \times  
+\underbrace{\underbrace{\frac{da_S^{ - 1}(p_{jX};c,n)}{dp}}_{\textbf{daSinvdP}}  
+\underbrace{g_{W}\left[a_S^{ - 1}(p_{jX};c,n)\right]}_{\textbf{normaSinv}}  
 \underbrace{w_{jX}}_{\textbf{intWeights}}}_{\textbf{mixingDensity}},  
 \end{split}  
 \label{llContrMixing} 
@@ -156,12 +156,12 @@ where $p_{1}, ..., p_{J}$ refer to the
 nodes and $w_{1}, ..., w_{J}$ to the corresponding weights. Notice that the  
 integration bounds are now 0 and 1 since if $w<\log v_S(n,c)$ the firms  
 surely survive and when $w>\log v_S(1,c)$ the firms surely exit.  
-Differentiation of $a_S^{-1}(p;c,n)$ gives  
+Differentiation of $a_S^{ - 1}(p;c,n)$ gives  
  
 \begin{equation}  
-\underbrace{\frac{da_S^{-1}(p;c,n)}{dp}}_{\textbf{daSinvdP}} =  
- \overbrace{ \sum_{n'=1}^{n} \overbrace{{n-1 \choose n'-1}   
-\left(p^{n'-2} (1-p)^{(n-n'-1)} \left( (n'-1) (1-p) - p (n-n') \right) \right)}^{\textbf{dbinomialPmfdP}} v_{S}(n',c)}^{\textbf{dexpaSInvdP}} \frac{1}{\underbrace{\exp(a_S^{-1}(p;c,n))}_{\textbf{expaSInv}}}  
+\underbrace{\frac{da_S^{ - 1}(p;c,n)}{dp}}_{\textbf{daSinvdP}} =  
+ \overbrace{ \sum_{n'=1}^{n} \overbrace{{n - 1 \choose n' - 1}   
+\left(p^{n'-2} (1 - p)^{(n-n' - 1)} \left( (n' - 1) (1 - p) - p (n-n') \right) \right)}^{\textbf{dbinomialPmfdP}} v_{S}(n',c)}^{\textbf{dexpaSInvdP}} \frac{1}{\underbrace{\exp(a_S^{ - 1}(p;c,n))}_{\textbf{expaSInv}}}  
 \end{equation}  
  
 Now, compute the matrix |mixingDensity| using (\ref{mixingDensity}). |mixingDensity| is of dimension   
@@ -170,8 +170,8 @@ defined as
  
 \begin{equation}    
       \text{mixingDensity(jX,c,n)} =    
-      \underbrace{\frac{da_S^{-1}(p_{jX};c,n)}{dp}}_{\textbf{daSinvdP}}  
-      \underbrace{g_{W}\left[a_S^{-1}(p_{jX};c,n)\right]}_{\textbf{normaSinv}}  
+      \underbrace{\frac{da_S^{ - 1}(p_{jX};c,n)}{dp}}_{\textbf{daSinvdP}}  
+      \underbrace{g_{W}\left[a_S^{ - 1}(p_{jX};c,n)\right]}_{\textbf{normaSinv}}  
       \underbrace{w_{jX}}_{\textbf{intWeights}}. \label{mixingDensity}  
 \end{equation}  
  
@@ -181,7 +181,7 @@ current number of incumbents is $n$.
  
 Note that mixed strategy play is only relevant for markets with at least   
 two firms. We define the auxiliary variable |expaSInv|, which equals   
-|expaSInv = exp(aSinv(:,:,n))|. |dexpaSInvdP| is another auxiliary variable   
+|expaSInv = exp(aSinv(:, :, n))|. |dexpaSInvdP| is another auxiliary variable   
 that stores the derivative of |expaSInv| with respect to |p|. Then assemble   
 |expaSInv| and |dexpaSInvdP| by looping over the possible outcomes from   
 mixing |nPrime=0,...,n|. |nPrime=0| refers to the case when all firms leave   
@@ -193,18 +193,18 @@ we use Gauss-Legendre weights that are stored in the vector |weights|
 during the integration steps.   
  
 We pre-compute |nchoosekMatrixPlusOne| which is a matrix of size $\check  
-n+1$ by $\check n+1$, where element $(i,j)$ contains $i-1 \choose j-1$. The  
+n + 1$ by $\check n + 1$, where element $(i,j)$ contains $i - 1 \choose j - 1$. The  
 copious naming and indexing convention is owed to the fact that Matlab's  
 indexing starts at one, not zero, so element $(1,1)$ corresponds to $0  
 \choose 0$. Pre-computing this matrix is helpful, because factorial  
 operations are computationally demanding.  
 %}
 
-nchoosekMatrixPlusOne = ones(Settings.nCheck+1);
+nchoosekMatrixPlusOne = ones(Settings.nCheck + 1);
 
 for nX=2:Settings.nCheck
-    for iX=0:(nX-1)
-        nchoosekMatrixPlusOne(nX+1, iX+1) = nchoosek(nX, iX);
+    for iX=0:(nX - 1)
+        nchoosekMatrixPlusOne(nX + 1, iX + 1) = nchoosek(nX, iX);
     end
 end 
 
@@ -218,29 +218,29 @@ daSinvdP = zeros(length(Settings.integrationNodes), Settings.cCheck, Settings.nC
 p = Settings.integrationNodes;
 w = Settings.integrationWeights;
  
-for n=2:Settings.nCheck
+for n = 2:Settings.nCheck
      
     expaSInv = zeros(length(p), Settings.cCheck);
     dexpaSInvdP = zeros(length(p), Settings.cCheck);
      
-    for nPrime=1:n
+    for nPrime = 1:n
         
         nCk = nchoosekMatrixPlusOne(n, nPrime);
-        binomialPmf = nCk .* repmat(p.^(nPrime-1).*(1-p).^(n-nPrime), 1, Settings.cCheck);
-        dbinomialPmfdP = nCk .* repmat(p.^(nPrime-2).*(1-p).^(n-nPrime-1) ...
-                      .* ( (nPrime-1).*(1-p) - p.*(n-nPrime)), 1, Settings.cCheck);
-        repvS =  repmat(vS(nPrime,:), Settings.truncOrder,1);
+        binomialPmf = nCk .* repmat(p .^ (nPrime - 1) .* (1 - p) .^ (n - nPrime), 1, Settings.cCheck);
+        dbinomialPmfdP = nCk .* repmat(p .^ (nPrime-2) .* (1 - p) .^ (n - nPrime - 1) ...
+                      .* ( (nPrime - 1) .* (1 - p) - p .* (n - nPrime)), 1, Settings.cCheck);
+        repvS =  repmat(vS(nPrime, :), Settings.truncOrder,1);
         expaSInv = expaSInv +  binomialPmf .* repvS ;
         dexpaSInvdP = dexpaSInvdP +  dbinomialPmfdP .* repvS;
         
     end
     
-    aSinv(:,:,n) =  log ( expaSInv );
-    daSinvdP(:,:,n) =  dexpaSInvdP ./ expaSInv;
+    aSinv(:, :, n) =  log ( expaSInv );
+    daSinvdP(:, :, n) =  dexpaSInvdP ./ expaSInv;
      
     intWeights = repmat(w, 1, Settings.cCheck);
-    normaSinv = normpdf(aSinv(:,:,n), -.5*Param.omega^2, Param.omega);
-    mixingDensity(:,:,n) = daSinvdP(:,:,n) .* normaSinv .* intWeights;
+    normaSinv = normpdf(aSinv(:, :, n), -.5*Param.omega^2, Param.omega);
+    mixingDensity(:, :, n) = daSinvdP(:, :, n) .* normaSinv .* intWeights;
 end
 
 % With the matrix |mixingDensity| in hand, we can compute the likelihood  
@@ -249,17 +249,17 @@ end
 % we only need to loop over all  those observations where purely mixed 
 % strategy play does in fact occur.   
 
-selectMixing = (from>=2 & to<=from);
+selectMixing = (from >= 2 & to <= from);
 idx = selectMixing .* (1:length(from))';
 idx(idx==0) = []; % \% vector with indices with pure mixed strategy play
 llhContributions_Mixing = zeros(size(from));
  
 for jX=1:length(idx)
  
-    nCk = nchoosekMatrixPlusOne(from(idx(jX))+1, to(idx(jX))+1);
+    nCk = nchoosekMatrixPlusOne(from(idx(jX)) + 1, to(idx(jX)) + 1);
     llhContributions_Mixing(idx(jX)) = ...
-        -sum( nCk .* p.^to(idx(jX)).* (1-p).^(from(idx(jX)) - to(idx(jX))) ...
-                  .* mixingDensity(:, demand(idx(jX)), from(idx(jX))) );
+        -sum(nCk .* p .^ to(idx(jX)) .* (1 - p) .^ (from(idx(jX)) - to(idx(jX))) ...
+                  .* mixingDensity(:,  demand(idx(jX)), from(idx(jX))) );
  
 end 
 
@@ -269,24 +269,24 @@ end
 % return the negative log likelihood function. When |ll| is not real 
 % valued, the negative log likelihood is set to |inf|. 
 
-ll = -sum(log( llhContributions_Entry +...
-               llhContributions_StayAtZero +...
-               llhContributions_StayAtNonZero +...
-               llhContributions_AllLeave +...
-               llhContributions_Mixing));
+ll = -sum(log(llhContributions_Entry + ...
+              llhContributions_StayAtZero + ...
+              llhContributions_StayAtNonZero + ...
+              llhContributions_AllLeave + ...
+              llhContributions_Mixing));
            
-if(isnan(ll) || max(real(ll)~=ll)==1)
+if(isnan(ll) || max(real(ll)~=ll) == 1)
     ll = inf;
 end
 
 % If two outputs are requested, we also return the likelihood contributions: 
 
-if(nargout==2)
-    likeCont =  llhContributions_Entry +...
-                llhContributions_StayAtZero +...
-                llhContributions_StayAtNonZero +...
-                llhContributions_AllLeave +...
-                llhContributions_Mixing;
+if(nargout == 2)
+    likeCont = llhContributions_Entry +...
+               llhContributions_StayAtZero +...
+               llhContributions_StayAtNonZero +...
+               llhContributions_AllLeave +...
+               llhContributions_Mixing;
 end
 
 % This concludes \textbf{likelihoodStep2.m}.

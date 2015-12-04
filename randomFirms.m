@@ -51,18 +51,18 @@ for nX = 1:Settings.rCheck
     
     switch (true)
         %\% All firms leave (only relevant if N(nX)>0)
-        case N(nX)>0 && (vS(1,C(nX)) <= exp(W(nX)))
+        case N(nX) > 0 && (vS(1, C(nX)) <= exp(W(nX)))
             Nprime(nX) = 0;
             
-        %\% Some firms leave (only relevant if N(nX)>1)
-        case N(nX)>1 && (vS(max(1,N(nX)),C(nX)) <= exp(W(nX)))
+        %\% Some firms leave (only relevant if N(nX) > 1)
+        case N(nX) > 1 && (vS(max(1,N(nX)), C(nX)) <= exp(W(nX)))
             aS = mixingProbabilities(N(nX), C(nX), W(nX), vS);
             Nprime(nX) = binornd(N(nX), aS);
             
         %\% All incumbents stay; there may be entry.
-        case N(nX)<Settings.nCheck && (vS(max(1,N(nX)),C(nX)) > exp(W(nX)))
-            Nprime(nX) = N(nX) + sum(vS(N(nX)+1:Settings.nCheck, C(nX)) ...
-                - (1 + Param.phi(N(nX)+1:Settings.nCheck)') .* exp(W(nX)) > 0  );
+        case N(nX) < Settings.nCheck && (vS(max(1, N(nX)), C(nX)) > exp(W(nX)))
+            Nprime(nX) = N(nX) + sum(vS((N(nX) + 1):Settings.nCheck, C(nX)) ...
+                - (1 + Param.phi((N(nX) + 1):Settings.nCheck)') .* exp(W(nX)) > 0);
             
         %\% Remaining cases include N(nX)=0 and no entry, or N(nX)=Settings.nCheck and no exit).
         otherwise

@@ -55,8 +55,9 @@ transMat = NaN(cCheck, cCheck);
 % -\frac{d}{2}-\mu}{\sigma}\right) 
 % \end{equation}
 
-for jX = 2:cCheck-1
-    transMat(:,jX) =  normcdf((logGrid(jX)-logGrid'+d/2-mu)/sigma) - normcdf((logGrid(jX)-logGrid'-d/2-mu)/sigma);
+for jX = 2:(cCheck - 1)
+    transMat(:, jX) =  normcdf((logGrid(jX) - logGrid' + d / 2 - mu) / sigma) ...
+                            - normcdf((logGrid(jX) - logGrid'-d / 2-mu) / sigma);
 end
 
 %
@@ -65,13 +66,13 @@ end
 % c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu}{\sigma}\right) 
 % \end{equation}
 
-transMat(:,1) = normcdf((logGrid(1)-logGrid'+d/2-mu)/sigma);
+transMat(:, 1) = normcdf((logGrid(1) - logGrid' + d / 2 - mu) / sigma);
 
 % \begin{equation} \Pi_{i,1}=Pr\left[ C'=c_{[\check c ]} |C=c_{[i]}\right]
 % = 1-\Phi\left(\frac{\log c_{[\check c ]} - \log c_{[i]}
 % -\frac{d}{2}-\mu}{\sigma}\right) \end{equation}
 
-transMat(:,cCheck) = 1 - normcdf((logGrid(cCheck)-logGrid'-d/2-mu)/sigma);
+transMat(:,cCheck) = 1 - normcdf((logGrid(cCheck) - logGrid' - d / 2 - mu) / sigma);
 
 % This completes the construction of the transition matrix |transMat|,
 % which we now store in the |Param| structure.
@@ -79,7 +80,7 @@ transMat(:,cCheck) = 1 - normcdf((logGrid(cCheck)-logGrid'-d/2-mu)/sigma);
 Param.demand.transMat = transMat;
 
 % Next, we compute the ergodic distribution of the demand process 
-% |ergDist|.  The ergodic distribution is only computed for the true 
+% |ergDist|. The ergodic distribution is only computed for the true 
 % parameter values, i.e. when the number of input arguments equals two. The 
 % ergodic distribution is the eigenvector of the transpose of the transition matrix with 
 % eigenvalue equal to 1 after normalizing it such that its entries sum to  
@@ -96,7 +97,7 @@ Param.demand.transMat = transMat;
 
 if nargin == 2
 [eigenVecs, eigenVals] = eigs(transMat');
-Param.demand.ergDist = eigenVecs(:,1) / sum(eigenVecs(:,1));
+Param.demand.ergDist = eigenVecs(:, 1) / sum(eigenVecs(:, 1));
 
 % We conclude by checking for two numerical problems that may arise. 
 % Firstly, confirm that the greatest eigenvalue is sufficiently close to 1 
@@ -105,12 +106,12 @@ Param.demand.ergDist = eigenVecs(:,1) / sum(eigenVecs(:,1));
 % same sign (one of them may be just under or above zero). This will 
 % undesirably result in an ergodic distribution with a negative entry. 
 
-if abs(max(eigenVals(:)-1)) > 1e-5
+if abs(max(eigenVals(:) - 1)) > 1e-5
     error('Warning: highest eigenvalue not sufficiently close to 1')
 end
  
-signDummy = eigenVecs(:,1)>0;
-if sum(signDummy)~=0 && sum(signDummy)~=cCheck
+signDummy = eigenVecs(:, 1) > 0;
+if sum(signDummy) ~= 0 && sum(signDummy) ~= cCheck
     error('Not all elements in relevant eigenvector are of same sign');
 end
  

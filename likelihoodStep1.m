@@ -16,7 +16,7 @@ function [ll, likeCont] = likelihoodStep1(Data , Settings, estimates)
 % $C_{t,r}$  and $C_{t+1,r}$, respectively, for $t=1,\ldots,\check t-1$ 
 % and $r=1,\ldots,\check r $. Thus, |from| and |to| are vectors with as 
 % many elements as there are transitions in the data. 
-from = Data.C(1:Settings.tCheck-1, 1:Settings.rCheck);
+from = Data.C(1:(Settings.tCheck - 1), 1:Settings.rCheck);
 to = Data.C(2:Settings.tCheck, 1:Settings.rCheck);
 
 % Preallocate the $(\check t -1)\cdot \check r \times1$ likelihood 
@@ -62,17 +62,17 @@ sigma = estimates(2);
 
 selectInteriorTransitions = to > 1 & to < Settings.cCheck;
 
-likeCont( selectInteriorTransitions  ) ...
+likeCont(selectInteriorTransitions ) ...
     = normcdf((Settings.logGrid(to(selectInteriorTransitions)) ...
-    - Settings.logGrid(from(selectInteriorTransitions)) + Settings.d/2 - mu)/sigma)...
+    - Settings.logGrid(from(selectInteriorTransitions)) + Settings.d / 2 - mu) / sigma)...
     - normcdf((Settings.logGrid(to(selectInteriorTransitions)) ...
-    - Settings.logGrid(from(selectInteriorTransitions)) - Settings.d/2 - mu)/sigma);
+    - Settings.logGrid(from(selectInteriorTransitions)) - Settings.d / 2 - mu) / sigma);
  
-likeCont(to==1) = normcdf((Settings.logGrid(1) -...
-    Settings.logGrid(from(to==1)) + Settings.d/2 - mu)/sigma);
+likeCont(to == 1) = normcdf((Settings.logGrid(1) -...
+    Settings.logGrid(from(to == 1)) + Settings.d / 2 - mu) / sigma);
  
-likeCont(to==Settings.cCheck) = 1 - normcdf((Settings.logGrid(Settings.cCheck) ...
-    - Settings.logGrid(from(to==Settings.cCheck)) - Settings.d/2 - mu)/sigma);
+likeCont(to == Settings.cCheck) = 1 - normcdf((Settings.logGrid(Settings.cCheck) ...
+    - Settings.logGrid(from(to == Settings.cCheck)) - Settings.d / 2 - mu) / sigma);
  
 ll = -sum(log(likeCont));
 

@@ -44,7 +44,7 @@ Settings.uppBndC = 5;
 % the distance between any two elements of |logGrid|. 
 
 Settings.logGrid = ...
-linspace(log(Settings.lowBndC),log(Settings.uppBndC), Settings.cCheck);
+linspace(log(Settings.lowBndC), log(Settings.uppBndC), Settings.cCheck);
 Settings.d = Settings.logGrid(2) - Settings.logGrid(1);
 
 % Next, we define the number of markets |rCheck| and the number of time 
@@ -131,7 +131,7 @@ from = Data.C(1:Settings.tCheck-1, 1:Settings.rCheck);
 % |startValues.step1|
 
 logTransitions = log([from(:) to(:)]);
-innovLogC = logTransitions(:,2) - logTransitions(:,1);
+innovLogC = logTransitions(:, 2) - logTransitions(:, 1);
 startValues.step1 = [mean(innovLogC)  std(innovLogC)];
 
 % Declare the first step likelihood function to be the objective function. 
@@ -156,8 +156,8 @@ llhTruth.step1 = objFunStep1(Param.truth.step1);
 % ended) is stored in |exitFlag.step1|. 
 
 tic;
-[Estimates.step1,llh.step1,exitFlag.step1] = fmincon(objFunStep1, ...
-    startValues.step1, [], [], [], [], [-inf,0], [], [], options);
+[Estimates.step1, llh.step1, exitFlag.step1] = fmincon(objFunStep1, ...
+    startValues.step1, [], [], [], [], [-inf, 0], [], [], options);
 computingTime.step1 = toc;
 
 % Now consider the second step, in which we estimate $(k,\varphi,\omega)$. 
@@ -204,7 +204,7 @@ computingTime.step2 = toc;
 % Now consider the third step, FIML. Start by declaring the estimates from 
 % the first two steps to be the starting values for the third step:  
 
-startValuesStep3=[Estimates.step2, Estimates.step1];
+startValuesStep3 = [Estimates.step2, Estimates.step1];
 
 % Declare the objective function:
 
@@ -215,7 +215,7 @@ objFunStep3 = @(estimates) likelihoodStep3(Data, Settings, Param, estimates);
 % parameters:
 
 lb = zeros(size(startValuesStep3));
-lb(length(startValuesStep3)-1)=-inf;
+lb(length(startValuesStep3) - 1) = -inf;
 
 % Store the negative log-likelihood at the true parameter values: 
 
@@ -224,7 +224,7 @@ llhTruth.step3 = objFunStep3(Param.truth.step3);
 % Obtain the estimates subject to the constraints |lb|:
 
 tic;
-[Estimates.step3,llh.step3,exitFlag.step3] = fmincon(objFunStep3,...
+[Estimates.step3, llh.step3, exitFlag.step3] = fmincon(objFunStep3,...
     startValuesStep3, [], [], [], [], lb, [], [], options);
 computingTime.step3 = toc;
 
