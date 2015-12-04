@@ -41,7 +41,7 @@ $n'>n$, the values of which are already in memory because we are iterating
 backwards.  
 
 %}
-function [ vS, pEntry, pEntrySet, pStay ] = valueFunctionIteration(Settings, Param)
+function [vS, pEntry, pEntrySet, pStay] = valueFunctionIteration(Settings, Param)
 
 % Preallocate the matrices that will be returned by the function.
 
@@ -71,7 +71,6 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).  
 % We pre-compute $\omega ^ 2$ at the beginning, so we do not have to do 
 % so repeatedly inside the loops below.
- 
 omega2 = Param.omega ^ 2;
  
 for n = Settings.nCheck:-1:1
