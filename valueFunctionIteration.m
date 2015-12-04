@@ -69,8 +69,8 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % difference |vSdiff| between  |vS(n, :)| and its update |vSPrime| does not  
 % exceed the stopping  criterion, |Settings.tolInner|.  Start by  
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).  
-% We pre-compute $\omega ^ 2$ now, so we do not have to do so repeatedly 
-% inside the loops below.
+% We pre-compute $\omega ^ 2$ at the beginning, so we do not have to do 
+% so repeatedly inside the loops below.
  
 omega2 = Param.omega ^ 2;
  
@@ -79,7 +79,7 @@ for n = Settings.nCheck:-1:1
     iter = 0;
     vSdiff = 1;
 
-    % pre-compute flow surplus so we don't have to do so repeatedly inside the while loop
+    % % pre-compute flow surplus so we don't have to do so repeatedly inside the while loop
     flowSurplus = exp(Settings.logGrid)' * Param.k(n) / n;
     
     while (vSdiff > Settings.tolInner && iter < Settings.maxIter)
@@ -117,7 +117,7 @@ end
 % 
 % The speed of our implementation of |valueFunctionIteration| could be 
 % increased if we transposed the matrices |vS|, |pEntry|, |pEntrySet|, and 
-% |pStay|. Since \textsc{Matlab} stores matrices in memory in column major, \textsc{Matlab} 
+% |pStay|. Since \textsc{Matlab} stores matrices in memory in column major order, \textsc{Matlab} 
 % faster traverses through the first dimension of a matrix than through the second. 
 % We use the slightly slower implementation in this package, because we 
 % find it aligns better with the underlying mathematical expressions. 
