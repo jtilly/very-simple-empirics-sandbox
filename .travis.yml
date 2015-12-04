@@ -1,17 +1,11 @@
-# I use Travis CI to build the html documentation using a perl script.
-# The build process proceeds in three steps:
-# 1) Checkout the komments branch with the perl script kpp.pl
-# 2) Build the html documentation using perl kpp.pl <filename>
-#    using documentation.m from the master branch.
-# 3) Push the html documentation to the gh-pages branch.
 language: perl
 branches:
   only:
   - master
+sudo: required
 env:
   global:
-  secure: "3gORt1QgqZLtVwDZVzhj1Wx6pxKrbHnmPtxxCmSNhO13GJDp1xSYzPg1sHxaxY3qWKUBP4TOuMCqxRJyPKM99FjQ4k1AULqz5naiKG7+SkjsCJhDPHSox5cGyued9joOKmPlP43pPRhUr9tAxJX6LLQQlfuBTvAAMKs06dleFX4z/Fn4CXjwPVMGXR97YQORV618TZqblHw1RvXAsMoQZqk/Z9P/OZ/49CsL05rXRvsOaEDn9/G+AFoDFj3wyxt3wqFecuyOnR0mA5jeiP/SrQwIaiJDPkY5vZCCO0HQvN7Mj4nvMOygDCHx6Uzln6lcqEY0lYH0ZBMt1874SopCghmgRyVpk2YfwInhPi3H+XGJfnBcVMy7MHfw25SuCHVR40oFWeQJz05B7fVjX7eZBiapENPB7xJ0DwMRwWY+52t5c27GC95MoGCzqCOK4GcpaGry2KSwc5z6qMcbHSTAULW01D0UFiGZh3yCTRKyFCQj4YjOXZc5gj4KDX/gRjl2fSaswXzBhiGdDS+tDuz9ZgYk9MQfMX5Sbuo4UP6KdzcQlZLwELh3fyQfwEHJD6gyG6L7xeGUDYRSRo8we1iW86WZKzWYxQmJK4aeY9gUnzwek4JgHoHsPJIaIqvl00DtDsiPUWwND9eVsuLI3VvPRm11ghCEAbl+JLpkEINDKMk="
-sudo: required
+    secure: t6TXSXXxd7H51B1nTi/2M4v+lQdQb7O3LTnDp0aJm5JSrELYSINp1RvAXuZg205jwhjrfu8zHuYsMhxVlBmgLYeYQjkMMPUFB4VwJ7ZYMhBsreUnrQ0vEu5JfOtXFpBT9tbJ05m+vq+0H0k0ewHaCyHlPUP0crEamMPBz0qRqsJfxQmT8r/ejHrQK/tytDJhccsV2uRBSPPzqOlDj8A+H38RpvPLC1K3H5fTeAyy6mGb39RkdG6cq40yHhKF8zknstcrNNlFJmTD/nr9ugEuOPxK2d5hrh/QVq7wFDhDesPI/pRXoPa/1lYqYTobhtjeIihRBm4dfKM/9AYpiJFSUE+AHho9CFI4lbFhF7OKNqJ3ET1hk+3Fe3a53ZeEwcVoz3JADjbTCoazbKocDK3kjRelk6FCO4IoiBb6rrVinDa9X0td0FTHQ6zSgqg7CEtot7HlO9bfo6hEysfGCOT//61n9Nkdc3HsFWgno5ZyJDY2d6XAVED7quq+0lVdmgHrFxB3it8BNnstN5qkX2Gwpu0d31pIyR/CqEpRUPR2O+X7C2O/z4SDllWZblx0MPdtHzPnkTU6c/1uq3I6d1S065SEYOMnlheBiI0TEchF2AsI+7Z2Nb50iBKzpF4VsxTLtzZKxJKF1LaW3EVHwrmRxBH3rOeDvyzm1uD/6WZCX10=
 install:
 - cd ~
 - git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git komments
