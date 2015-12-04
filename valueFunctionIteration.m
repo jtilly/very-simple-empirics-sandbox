@@ -71,9 +71,9 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).  
 % We pre-compute $\omega ^ 2$ now, so we do not have to do so repeatedly 
 % inside the loops below.
-
+ 
 omega2 = Param.omega ^ 2;
-
+ 
 for n = Settings.nCheck:-1:1
     
     iter = 0;
