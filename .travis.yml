@@ -22,8 +22,6 @@ script:
 - cd ${TRAVIS_BUILD_DIR}
 - perl ~/komments/kpp.pl documentation.m
 - zip acty-sandbox.zip *.m *.html
-after_failure:
-- "./travis-tool.sh dump_logs"
 after_success:
 - cd ~
 - git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
