@@ -36,147 +36,7 @@ all the necessary ingredients to generate data from the model. This is
 implemented by the function \textbf{dgp.m}. Lastly, we put all of the above 
 together in \textbf{example.m}, where we create a synthetic sample and 
 estimate the underlying primitives. 
- 
-\section{Preliminaries}   
- 
-Throughout the Matlab code, the structures |Settings|, |Param|, and |Data| 
-play an important role. Since these structures show up in most if not all 
-functions to come, we introduce them here for further reference. 
- 
-\subsection{|Settings|} 
- 
-The structure |Settings| contains parameters that govern the execution of  
-the \textsc{Matlab}. All elements in  |Settings| need to be defined by hand 
-and remain constant throughout the  execution of the program. 
- 
-\begin{itemize} 
- 
-\item |Settings.tolInner| the real valued tolerance for the inner loop of  
-the NFXP.  
-  
-\item |Settings.tolOuter| the real valued tolerance for the outer loop of  
-the NFXP.  
-  
-\item |Settings.maxIter| the integer valued maximum number of iterations  
-the inner loop of the NXP may take before it throws an error.  
-  
-\item |Settings.nCheck| the integer valued maximum number of firms that the  
-market can sustain, $\check n$.  
-  
-\item |Settings.cCheck| the integer valued number of support points that  
-the demand process can take on.  
-  
-\item |Settings.lowBndC| is the real valued lower bound of the demand grid.  
-  
-\item |Settings.uppBndC| is the real valued upper bound of the demand grid.  
-  
-\item |Settings.logGrid| is a row vector of length |Settings.cCheck| with  
-the logged demand grid.  
-  
-\item |Settings.d| is the real valued distance between two points on the  
-logged demand grid.  
-  
-\item |Settings.rCheck| is the integer valued number of markets for which  
-we have or simulate data, $\check r$.  
-  
-\item |Settings.tCheck| is the integer valued number of time periods for  
-which we or simulate have data, $\check t$.  
-  
-\item |Settings.tBurn| is the integer valued number of burn in periods used  
-during the simulation.  
-  
-\item |Settings.fdStep| is the real valued step size used to compute finite  
-differences, when we compute the score of the likelihood function.  
-  
-\item |Settings.truncOrder| is the integer valued of points used for the  
-Gauss-Legendre integration.  
-  
-\item |Settings.integrationNodes| is the real valued row vector of length  
-|Settings.truncOrder| with Gauss-Legendre nodes.  
-  
-\item |Settings.integrationWeights| is the real valued row vector of length  
-|Settings.truncOrder| with Gauss-Legendre weights.  
-    
-\item |estimates2k(x)| is an anonymous function that maps the argument ---  
-a vector of estimates |x| --- into the vector valued outcome |Param.k|,  
-which will be defined below.  
-   
-\item |estimates2phi(x)| is an anonymous function that maps the argument  
---- a vector of estimates |x| --- into the vector valued outcome  
-|Param.phi|, which will be defined below.  
-  
-\item |estimates2omega(x)| is an anonymous function that maps the argument  
---- a vector of estimates |x| --- into the real valued outcome  
-|Param.omega|, which will be defined below.  
- 
-\end{itemize} 
- 
-\subsection{|Param|} 
- 
-The structure |Param| contains the primitives of the model. 
- 
-\begin{itemize} 
- 
-\item |Param.rho| is the real valued discount factor. 
- 
-\item |Param.k| is a real valued row vector of length |Settings.nCheck| 
-that parameterizes the surplus function, $k(n)$. 
- 
-\item |Param.phi| is a real valued row vector of length |Settings.nCheck| 
-that parameterizes the median of the entry costs, $\varphi(n)$. 
- 
-\item |Param.omega| is a real and parameterizes the scale, $\omega$, of the 
-cost shock distribution. 
- 
-\item |Param.demand.mu| is a real and parameterizes the mean, $\mu$, of the 
-log innovations of the demand process. 
- 
-\item |Param.demand.sigma| is a real and parameterizes the standard 
-deviation, $\sigma$, of the log innovations of the demand process. 
- 
-\item |Param.demand.transMat| is a real valued transition probability 
-matrix of the demand process, which is of size |Settings.cCheck| by 
-|Settings.cCheck|. 
- 
-\item |Param.demand.ergDist| is a real valued column vector of length 
-|Settings.cCheck| with the ergodic distribution of the demand process. 
- 
-\item |Param.truth.step1| is a real valued row vector with the true 
-parameter values for the first step in the three-step estimation procedure  
-during the Monte Carlo simulation. 
- 
-\item |Param.truth.step2| is a real valued row vector with the true 
-parameter values for the second step in the three-step estimation procedure  
-during the Monte Carlo simulation. 
- 
-\item |Param.truth.step3| is a real valued row vector with the true 
-parameter values for the third step in the three-step estimation procedure  
-during the Monte Carlo simulation. 
- 
-\end{itemize} 
- 
-\subsection{|Data|} 
- 
-The structure |Data| contains the following elements. 
- 
-\begin{itemize} 
- 
-\item |Data.C| is an integer valued matrix of size |Settings.tCheck| by 
-|Settings.rCheck|, where each element |(t,r)| contains the index of the 
-logged demand grid that describes the demand state in market |r| at time 
-|t|. 
- 
-\item |Data.N| is an integer valued matrix of size |Settings.tCheck| by 
-|Settings.rCheck|, where each element |(t,r)| contains the number of active 
-firms in market |r| at time |t|. 
- 
-\item |Data.W| is a real valued matrix of size |Settings.tCheck| by 
-|Settings.rCheck| that contains the cost shocks that are generated in the 
-Monte Carlo simulation. 
- 
-\end{itemize} 
- 
-   
+
 \section{Equilibrium computation}   
   
 This subsection explains how \textbf{valueFunctionIteration.m} can be used  
@@ -535,12 +395,149 @@ generating function are used in the NFXP procedure.
    
 \section{The example script: \textbf{example.m}}   
 \input[1..end]{example.m}   
+
+
+\section{Appendix A: List of Structures}   
+ 
+Throughout the Matlab code, the structures |Settings|, |Param|, and |Data| 
+play an important role. We define their contents in this section.
+ 
+\subsection{|Settings|} 
+ 
+The structure |Settings| contains parameters that govern the execution of  
+the \textsc{Matlab}. All elements in  |Settings| need to be defined by hand 
+and remain constant throughout the  execution of the program. 
+ 
+\begin{itemize} 
+ 
+\item |Settings.tolInner| the real valued tolerance for the inner loop of  
+the NFXP.  
+  
+\item |Settings.tolOuter| the real valued tolerance for the outer loop of  
+the NFXP.  
+  
+\item |Settings.maxIter| the integer valued maximum number of iterations  
+the inner loop of the NXP may take before it throws an error.  
+  
+\item |Settings.nCheck| the integer valued maximum number of firms that the  
+market can sustain, $\check n$.  
+  
+\item |Settings.cCheck| the integer valued number of support points that  
+the demand process can take on.  
+  
+\item |Settings.lowBndC| is the real valued lower bound of the demand grid.  
+  
+\item |Settings.uppBndC| is the real valued upper bound of the demand grid.  
+  
+\item |Settings.logGrid| is a row vector of length |Settings.cCheck| with  
+the logged demand grid.  
+  
+\item |Settings.d| is the real valued distance between two points on the  
+logged demand grid.  
+  
+\item |Settings.rCheck| is the integer valued number of markets for which  
+we have or simulate data, $\check r$.  
+  
+\item |Settings.tCheck| is the integer valued number of time periods for  
+which we or simulate have data, $\check t$.  
+  
+\item |Settings.tBurn| is the integer valued number of burn in periods used  
+during the simulation.  
+  
+\item |Settings.fdStep| is the real valued step size used to compute finite  
+differences, when we compute the score of the likelihood function.  
+  
+\item |Settings.truncOrder| is the integer valued of points used for the  
+Gauss-Legendre integration.  
+  
+\item |Settings.integrationNodes| is the real valued row vector of length  
+|Settings.truncOrder| with Gauss-Legendre nodes.  
+  
+\item |Settings.integrationWeights| is the real valued row vector of length  
+|Settings.truncOrder| with Gauss-Legendre weights.  
+    
+\item |estimates2k(x)| is an anonymous function that maps the argument ---  
+a vector of estimates |x| --- into the vector valued outcome |Param.k|,  
+which will be defined below.  
    
+\item |estimates2phi(x)| is an anonymous function that maps the argument  
+--- a vector of estimates |x| --- into the vector valued outcome  
+|Param.phi|, which will be defined below.  
+  
+\item |estimates2omega(x)| is an anonymous function that maps the argument  
+--- a vector of estimates |x| --- into the real valued outcome  
+|Param.omega|, which will be defined below.  
+ 
+\end{itemize} 
+ 
+\subsection{|Param|} 
+ 
+The structure |Param| contains the primitives of the model. 
+ 
+\begin{itemize} 
+ 
+\item |Param.rho| is the real valued discount factor. 
+ 
+\item |Param.k| is a real valued row vector of length |Settings.nCheck| 
+that parameterizes the surplus function, $k(n)$. 
+ 
+\item |Param.phi| is a real valued row vector of length |Settings.nCheck| 
+that parameterizes the median of the entry costs, $\varphi(n)$. 
+ 
+\item |Param.omega| is a real and parameterizes the scale, $\omega$, of the 
+cost shock distribution. 
+ 
+\item |Param.demand.mu| is a real and parameterizes the mean, $\mu$, of the 
+log innovations of the demand process. 
+ 
+\item |Param.demand.sigma| is a real and parameterizes the standard 
+deviation, $\sigma$, of the log innovations of the demand process. 
+ 
+\item |Param.demand.transMat| is a real valued transition probability 
+matrix of the demand process, which is of size |Settings.cCheck| by 
+|Settings.cCheck|. 
+ 
+\item |Param.demand.ergDist| is a real valued column vector of length 
+|Settings.cCheck| with the ergodic distribution of the demand process. 
+ 
+\item |Param.truth.step1| is a real valued row vector with the true 
+parameter values for the first step in the three-step estimation procedure  
+during the Monte Carlo simulation. 
+ 
+\item |Param.truth.step2| is a real valued row vector with the true 
+parameter values for the second step in the three-step estimation procedure  
+during the Monte Carlo simulation. 
+ 
+\item |Param.truth.step3| is a real valued row vector with the true 
+parameter values for the third step in the three-step estimation procedure  
+during the Monte Carlo simulation. 
+ 
+\end{itemize} 
+ 
+\subsection{|Data|} 
+ 
+The structure |Data| contains the following elements. 
+ 
+\begin{itemize} 
+ 
+\item |Data.C| is an integer valued matrix of size |Settings.tCheck| by 
+|Settings.rCheck|, where each element |(t,r)| contains the index of the 
+logged demand grid that describes the demand state in market |r| at time 
+|t|. 
+ 
+\item |Data.N| is an integer valued matrix of size |Settings.tCheck| by 
+|Settings.rCheck|, where each element |(t,r)| contains the number of active 
+firms in market |r| at time |t|. 
+ 
+\item |Data.W| is a real valued matrix of size |Settings.tCheck| by 
+|Settings.rCheck| that contains the cost shocks that are generated in the 
+Monte Carlo simulation. 
+ 
+\end{itemize} 
    
-\section{Appendix}    
+\section{Appendix B: Auxiliary Functions}    
    
-The appendix contains descriptions for some auxiliary functions that are  
-not essential for the understanding of the code.  
+This Part of the appendix contains descriptions of all auxiliary functions used that were not described above.
  
 \subsection{\textbf{markov.m}}    
   
