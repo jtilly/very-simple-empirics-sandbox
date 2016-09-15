@@ -15,7 +15,7 @@ install:
 script:
 - cd ${TRAVIS_BUILD_DIR}
 - perl ~/komments/kpp.pl documentation.m
-- zip verysimple-sandbox.zip *.m *.html
+- zip very-simple.zip *.m *.html
 after_success:
 - cd ~
 - git clone https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
@@ -25,7 +25,7 @@ after_success:
 - git checkout gh-pages
 - git pull origin gh-pages
 - mv ${TRAVIS_BUILD_DIR}/documentation.m.html .
-- mv ${TRAVIS_BUILD_DIR}/verysimple-sandbox.zip .
+- mv ${TRAVIS_BUILD_DIR}/very-simple.zip .
 - git add *.html *.zip
 - git commit -m "automatic travis update"
 - git push origin gh-pages
