@@ -118,9 +118,8 @@ Recall the definitions of the entry and survival thresholds in equations
 We use the convention that 
  
 \begin{equation} 
-\overline w_S(\check n +1, c) = 
-\overline w_E(\check n +1, c) = 
-\overline w_E(\check n, c) = -\infty. 
+\overline w_S(\check n + 1, c) = 
+\overline w_E(\check n + 1, c) = -\infty. 
 \end{equation} 
  
 From Lemma 2, it follows that the thresholds satisfy the monotonicity 
@@ -131,10 +130,10 @@ property
 \overline w_E(1, c)         \geq \cdots \geq 
 \overline w_S(n, c)         \geq 
 \overline w_E(n, c)         \geq \cdots \geq 
-\overline w_S(\check n,c)   > 
-\overline w_E(\check n, c)    = 
-\overline w_S(\check n +1, c) = 
-\overline w_E(\check n +1, c) = -\infty. 
+\overline w_S(\check n,c)   \geq 
+\overline w_E(\check n, c)   \geq 
+\overline w_S(\check n + 1, c) = 
+\overline w_E(\check n + 1, c) = -\infty. 
 \end{equation} 
  
 The thresholds also yield a convenient representation of the number of 
