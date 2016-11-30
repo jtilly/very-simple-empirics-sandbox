@@ -98,7 +98,7 @@ For a given survival strategy $a_S(n,c,w)$, the likelihood contribution from
 \int_{\log v_S(n,c)}^{\log v_S(1,c)} {n \choose n'}  a_S(n,c,w)^{n'}  
 \left(1-a_S(n,c,w)\right)^{n-n'} g_W(w) dw.  
 \end{equation}  
-The term inside the integral is the probabillity mass function of a   
+The term inside the integral is the probability mass function of a   
 binomial distribution function with success probability $a_S(n,c,w)$.  
 The survival strategies are defined by the indifference condition   
 (equation (5) in the paper)  
@@ -289,5 +289,5 @@ if(nargout == 2)
                llhContributions_Mixing;
 end
 
-% This concludes \textbf{likelihoodStep2.m}.
+% This concludes \textbf{likelihoodStep2}.
 end

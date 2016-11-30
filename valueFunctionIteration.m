@@ -112,7 +112,7 @@ end
 % number of iterations for each value function iteration. Whenever |iter|  
 % exceeds |Settings.maxIter|, the value function iteration is terminated  
 % and a error is returned. This concludes  
-% \textbf{valueFunctionIteration.m}.  
+% \textbf{valueFunctionIteration}.  
 % 
 % The speed of our implementation of |valueFunctionIteration| could be 
 % increased if we transposed the matrices |vS|, |pEntry|, |pEntrySet|, and 

@@ -64,5 +64,5 @@ Data.C = C((end - Settings.tCheck + 1):end, :);
 Data.N = N((end - Settings.tCheck + 1):end, :);
 Data.W = W((end - Settings.tCheck + 1):end, :);
 
-% This concludes the function \textbf{dgp.m}.
+% This concludes the function \textbf{dgp}.
 end

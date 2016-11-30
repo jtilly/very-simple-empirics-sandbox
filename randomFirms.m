@@ -21,7 +21,7 @@ the number of firms remains at zero.
  \item $v_S(n,c) \leq \exp (w) < v_S(1,c)$: In this case, a monopolist finds  
 survival profitable, but the current number of firms $n$ does not. Thus,   
 some firms will be leaving the market and firms' survival strategies   
-satisfy $a_S(n,c, w) \in (0,1)$. $N'$ follows a binominal   
+satisfy $a_S(n,c, w) \in (0,1)$. $N'$ follows a binomial   
 distribution with $n$ trials and success probability $a_S(n,c,w)$.    
 This case is only well defined when $n>1$.  
 
@@ -69,5 +69,5 @@ for nX = 1:Settings.rCheck
             Nprime(nX) = N(nX);
     end
 end
-% This concludes \textbf{randomFirms.m}.
+% This concludes \textbf{randomFirms}.
 end

@@ -108,5 +108,5 @@ end
 covariance = inv(Hessian);
 se = sqrt(diag(covariance))';
 
-% This concludes \textbf{likelihoodStep3.m}.
+% This concludes \textbf{likelihoodStep3}.
 end

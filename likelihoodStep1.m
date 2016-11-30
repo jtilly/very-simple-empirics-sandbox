@@ -76,5 +76,5 @@ likeCont(to == Settings.cCheck) = 1 - normcdf((Settings.logGrid(Settings.cCheck)
  
 ll = -sum(log(likeCont));
 
-% This concludes \textbf{likelihoodStep1.m}. 
+% This concludes \textbf{likelihoodStep1}. 
 end
