@@ -149,15 +149,15 @@ To compute the expectation with respect to $W'$ on the RHS of equation
 
 \begin{itemize}
 
-\item $w'>\overline w_S(n, c')$: The number of currently active firms 
-is too large. Firms will leave the market with positive probability (with 
+\item $w'>\overline w_S(n, c')$: The number of currently active firms
+is too large. Firms will leave the market with positive probability (with
 zero expected continuation value).
 
-\item $\overline w_S(n, c')\geq w'>\overline w_E(n+1, c')$: All 
+\item $\overline w_S(n, c')\geq w'>\overline w_E(n+1, c')$: All
 incumbents remain active, but there is no entry.
 
-\item $\overline w_E(n', c') \geq w' > \overline w_E(n'+1, c')$ for 
-$n'>n$: All incumbents remain active and there will be $n'-n$ additional 
+\item $\overline w_E(n', c') \geq w' > \overline w_E(n'+1, c')$ for
+$n'>n$: All incumbents remain active and there will be $n'-n$ additional
 entrants.
 
 \end{itemize}
@@ -354,20 +354,20 @@ This function computes the second step likelihood function.
 
 \section{Data generating process}
 
-Here we describe how to generate a synthetic sample with firms and 
-consumers for $\check r $ markets and $\check t $ time periods. The data 
+Here we describe how to generate a synthetic sample with firms and
+consumers for $\check r $ markets and $\check t $ time periods. The data
 generation process consists of three functions.
 
 \begin{itemize}
 
-\item \textbf{randomFirms} draws a vector of length $\check r$ with the 
-number of firms next period $n'$ given the current realizations of demand 
+\item \textbf{randomFirms} draws a vector of length $\check r$ with the
+number of firms next period $n'$ given the current realizations of demand
 $c$, cost shocks $w$, and the number of incumbents $n$.
 
-\item \textbf{mixingProbabilities} computes the purely mixed strategy 
+\item \textbf{mixingProbabilities} computes the purely mixed strategy
 survival probabilities.
 
-\item \textbf{dgp} puts the above functions together and returns a 
+\item \textbf{dgp} puts the above functions together and returns a
 synthetic data set.
 
 \end{itemize}
@@ -384,7 +384,7 @@ synthetic data set.
 
 \input[2..end]{dgp.m}
 
-The next section discusses how the three likelihood functions and the data 
+The next section discusses how the three likelihood functions and the data
 generating function are used in the NFXP procedure.
 
 \section{The example script: \textbf{example.m}}
@@ -393,73 +393,73 @@ generating function are used in the NFXP procedure.
 
 \section{Appendix A: List of Structures}
 
-Throughout the Matlab code, the structures |Settings|, |Param|, and |Data| 
+Throughout the Matlab code, the structures |Settings|, |Param|, and |Data|
 play an important role. We define their contents in this section.
 
 \subsection{|Settings|}
 
-The structure |Settings| contains parameters that govern the execution of 
-the \textsc{Matlab}. All elements in  |Settings| need to be defined by hand 
+The structure |Settings| contains parameters that govern the execution of
+the \textsc{Matlab}. All elements in  |Settings| need to be defined by hand
 and remain constant throughout the  execution of the program.
 
 \begin{itemize}
 
-\item |Settings.tolInner| the real valued tolerance for the inner loop of 
+\item |Settings.tolInner| the real valued tolerance for the inner loop of
 the NFXP.
 
-\item |Settings.tolOuter| the real valued tolerance for the outer loop of 
+\item |Settings.tolOuter| the real valued tolerance for the outer loop of
 the NFXP.
 
-\item |Settings.maxIter| the integer valued maximum number of iterations 
+\item |Settings.maxIter| the integer valued maximum number of iterations
 the inner loop of the NXP may take before it throws an error.
 
-\item |Settings.nCheck| the integer valued maximum number of firms that the 
+\item |Settings.nCheck| the integer valued maximum number of firms that the
 market can sustain, $\check n$.
 
-\item |Settings.cCheck| the integer valued number of support points that 
+\item |Settings.cCheck| the integer valued number of support points that
 the demand process can take on.
 
 \item |Settings.lowBndC| is the real valued lower bound of the demand grid.
 
 \item |Settings.uppBndC| is the real valued upper bound of the demand grid.
 
-\item |Settings.logGrid| is a row vector of length |Settings.cCheck| with 
+\item |Settings.logGrid| is a row vector of length |Settings.cCheck| with
 the logged demand grid.
 
-\item |Settings.d| is the real valued distance between two points on the 
+\item |Settings.d| is the real valued distance between two points on the
 logged demand grid.
 
-\item |Settings.rCheck| is the integer valued number of markets for which 
+\item |Settings.rCheck| is the integer valued number of markets for which
 we have or simulate data, $\check r$.
 
-\item |Settings.tCheck| is the integer valued number of time periods for 
+\item |Settings.tCheck| is the integer valued number of time periods for
 which we or simulate have data, $\check t$.
 
-\item |Settings.tBurn| is the integer valued number of burn in periods used 
+\item |Settings.tBurn| is the integer valued number of burn in periods used
 during the simulation.
 
-\item |Settings.fdStep| is the real valued step size used to compute finite 
+\item |Settings.fdStep| is the real valued step size used to compute finite
 differences, when we compute the score of the likelihood function.
 
-\item |Settings.truncOrder| is the integer valued of points used for the 
+\item |Settings.truncOrder| is the integer valued of points used for the
 Gauss-Legendre integration.
 
-\item |Settings.integrationNodes| is the real valued row vector of length 
+\item |Settings.integrationNodes| is the real valued row vector of length
 |Settings.truncOrder| with Gauss-Legendre nodes.
 
-\item |Settings.integrationWeights| is the real valued row vector of length 
+\item |Settings.integrationWeights| is the real valued row vector of length
 |Settings.truncOrder| with Gauss-Legendre weights.
 
 \item |estimates2k(x)| is an anonymous function that maps the argument ---
 a vector of estimates |x| --- into the vector valued outcome |Param.k|,
 which will be defined below.
 
-\item |estimates2phi(x)| is an anonymous function that maps the argument 
---- a vector of estimates |x| --- into the vector valued outcome 
+\item |estimates2phi(x)| is an anonymous function that maps the argument
+--- a vector of estimates |x| --- into the vector valued outcome
 |Param.phi|, which will be defined below.
 
-\item |estimates2omega(x)| is an anonymous function that maps the argument 
---- a vector of estimates |x| --- into the real valued outcome 
+\item |estimates2omega(x)| is an anonymous function that maps the argument
+--- a vector of estimates |x| --- into the real valued outcome
 |Param.omega|, which will be defined below.
 
 \end{itemize}
@@ -472,38 +472,38 @@ The structure |Param| contains the primitives of the model.
 
 \item |Param.rho| is the real valued discount factor.
 
-\item |Param.k| is a real valued row vector of length |Settings.nCheck| 
+\item |Param.k| is a real valued row vector of length |Settings.nCheck|
 that parameterizes the surplus function, $k(n)$.
 
-\item |Param.phi| is a real valued row vector of length |Settings.nCheck| 
+\item |Param.phi| is a real valued row vector of length |Settings.nCheck|
 that parameterizes the median of the entry costs, $\varphi(n)$.
 
-\item |Param.omega| is a real and parameterizes the scale, $\omega$, of the 
+\item |Param.omega| is a real and parameterizes the scale, $\omega$, of the
 cost shock distribution.
 
-\item |Param.demand.mu| is a real and parameterizes the mean, $\mu$, of the 
+\item |Param.demand.mu| is a real and parameterizes the mean, $\mu$, of the
 log innovations of the demand process.
 
-\item |Param.demand.sigma| is a real and parameterizes the standard 
+\item |Param.demand.sigma| is a real and parameterizes the standard
 deviation, $\sigma$, of the log innovations of the demand process.
 
-\item |Param.demand.transMat| is a real valued transition probability 
+\item |Param.demand.transMat| is a real valued transition probability
 matrix of the demand process, which is of size |Settings.cCheck| by
 |Settings.cCheck|.
 
-\item |Param.demand.ergDist| is a real valued column vector of length 
+\item |Param.demand.ergDist| is a real valued column vector of length
 |Settings.cCheck| with the ergodic distribution of the demand process.
 
-\item |Param.truth.step1| is a real valued row vector with the true 
-parameter values for the first step in the three-step estimation procedure 
+\item |Param.truth.step1| is a real valued row vector with the true
+parameter values for the first step in the three-step estimation procedure
 during the Monte Carlo simulation.
 
-\item |Param.truth.step2| is a real valued row vector with the true 
-parameter values for the second step in the three-step estimation procedure 
-during the Monte Carlo simulation. 
+\item |Param.truth.step2| is a real valued row vector with the true
+parameter values for the second step in the three-step estimation procedure
+during the Monte Carlo simulation.
 
-\item |Param.truth.step3| is a real valued row vector with the true 
-parameter values for the third step in the three-step estimation procedure 
+\item |Param.truth.step3| is a real valued row vector with the true
+parameter values for the third step in the three-step estimation procedure
 during the Monte Carlo simulation.
 
 \end{itemize}
@@ -514,17 +514,17 @@ The structure |Data| contains the following elements.
 
 \begin{itemize}
 
-\item |Data.C| is an integer valued matrix of size |Settings.tCheck| by 
-|Settings.rCheck|, where each element |(t,r)| contains the index of the 
-logged demand grid that describes the demand state in market |r| at time 
+\item |Data.C| is an integer valued matrix of size |Settings.tCheck| by
+|Settings.rCheck|, where each element |(t,r)| contains the index of the
+logged demand grid that describes the demand state in market |r| at time
 |t|.
 
-\item |Data.N| is an integer valued matrix of size |Settings.tCheck| by 
-|Settings.rCheck|, where each element |(t,r)| contains the number of active 
-firms in market |r| at time |t|. 
+\item |Data.N| is an integer valued matrix of size |Settings.tCheck| by
+|Settings.rCheck|, where each element |(t,r)| contains the number of active
+firms in market |r| at time |t|.
 
-\item |Data.W| is a real valued matrix of size |Settings.tCheck| by 
-|Settings.rCheck| that contains the cost shocks that are generated in the 
+\item |Data.W| is a real valued matrix of size |Settings.tCheck| by
+|Settings.rCheck| that contains the cost shocks that are generated in the
 Monte Carlo simulation.
 
 \end{itemize}
