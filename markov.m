@@ -3,7 +3,7 @@
 This function computes the transition probability matrix |transMat| and the
 ergodic distribution |ergDist| of the demand process. If this function is
 called using only |Param| and |Settings| as inputs, then |Param.demand.transMat| is
-computed using the true values of the demand process parameters $(\mu,\sigma)$
+computed using the true values of the demand process parameters $(\mu_C, \sigma_C)$
 that are stored in |Param.truth.step1|. This is used in \textbf{example.m} when
 we generate synthetic data on the number of consumers in each market. In this
 case, we will also compute the ergodic distribution |Param.demand.ergDist|.
@@ -16,7 +16,7 @@ function Param = markov(Param, Settings, mu, sigma)
 
 % The code starts with extracting the relevant variables from the
 % |Settings| structure for convenience. If only two input arguments are
-% passed to the function, then the true values for $(\mu,\sigma)$ are used.
+% passed to the function, then the true values for $(\mu_C, \sigma_C)$ are used.
 
 cCheck = Settings.cCheck;
 logGrid = Settings.logGrid;
@@ -50,9 +50,9 @@ transMat = NaN(cCheck, cCheck);
 
 % \begin{equation}
 % \Pi_{i,j}=Pr\left[ C'=c_{[j]} |C=c_{[i]}\right] = \Phi\left(\frac{\log
-% c_{[j]} - \log c_{[i]} +\frac{d}{2}-\mu}{\sigma}\right)-
+% c_{[j]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)-
 % \Phi\left(\frac{\log c_{[j]} - \log c_{[i]}
-% -\frac{d}{2}-\mu}{\sigma}\right)
+% -\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 
 for jX = 2:(cCheck - 1)
@@ -63,14 +63,14 @@ end
 %
 % \begin{equation}
 % \Pi_{i,1}=Pr\left[ C'=c_{[1]} |C=c_{[i]}\right] = \Phi\left(\frac{\log
-% c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu}{\sigma}\right)
+% c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 
 transMat(:, 1) = normcdf((logGrid(1) - logGrid' + d / 2 - mu) / sigma);
 
 % \begin{equation} \Pi_{i,1}=Pr\left[ C'=c_{[\check c ]} |C=c_{[i]}\right]
 % = 1-\Phi\left(\frac{\log c_{[\check c ]} - \log c_{[i]}
-% -\frac{d}{2}-\mu}{\sigma}\right) \end{equation}
+% -\frac{d}{2}-\mu_C}{\sigma_C}\right) \end{equation}
 
 transMat(:,cCheck) = 1 - normcdf((logGrid(cCheck) - logGrid' - d / 2 - mu) / sigma);
 

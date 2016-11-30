@@ -107,7 +107,7 @@ Param.truth.step3 = [Param.truth.step2, Param.truth.step1];
 % We now generate a synthetic sample that we will then estimate using the
 % three step estimation procedure. We begin the data generation by computing
 % the transition matrix and the ergodic distribution of the demand process,
-% using the true values for its parameters $(\mu,\sigma)$. This is done using the function
+% using the true values for its parameters $(\mu_C, \sigma_C)$. This is done using the function
 % \textbf{markov.m}, which creates the $\check c \times \check c$ transition matrix
 % |Param.demand.transMat| and the $\check c \times 1$ ergodic distribution
 % |Param.demand.ergdist|. We document \textbf{markov.m} in the Appendix.
@@ -127,7 +127,7 @@ from = Data.C(1:Settings.tCheck-1, 1:Settings.rCheck);
 % $t=1,\ldots,\check t -1$ and $r=1,\ldots,\check r $, as given in the
 % $\check{t}\times \check r $ matrix |Data.C|. As discussed above, we use
 % the mean and standard deviations of the innovations in logged demand as
-% starting values for $(\mu,\sigma)$. These are stored in
+% starting values for $(\mu_C, \sigma_C)$. These are stored in
 % |startValues.step1|
 
 logTransitions = log([from(:) to(:)]);
@@ -140,7 +140,7 @@ startValues.step1 = [mean(innovLogC)  std(innovLogC)];
 objFunStep1 = @(estimates) likelihoodStep1(Data, Settings, estimates);
 
 % Store the negative log likelihood evaluated at the true values of
-% $(\mu,\sigma)$. This will later allow us to compare the negative log
+% $(\mu_C, \sigma_C)$. This will later allow us to compare the negative log
 % likelihood function at the final estimates to the negative log likelihood
 % function at the true parameter values (the former should always be
 % smaller than the latter).
@@ -149,8 +149,8 @@ llhTruth.step1 = objFunStep1(Param.truth.step1);
 
 % Next, maximize the likelihood function using \textbf{fmincon}.  The only
 % constraint under which we are maximizing is that $\sigma >0$. We impose
-% this constraint by specifying the lower bound of $(\mu,\sigma)$ to be
-% |[-inf,0]|. The estimates of $(\mu,\sigma)$ are stored in
+% this constraint by specifying the lower bound of $(\mu_C, \sigma_C)$ to be
+% |[-inf,0]|. The estimates of $(\mu_C, \sigma_C)$ are stored in
 % |Estimates.step1|, the likelihood at the optimal value is stored in
 % |llh.step1| and the exit flag (the reason for which the optimization
 % ended) is stored in |exitFlag.step1|.
@@ -210,8 +210,8 @@ startValuesStep3 = [Estimates.step2, Estimates.step1];
 
 objFunStep3 = @(estimates) likelihoodStep3(Data, Settings, Param, estimates);
 
-% The lower bound for all parameter is zero, except for $\mu$ which is
-% unbounded. $\mu$ corresponds to the second-last entry in the list of
+% The lower bound for all parameter is zero, except for $\mu_C$ which is
+% unbounded. $\mu_C$ corresponds to the second-last entry in the list of
 % parameters:
 
 lb = zeros(size(startValuesStep3));

@@ -2,7 +2,7 @@
 % This function computes the first step likelihood function from demand
 % data. This function takes as inputs the |Data| structure (from which the
 % matrix |data.C| will be used), the |Settings| structure, and the
-% |estimates| vector which consists of $\mu$ and $\sigma$. The output of
+% |estimates| vector which consists of $\mu_C$ and $\sigma_C$. The output of
 % the function is the negative log likelihood |ll| and the $(\check t
 % -1)\cdot \check r \times1$ vector of likelihood contributions |likeCont|.
 % Notice that the data contains $\check t$ time periods, which gives us
@@ -38,21 +38,21 @@ sigma = estimates(2);
 %
 % \begin{equation}
 % \Pi_{i,j} =   Pr\left[ C'=c_{[j]} |C=c_{[i]}\right]
-%           =   \Phi\left(\frac{\log c_{[j]} - \log c_{[i]} +\frac{d}{2}-\mu}{\sigma}\right)
-%             - \Phi\left(\frac{\log c_{[j]} - \log c_{[i]} -\frac{d}{2}-\mu}{\sigma}\right)
+%           =   \Phi\left(\frac{\log c_{[j]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)
+%             - \Phi\left(\frac{\log c_{[j]} - \log c_{[i]} -\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 %
 % Similarly, transition to the lower and upper bound yield likelihood contributions of
 % \begin{equation}
 % \Pi_{i,1} =   Pr\left[ C'=c_{[1]} |C=c_{[i]}\right]
-%           =   \Phi\left(\frac{\log c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu}{\sigma}\right)
+%           =   \Phi\left(\frac{\log c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 %
 % and
 %
 % \begin{equation}
 % \Pi_{i,\check c} = Pr\left[ C'=c_{[\check c ]} |C=c_{[i]}\right]
-%                  = 1-\Phi\left(\frac{\log c_{[\check c ]} - \log c_{[i]} -\frac{d}{2}-\mu}{\sigma}\right),
+%                  = 1-\Phi\left(\frac{\log c_{[\check c ]} - \log c_{[i]} -\frac{d}{2}-\mu_C}{\sigma_C}\right),
 % \end{equation}
 %
 % respectively.

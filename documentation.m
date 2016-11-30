@@ -233,7 +233,7 @@ that include the demand state $C_{t,r}$ and the number of active firms
 $N_{t,r}$. We wish to estimate the parameter vector
 
 \begin{equation}
-\theta \equiv (\theta_C, \theta_P, \theta_W) \equiv ( (\mu,\sigma), (k, \varphi), \omega ).
+\theta \equiv (\theta_C, \theta_P, \theta_W) \equiv ( (\mu_C, \sigma_C), (k, \varphi), \omega ).
 \end{equation}
 
 The likelihood contribution of a single market-level observation, i.e. a
@@ -481,11 +481,11 @@ that parameterizes the median of the entry costs, $\varphi(n)$.
 \item |Param.omega| is a real and parameterizes the scale, $\omega$, of the
 cost shock distribution.
 
-\item |Param.demand.mu| is a real and parameterizes the mean, $\mu$, of the
+\item |Param.demand.mu| is a real and parameterizes the mean, $\mu_C$, of the
 log innovations of the demand process.
 
 \item |Param.demand.sigma| is a real and parameterizes the standard
-deviation, $\sigma$, of the log innovations of the demand process.
+deviation, $\sigma_C$, of the log innovations of the demand process.
 
 \item |Param.demand.transMat| is a real valued transition probability
 matrix of the demand process, which is of size |Settings.cCheck| by
