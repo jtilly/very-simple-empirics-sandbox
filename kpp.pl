@@ -949,6 +949,11 @@ sub break {
 				if ( $thisLine =~ s/$closeComment// ) {
 					$inCommentBlock = 0;           
 				}
+
+				# Replace line breaks in comments by a [whitespace][linebreak], because otherwise HTML
+				# will concatenate words across the line break (at least within a itemize environment)
+				$thisLine =~ s/\n/\ \n/g;
+				
 				$comments[$i] = $thisLine;
 				$code[$i]     = "";
 			}
