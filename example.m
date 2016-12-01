@@ -5,6 +5,7 @@
 % changes in the results are not because different random values were
 % generated.
 s = RandStream('mlfg6331_64');
+RandStream.setGlobalStream(s);
 
 % Next, we define two variable structures. The |Settings| structure
 % collects various settings used in the remainder of the program. The
