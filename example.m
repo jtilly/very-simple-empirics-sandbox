@@ -149,7 +149,7 @@ objFunStep1 = @(estimates) likelihoodStep1(Data, Settings, estimates);
 llhTruth.step1 = objFunStep1(Param.truth.step1);
 
 % Next, maximize the likelihood function using \textbf{fmincon}.  The only
-% constraint under which we are maximizing is that $\sigma >0$. We impose
+% constraint under which we are maximizing is that $\sigma_C >0$. We impose
 % this constraint by specifying the lower bound of $(\mu_C, \sigma_C)$ to be
 % |[-inf,0]|. The estimates of $(\mu_C, \sigma_C)$ are stored in
 % |Estimates.step1|, the likelihood at the optimal value is stored in
@@ -177,7 +177,7 @@ startValues.step2 = 1 + 4 * ones(1, length(Param.truth.step2)) * rand;
 
 % Applying \textbf{markov.m}, we then generate
 % the transition matrix and ergodic distribution using the estimated values
-% $(\hat \mu,\hat \sigma)$ from the first step as the parameters for the
+% $(\hat \mu_C,\hat \sigma_C)$ from the first step as the parameters for the
 % demand process:
 
 Param = markov(Param, Settings, Estimates.step1(1), Estimates.step1(2));
