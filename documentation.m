@@ -22,22 +22,22 @@ as a platform for replication, experimentation, and teaching.
 
 The whole package can be downloaded from \url{http://jtilly.io/very-simple-markov-perfect/very-simple.zip}{here}.
 The code can be executed in \textsc{Matlab} by running the script
-\textbf{example.m}.
+|example.m|.
 
 This documentation is structured as follows. We first introduce the algorithm that
 computes the equilibrium value functions. This algorithm is implemented by
-the function \textbf{valueFunctionIteration}. We then introduce the
+the function |valueFunctionIteration|. We then introduce the
 likelihood functions required for the three step estimation procedure. These
-are implemented by the functions \textbf{likelihoodStep1},
-\textbf{likelihoodStep2}, and \textbf{likelihoodStep3}. We then discuss
+are implemented by the functions |likelihoodStep1|,
+|likelihoodStep2|, and |likelihoodStep3|. We then discuss
 all the necessary ingredients to generate data from the model. This is
-implemented by the function \textbf{dgp}. Lastly, we put all of the above
-together in the script \textbf{example.m}, where we create a synthetic sample and
+implemented by the function |dgp|. Lastly, we put all of the above
+together in the script |example.m|, where we create a synthetic sample and
 estimate the underlying primitives.
 
 \section{Equilibrium computation}
 
-This subsection explains how \textbf{valueFunctionIteration} can be used
+This subsection explains how |valueFunctionIteration| can be used
 to compute the unique Markov-perfect equilibrium of our dynamic game. The
 equilibrium computation procedure that is described in the paper involves
 iterating on the post-entry value function (which is a contraction mapping)
@@ -301,30 +301,30 @@ of the demand process. In contrast, computing $\mathcal{L}_N\left( \theta
 The three-steps estimation procedure is as described in
 \cite{ecta1987Rust}:
 
-\begin{itemize}
+\begin{enumerate}
 
 \item \textbf{ Estimate $\theta_C$ with $\tilde\theta_C\equiv\arg
-\max_{\theta_C}{\cal L}_C(\theta_C)$;}
+\max_{\theta_C}{\cal L}_C(\theta_C)$.}
 
-\item \textbf{ estimate $(\theta_P,\theta_W)$ with
+\item \textbf{ Estimate $(\theta_P,\theta_W)$ with
 $(\tilde\theta_P,\tilde\theta_W)\equiv\arg\max_{(\theta_P,\theta_W)}{\cal
-L}_N(\theta_P,\tilde\theta_C,\theta_W)$; and }
+L}_N(\theta_P,\tilde\theta_C,\theta_W)$.}
 
-\item \textbf{ estimate $\theta$ by maximizing the full likelihood function
+\item \textbf{ Estimate $\theta$ by maximizing the full likelihood function
 $\hat\theta\equiv\arg\max_\theta{\cal L}(\theta)$, using
 $\tilde\theta\equiv(\tilde\theta_P,\tilde\theta_C,\tilde\theta_W)$ as
 starting value.}
 
-\end{itemize}
+\end{enumerate}
 
 The first two steps are thus used for providing starting values for the
-full information maximum likelihood (FIML) in step 3. As can be seen from
+full information maximum likelihood (FIML) in Step 3. As can be seen from
 experimenting with the code, the first two steps provide very good starting
 values for the FIML, which therefore converges after only a small number of
 iterations. Note that it is the second step which gives the procedure the
 name NXFP: solving the model entails solving for the fixed point of the
-value functions, and this is nested within the iterative optimization to
-find the maximum likelihood.
+value functions, and this is nested within the optimization procedure that
+maximizes the likelihood.
 
 The starting values for the first step are directly calculated from the
 data as the mean and standard deviation of the  innovations of logged
@@ -344,8 +344,6 @@ not, we only discuss the computation of standard errors in the third step.
 \subsection{Likelihood Step 2: Estimate $\left(
 \theta_P,\theta_W \right)$}
 
-This function computes the second step likelihood function.
-
 \input[2..end]{likelihoodStep2.m}
 
 \subsection{Likelihood Step 3: Jointly estimate all parameters}
@@ -360,14 +358,14 @@ generation process consists of three functions.
 
 \begin{itemize}
 
-\item \textbf{randomFirms} draws a vector of length $\check r$ with the
+\item |randomFirms| draws a vector of length $\check r$ with the
 number of firms next period $n'$ given the current realizations of demand
 $c$, cost shocks $w$, and the number of incumbents $n$.
 
-\item \textbf{mixingProbabilities} computes the purely mixed strategy
+\item |mixingProbabilities| computes the purely mixed strategy
 survival probabilities.
 
-\item \textbf{dgp} puts the above functions together and returns a
+\item |dgp| puts the above functions together and returns a
 synthetic data set.
 
 \end{itemize}
@@ -387,7 +385,7 @@ synthetic data set.
 The next section discusses how the three likelihood functions and the data
 generating function are used in the NFXP procedure.
 
-\section{The example script: \textbf{example.m}}
+\section{The example script: |example.m|}
 \input[1..end]{example.m}
 
 
@@ -450,16 +448,16 @@ Gauss-Legendre integration.
 \item |Settings.integrationWeights| is the real valued row vector of length
 |Settings.truncOrder| with Gauss-Legendre weights.
 
-\item |estimates2k(x)| is an anonymous function that maps the argument ---
-a vector of estimates |x| --- into the vector valued outcome |Param.k|,
+\item |estimates2k(x)| is an anonymous function that maps the argument
+a vector of estimates |x| into the vector valued outcome |Param.k|,
 which will be defined below.
 
-\item |estimates2phi(x)| is an anonymous function that maps the argument
---- a vector of estimates |x| --- into the vector valued outcome
+\item |estimates2phi(x)| is an anonymous function that maps the argument a
+vector of estimates |x| into the vector valued outcome
 |Param.phi|, which will be defined below.
 
 \item |estimates2omega(x)| is an anonymous function that maps the argument
---- a vector of estimates |x| --- into the real valued outcome
+a vector of estimates |x| into the real valued outcome
 |Param.omega|, which will be defined below.
 
 \end{itemize}
