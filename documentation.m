@@ -107,8 +107,8 @@ Recall the definitions of the entry and survival thresholds in equations
 
 \begin{equation}
 \begin{split}
-\bar{w}_{E}(n,c) &\equiv \log v_{S} \left( n,c \right) - \log \left(1+\varphi \right) \\
-\bar{w}_{S}(n,c) &\equiv \log v_{S} \left( n,c \right).
+\overline w_{E}(n,c) &\equiv \log v_{S} \left( n,c \right) - \log \left(1+\varphi \right) \\
+\overline w_{S}(n,c) &\equiv \log v_{S} \left( n,c \right).
 \end{split}
 \end{equation}
 
