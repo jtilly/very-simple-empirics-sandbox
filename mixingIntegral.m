@@ -172,7 +172,7 @@ for jX = 1:length(from)
     end
 end
 
-% Note that it is possible to improve the peformance of the code by only
+% Note that it is possible to improve the performance of the code by only
 % calling this function once instead of three times as we currently do in
 % the likelihood function computation. However, that makes the code somewhat
 % more difficult to follow, which is why we opted for the slightly slower
