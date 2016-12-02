@@ -2,7 +2,7 @@
 % This function computes the full information likelihood. This step only
 % involves taking the product of the likelihood contributions from the
 % first two steps. Here we will also go over the computation of standard
-% errors. The function \textbf{likelihoodStep3} requires the structures |Data|,
+% errors. The function |likelihoodStep3| requires the structures |Data|,
 % |Settings|, and |Param|, and the vector |estimates| as inputs.
 % The arguments returned include the negative log likelihood
 % function |ll|, a vector of standard errors |se|, a vector of the
@@ -108,5 +108,5 @@ end
 covariance = inv(Hessian);
 se = sqrt(diag(covariance))';
 
-% This concludes \textbf{likelihoodStep3}.
+% This concludes |likelihoodStep3|.
 end

@@ -69,5 +69,5 @@ for nX = 1:Settings.rCheck
             Nprime(nX) = N(nX);
     end
 end
-% This concludes \textbf{randomFirms}.
+% This concludes |randomFirms|.
 end

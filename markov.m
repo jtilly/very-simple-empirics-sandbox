@@ -4,7 +4,7 @@ This function computes the transition probability matrix |transMat| and the
 ergodic distribution |ergDist| of the demand process. If this function is
 called using only |Param| and |Settings| as inputs, then |Param.demand.transMat| is
 computed using the true values of the demand process parameters $(\mu_C, \sigma_C)$
-that are stored in |Param.truth.step1|. This is used in \textbf{example.m} when
+that are stored in |Param.truth.step1|. This is used in |example.m| when
 we generate synthetic data on the number of consumers in each market. In this
 case, we will also compute the ergodic distribution |Param.demand.ergDist|.
 Alternatively, if the function is called with the additional inputs |mu|

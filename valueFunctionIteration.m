@@ -1,6 +1,6 @@
 %% valueFunctionIteration.m
 %{
-The function \textbf{valueFunctionIteration.m} requires the arguments
+The function |valueFunctionIteration| requires the arguments
 |Settings| and |Param|. It returns the following four matrices:
   
 \begin{itemize}
@@ -112,7 +112,7 @@ end
 % number of iterations for each value function iteration. Whenever |iter|
 % exceeds |Settings.maxIter|, the value function iteration is terminated
 % and a error is returned. This concludes
-% \textbf{valueFunctionIteration}.
+% |valueFunctionIteration|.
 %
 % The speed of our implementation of |valueFunctionIteration| could be
 % increased if we transposed the matrices |vS|, |pEntry|, |pEntrySet|, and

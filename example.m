@@ -49,7 +49,7 @@ linspace(log(Settings.lowBndC), log(Settings.uppBndC), Settings.cCheck);
 Settings.d = Settings.logGrid(2) - Settings.logGrid(1);
 
 % Next, we define the number of markets |rCheck| and the number of time
-% periods |tCheck|. In the data generating process (\textbf{dgp.m}), we
+% periods |tCheck|. In the data generating process (|dgp|), we
 % will draw data for |tBurn + tCheck| periods, but only store the last
 % |tCheck| time periods of data.  |tBurn| denotes the number of burn-in
 % periods that are used to ensure that the simulated data refers to the
@@ -70,7 +70,7 @@ Settings.fdStep = 1e-7;
 % will need to numerically integrate over the support of the survival
 % strategies, $(0,1)$. We will do so using Gauss-Legendre quadrature.
 % |truncOrder| refers to number of Gauss-Legendre nodes used. We document
-% the function \textbf{lgwt.m} in the Appendix.
+% the function |lgwt| in the Appendix.
 
 Settings.truncOrder = 32;
 [Settings.integrationNodes, Settings.integrationWeights] = ...
@@ -78,7 +78,7 @@ Settings.truncOrder = 32;
 
 % We can now define the settings for the optimizer used during the
 % estimation. Note that these options will be used for \textsc{Matlab}'s
-% constrained optimization function \textbf{fmincon}.
+% constrained optimization function |fmincon|.
 
 options = optimset( 'Algorithm', 'interior-point', 'Display', 'iter', ...
     'TolFun', Settings.tolOuter, 'TolX', Settings.tolOuter, ...
@@ -103,22 +103,21 @@ Param.demand.sigma = 0.02;
 Param.truth.step1 = [Param.demand.mu, Param.demand.sigma];
 Param.truth.step2 = [Param.k, Param.phi(1), Param.omega];
 Param.truth.step3 = [Param.truth.step2, Param.truth.step1];
-
  
 % We now generate a synthetic sample that we will then estimate using the
 % three step estimation procedure. We begin the data generation by computing
 % the transition matrix and the ergodic distribution of the demand process,
 % using the true values for its parameters $(\mu_C, \sigma_C)$. This is done using the function
-% \textbf{markov.m}, which creates the $\check c \times \check c$ transition matrix
+% |markov|, which creates the $\check c \times \check c$ transition matrix
 % |Param.demand.transMat| and the $\check c \times 1$ ergodic distribution
-% |Param.demand.ergdist|. We document \textbf{markov.m} in the Appendix.
+% |Param.demand.ergdist|.
 
 Param = markov(Param, Settings);
 
-% Next, we generate the dataset $(n,c)$ using \textbf{dgp.m}. This creates
+% Next, we generate the dataset $(n,c)$ using |dgp|. This creates
 % the two $\check t \times \check r$ matrices |data.C| and |data.N|. Then
 % construct the |from| and |to| matrices of size $(\check t -1)\times
-% \check r $ as we did in \textbf{likelihoodStep1.m}.
+% \check r $ as we did in |likelihoodStep1|.
 
 Data = dgp(Settings, Param);
 to = Data.C(2:Settings.tCheck, 1:Settings.rCheck);
@@ -148,7 +147,7 @@ objFunStep1 = @(estimates) likelihoodStep1(Data, Settings, estimates);
 
 llhTruth.step1 = objFunStep1(Param.truth.step1);
 
-% Next, maximize the likelihood function using \textbf{fmincon}.  The only
+% Next, maximize the likelihood function using |fmincon|.  The only
 % constraint under which we are maximizing is that $\sigma_C >0$. We impose
 % this constraint by specifying the lower bound of $(\mu_C, \sigma_C)$ to be
 % |[-inf,0]|. The estimates of $(\mu_C, \sigma_C)$ are stored in
@@ -163,7 +162,7 @@ computingTime.step1 = toc;
 
 % Now consider the second step, in which we estimate $(k,\varphi,\omega)$.
 % Start by creating anonymous functions which will be used in
-% \textbf{likelihoodStep2.m} to map the vector of parameter estimates into
+% |likelihoodStep2| to map the vector of parameter estimates into
 % the |Param| structure:
 
 Settings.estimates2k = @(x) x(1:Settings.nCheck);
@@ -175,7 +174,7 @@ Settings.estimates2omega = @(x) x(7);
 
 startValues.step2 = 1 + 4 * ones(1, length(Param.truth.step2)) * rand;
 
-% Applying \textbf{markov.m}, we then generate
+% Using |markov|, we then generate
 % the transition matrix and ergodic distribution using the estimated values
 % $(\hat \mu_C,\hat \sigma_C)$ from the first step as the parameters for the
 % demand process:

@@ -22,8 +22,8 @@ function Data = dgp(Settings, Param)
 N = NaN(Settings.tBurn + Settings.tCheck, Settings.rCheck);
 C = NaN(Settings.tBurn + Settings.tCheck, Settings.rCheck);
 
-% We now compute the post-survival equilibrium value functions using
-% \textbf{valueFuncrionIteration}:
+% We now compute the post-survival equilibrium value functions using the
+% function |valueFunctionIteration|:
 vS = valueFunctionIteration(Settings,Param);
 
 % The cost shocks are iid across markets and periods, so we can draw them
@@ -32,7 +32,7 @@ vS = valueFunctionIteration(Settings,Param);
 W = Param.omega * randn(Settings.tBurn + Settings.tCheck, Settings.rCheck) -0.5 * Param.omega ^ 2;
 
 % Next, we draw an initial demand state from the ergodic distribution of
-% the demand process for each market using the \textbf{randomDiscr}
+% the demand process for each market using the |randomDiscr|
 % function, which is documented in the appendix. With the initial demand state for each market in hand, for each
 % time period we use the transition matrix to draw the current demand state
 % given the previous state:
@@ -45,7 +45,7 @@ end
 % The initial number of firms in each market is drawn randomly from a
 % discrete uniform distribution on $\{ {1,2,\ldots ,\check n } \}$. In each
 % period following the first one, the number of firms is generated using
-% the \textbf{randomFirms} function, which randomly draws realizations of
+% the |randomFirms| function, which randomly draws realizations of
 % the cost shocks and then uses the firms' equilibrium strategies to update
 % the number of active firms. We draw the numbers of firms separately for
 % the burn-in phase and the real sample, because for the latter we also
@@ -64,5 +64,5 @@ Data.C = C((end - Settings.tCheck + 1):end, :);
 Data.N = N((end - Settings.tCheck + 1):end, :);
 Data.W = W((end - Settings.tCheck + 1):end, :);
 
-% This concludes the function \textbf{dgp}.
+% This concludes the function |dgp|.
 end

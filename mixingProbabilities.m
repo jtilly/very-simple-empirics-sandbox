@@ -61,5 +61,5 @@ for iX=1:length(N)
     aS(iX) = mixprobcand;
 
 end
-% This concludes \textbf{mixingProbabilities}.
+% This concludes |mixingProbabilities|.
 end
