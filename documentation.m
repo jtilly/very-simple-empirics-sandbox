@@ -341,12 +341,12 @@ not, we only discuss the computation of standard errors in the third step.
 
 \input[2..end]{likelihoodStep1.m}
 
-\subsection{Likelihood Step 2: Estimate $\left(
-\theta_P,\theta_W \right)$}
+\subsection{Likelihood Step 2: Estimate $(
+\theta_P,\theta_W)$}
 
 \input[2..end]{likelihoodStep2.m}
 
-\subsection{Likelihood Step 3: Jointly estimate all parameters}
+\subsection{Likelihood Step 3: Estimate $(\theta_C, \theta_P, \theta_W)$}
 
 \input[2..end]{likelihoodStep3.m}
 
