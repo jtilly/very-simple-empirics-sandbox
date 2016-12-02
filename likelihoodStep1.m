@@ -19,8 +19,8 @@ function [ll, likeCont] = likelihoodStep1(Data , Settings, estimates)
 from = Data.C(1:(Settings.tCheck - 1), 1:Settings.rCheck);
 to = Data.C(2:Settings.tCheck, 1:Settings.rCheck);
 
-% Preallocate the $(\check t -1)\cdot \check r \times1$ likelihood
-% contribution vector:
+% We allocate the $(\check t -1)\cdot \check r \times1$ likelihood
+% contribution vector and set its value to |NaN|:
 likeCont = NaN(size(from(:),1), 1);
 
 % Assign |mu| and |sigma|, the values with respect to which we will

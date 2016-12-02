@@ -24,11 +24,12 @@ For the |roots| function to work, we need to transform
 \end{equation}
 where the relevant \textsc{Matlab} variables are marked in bold font.
 
- Preallocate a vector of zeros with the survival strategies that will
+We allocate a vector of zeros with the survival strategies that will
 subsequently be filled and then loop over each element in |N|.
 %}
 
 aS = zeros(size(N));
+ 
 for iX=1:length(N)
 
 % Store the post-entry number of active firms in a scalar |nE|. Preallocate

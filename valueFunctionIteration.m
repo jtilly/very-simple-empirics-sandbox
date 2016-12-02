@@ -43,8 +43,8 @@ backwards.
 %}
 function [vS, pEntry, pEntrySet, pStay] = valueFunctionIteration(Settings, Param)
 
-% Preallocate the matrices that will be returned by the function.
-
+% We allocate the various matrices that will be returned by the function and
+% set their initial values to zero.
 vS = ones(Settings.nCheck + 1, Settings.cCheck);
 pEntry = zeros(Settings.nCheck + 1, Settings.cCheck);
 pEntrySet = zeros(Settings.nCheck + 1, Settings.cCheck);
@@ -69,9 +69,10 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % difference |vSdiff| between  |vS(n, :)| and its update |vSPrime| does not
 % exceed the stopping  criterion, |Settings.tolInner|.  Start by
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).
-% We pre-compute $\omega ^ 2$ at the beginning, so we do not have to do
-% so repeatedly inside the loops below.
+% We pre-compute $\omega ^ 2$ and the demand grid (transposed) at the beginning,
+% so we do not have to do so repeatedly inside the loops below.
 omega2 = Param.omega ^ 2;
+gridTrans = exp(Settings.logGrid)';
  
 for n = Settings.nCheck:-1:1
     
@@ -79,7 +80,7 @@ for n = Settings.nCheck:-1:1
     vSdiff = 1;
 
     % % pre-compute flow surplus so we don't have to do so repeatedly inside the while loop
-    flowSurplus = exp(Settings.logGrid)' * Param.k(n) / n;
+    flowSurplus = gridTrans * Param.k(n) / n;
     
     while (vSdiff > Settings.tolInner && iter < Settings.maxIter)
         
