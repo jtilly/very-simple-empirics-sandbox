@@ -68,7 +68,7 @@ llhContributions_StayAtZero(selectMarketsStayAtZero) = 1 - pEntry(1, demand(sele
 % \item \textbf{Case 3: Number of firms stays the same at a non-zero number
 % ($\mathbf{n'=n>0}$).} The likelihood contribution is
 % \begin{equation}
-% \mbox{Pr} \left( \overline w_S(n, c) \leq W < \overline w_E(n + 1, c) \right)
+% \mbox{Pr} \left( \overline w_E(n + 1, c) \leq W < \overline w_S(n, c) \right)
 % = \tilde \Phi\left[\log v_S(n,c) \right]
 %  - \tilde \Phi\left[\log v_S(n + 1,c) - \log (1+\varphi) \right]
 % \end{equation}
@@ -106,7 +106,7 @@ The survival strategies are defined by the indifference condition
 \sum_{n'=1}^{n} {n - 1 \choose n' - 1}\; a_S^{n' - 1} \left(1-a_S\right)^{n-n'}
 \left(- \exp(w)+v_{S}(n',c)\right)=0.
 \end{equation}
- 
+
 In principle, we could compute this integral directly by numerically
 integrating over $W$. In practice, it is computationally convenient to do
 a change of variables and integrate over the survival strategies
@@ -115,22 +115,22 @@ survival strategy $a_S(n,c,w)$ (which is a function of $n$, $c$, and $w$)
 and the variable of integration (which is just a scalar), we will refer
 to the latter as $p$. Thus, for a given value of $p$, we need to find the
 value of $w$ such that $p = a_S(n,c,w)$.
- 
+
 Equation (\ref{indifference}) defines the
 inverse $a_S^{ - 1}(p;c,n)$ for which
- 
+
 \begin{equation}
 a_S^{ - 1}(a_S(n,c,w);c,n) = w.
 \end{equation}
- 
+
 This inverse function can be solved for analytically and it is given by
- 
+
 \begin{equation}
 \underbrace{a_S^{ - 1}(p;c,n)}_{\textbf{aSinv}}
 = \log \left(\underbrace{\sum_{n'=1}^{n} {n - 1 \choose n' - 1}
       p^{n' - 1} \left(1 - p\right)^{n-n'} v_{S}(n',c) }_{\textbf{expaSInv}}\right)
 \end{equation}
- 
+
 Then note that $a_S^{ - 1}(1;c,n) = \log v_S(n,c)$ and $a_S^{ - 1}(0;c,n) =
 \log v_S(1,c)$.
 We can write the likelihood contribution as an integral over $p$:
@@ -150,35 +150,35 @@ We can write the likelihood contribution as an integral over $p$:
 \end{split}
 \label{llContrMixing}
 \end{equation}
- 
+
 where $p_{1}, ..., p_{J}$ refer to the
 \url{http://en.wikipedia.org/wiki/Gaussian_quadrature}{Gauss-Legendre}
 nodes and $w_{1}, ..., w_{J}$ to the corresponding weights. Notice that the
 integration bounds are now 0 and 1 since if $w<\log v_S(n,c)$ the firms
 surely survive and when $w>\log v_S(1,c)$ the firms surely exit.
 Differentiation of $a_S^{ - 1}(p;c,n)$ gives
- 
+
 \begin{equation}
 \underbrace{\frac{da_S^{ - 1}(p;c,n)}{dp}}_{\textbf{daSinvdP}} =
  \overbrace{ \sum_{n'=1}^{n} \overbrace{{n - 1 \choose n' - 1}
 \left(p^{n'-2} (1 - p)^{(n-n' - 1)} \left( (n' - 1) (1 - p) - p (n-n') \right) \right)}^{\textbf{dbinomialPmfdP}} v_{S}(n',c)}^{\textbf{dexpaSInvdP}} \frac{1}{\underbrace{\exp(a_S^{ - 1}(p;c,n))}_{\textbf{expaSInv}}}
 \end{equation}
- 
+
 Now, compute the matrix |mixingDensity| using (\ref{mixingDensity}). |mixingDensity| is of dimension
 |Settings.truncOrder| by |Settings.cCheck| by |Settings.nCheck|. It is
 defined as
- 
+
 \begin{equation}
       \text{mixingDensity(jX,c,n)} =
       \underbrace{\frac{da_S^{ - 1}(p_{jX};c,n)}{dp}}_{\textbf{daSinvdP}}
       \underbrace{g_{W}\left[a_S^{ - 1}(p_{jX};c,n)\right]}_{\textbf{normaSinv}}
       \underbrace{w_{jX}}_{\textbf{intWeights}}. \label{mixingDensity}
 \end{equation}
- 
+
 The element $(p_{jX}, c, n)$ gives us the density
 of the mixing probability $p_{jX}$ when demand equals $c$ and the
 current number of incumbents is $n$.
- 
+
 Note that mixed strategy play is only relevant for markets with at least
 two firms. We define the auxiliary variable |expaSInv|, which equals
 |expaSInv = exp(aSinv(:, :, n))|. |dexpaSInvdP| is another auxiliary variable
@@ -191,7 +191,7 @@ compute the derivative with respect to |p| and store it as |daSinvdP|.
 Lastly, compute the mixing density, where we already take into account that
 we use Gauss-Legendre weights that are stored in the vector |weights|
 during the integration steps.
- 
+
 We pre-compute |nchoosekMatrixPlusOne| which is a matrix of size $\check
 n + 1$ by $\check n + 1$, where element $(i,j)$ contains $i - 1 \choose j - 1$. The
 copious naming and indexing convention is owed to the fact that Matlab's
@@ -217,14 +217,14 @@ daSinvdP = zeros(length(Settings.integrationNodes), Settings.cCheck, Settings.nC
 
 p = Settings.integrationNodes;
 w = Settings.integrationWeights;
- 
+
 for n = 2:Settings.nCheck
-     
+
     expaSInv = zeros(length(p), Settings.cCheck);
     dexpaSInvdP = zeros(length(p), Settings.cCheck);
-     
+
     for nPrime = 1:n
-        
+
         nCk = nchoosekMatrixPlusOne(n, nPrime);
         binomialPmf = nCk .* repmat(p .^ (nPrime - 1) .* (1 - p) .^ (n - nPrime), 1, Settings.cCheck);
         dbinomialPmfdP = nCk .* repmat(p .^ (nPrime-2) .* (1 - p) .^ (n - nPrime - 1) ...
@@ -232,12 +232,12 @@ for n = 2:Settings.nCheck
         repvS =  repmat(vS(nPrime, :), Settings.truncOrder,1);
         expaSInv = expaSInv +  binomialPmf .* repvS ;
         dexpaSInvdP = dexpaSInvdP +  dbinomialPmfdP .* repvS;
-        
+
     end
-    
+
     aSinv(:, :, n) =  log ( expaSInv );
     daSinvdP(:, :, n) =  dexpaSInvdP ./ expaSInv;
-     
+
     intWeights = repmat(w, 1, Settings.cCheck);
     normaSinv = normpdf(aSinv(:, :, n), -.5*Param.omega^2, Param.omega);
     mixingDensity(:, :, n) = daSinvdP(:, :, n) .* normaSinv .* intWeights;
@@ -253,14 +253,14 @@ selectMixing = (from >= 2 & to <= from);
 idx = selectMixing .* (1:length(from))';
 idx(idx==0) = []; % \% vector with indices with pure mixed strategy play
 llhContributions_Mixing = zeros(size(from));
- 
+
 for jX=1:length(idx)
- 
+
     nCk = nchoosekMatrixPlusOne(from(idx(jX)) + 1, to(idx(jX)) + 1);
     llhContributions_Mixing(idx(jX)) = ...
         -sum(nCk .* p .^ to(idx(jX)) .* (1 - p) .^ (from(idx(jX)) - to(idx(jX))) ...
                   .* mixingDensity(:,  demand(idx(jX)), from(idx(jX))) );
- 
+
 end
 
 % \end{itemize}
@@ -274,7 +274,7 @@ ll = -sum(log(llhContributions_Entry + ...
               llhContributions_StayAtNonZero + ...
               llhContributions_AllLeave + ...
               llhContributions_Mixing));
-           
+
 if(isnan(ll) || max(real(ll)~=ll) == 1)
     ll = inf;
 end
