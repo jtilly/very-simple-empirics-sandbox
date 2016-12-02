@@ -1,7 +1,7 @@
 %% mixingIntegral.m
 %{
 \textbf{Computing the integral resulting from mixed strategies play.}
-%
+
 For a given survival strategy $a_S(n,c,w)$, the likelihood contribution from
 (purely) mixed strategy play is given by
 \begin{equation}
