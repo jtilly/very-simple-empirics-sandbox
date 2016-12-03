@@ -1,25 +1,24 @@
 %% randomDiscr.m
 
 %{
-  This function generates realizations for each of |K| discrete random
-  variables using the inverse CDF method. Each of the |K| random variables
-  has support |1,2,...,M| and is characterized by the probability mass
-  function |P(:,k)|. This function draws realizations from the Markov chain
-  that governs the demand process.
+  This function randomly draws realizations from discrete probability
+  distributions using the inverse cumulative distribution function method. The
+  idea is to first draw a realization from a uniform distribution and then map
+  that draw, a probability, into the corresponding mass point of the discrete
+  distribution. This function is written to draw one realization each from
+  |K| distributions at a time. Each of the |K| distributions is assumed to be
+  defined over |M| points.
+
+  The function takes as input a matrix |P| which is of dimension |M| times |K|.
+  In this matrix, each column corresponds to a probability mass function.
+
 %}
 function iX = randomDiscr(P)
-% 1,2,...,M is the support
-M = size(P, 1);
-% number of variables
-K = size(P, 2);
-% Draw |K| realizations from $U[0,1]$ and duplicate each realization |M| times
-% to create the matrix |U|, which is of dimension |M|$\times$|K|.
-U = ones(M, 1) * rand(1, K);
-% Compute the cumulative distribution function.
-cdf = cumsum(P);
-% Obtain the smallest element in the support of each of the |K|
-% random variables for which the CDF just exceeds the realization of U.
-iX = 1 + sum(U > cdf);
-% The result is a vector |iX| of length |K| with realizations from the
-% collection of discrete random variables governed by |P|.
+	M = size(P, 1);
+	K = size(P, 2);
+	U = ones(M, 1) * rand(1, K); % % Draw uniform random variables
+	cdf = cumsum(P); % % Compute CDF
+	iX = 1 + sum(U > cdf); % % Find mass point that corresponds to U
+% The result is a vector |iX| of length |K| with realizations from the discrete
+% distributions described by |P|.
 end

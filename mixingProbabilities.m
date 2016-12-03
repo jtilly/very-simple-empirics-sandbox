@@ -12,7 +12,7 @@ function aS = mixingProbabilities(N, C, W, vS)
 
 %{
 The function will solve
-(\ref{indifference}) for $a_S$ using \textsc{Matlab's} |roots| function.
+(\ref{eq:indifference1}) for $a_S$ using \textsc{Matlab's} |roots| function.
 For the |roots| function to work, we need to transform
 (\ref{indifference}) into polynomial form, which is given by
 \begin{equation}
@@ -29,10 +29,10 @@ subsequently be filled and then loop over each element in |N|.
 %}
 
 aS = zeros(size(N));
- 
+
 for iX=1:length(N)
 
-% Store the post-entry number of active firms in a scalar |nE|. Preallocate
+% Store the post-entry number of active firms in a scalar |nE|. Allocate
 % the matrix |matCoef| to store the coefficients of the polynomial above.
 % Then assemble the coefficients by looping from |nE-1| to |0|.
 

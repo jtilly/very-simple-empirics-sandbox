@@ -4,7 +4,7 @@
 function [x,w] = lgwt(N, a, b)
 % This function is for computing definite integrals using Legendre-Gauss
 % Quadrature. It computes the Legendre-Gauss nodes and weights on an
-% interval |[a,b]| with truncation order |N|
+% interval |[a,b]| with number of nodes |N|.
 %
 % Suppose you have a continuous function $f(x)$ which is defined on |[a,b]|
 % which you can evaluate at any $x$ in |[a,b]|. Simply evaluate it at all

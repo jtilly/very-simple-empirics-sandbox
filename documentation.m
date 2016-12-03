@@ -35,12 +35,13 @@ implemented by the function |dgp|. Lastly, we put all of the above
 together in the script |example.m|, where we create a synthetic sample and
 estimate the underlying primitives.
 
-\section{Equilibrium computation}
+\section{Compute Equilibrium}
 
-This subsection explains how |valueFunctionIteration| can be used
-to compute the unique Markov-perfect equilibrium of our dynamic game. The
-equilibrium computation procedure that is described in the paper involves
-iterating on the post-entry value function (which is a contraction mapping)
+\subsection{Value Functions and Entry Rules}
+
+We begin by describing the computational algorithm that we use to compute
+the equilibrium value functions. The equilibrium computation procedure that is
+described in the paper involves iterating on the post-entry value function
 using the Bellman equation
 
 \begin{equation}
@@ -210,7 +211,6 @@ function. Defining $\tilde \Phi[x] = \Phi\left[ \frac{x + 0.5\omega^2
 \label{pSureSurvivalNoEntry}
 \end{equation}
 
-
 for the number of firms staying the same, and
 
 \begin{equation}
@@ -224,7 +224,35 @@ equation (\ref{vS_2}) in \textsc{Matlab}.
 
 \input[2..end]{valueFunctionIteration.m}
 
-\section{Likelihood computation}
+\subsection{Survival Rules}
+
+Our equilibrium computation algorithm |valueFunctionIteration| is fast because
+we do not need to completely characterize firms' survival strategies to compute the
+equilibrium value functions. We know that \emph{when} firms mix between staying
+and exiting, the must receive a continuation value of zero. Firms use mixed
+strategies whenever the cost shock falls into the interval
+\begin{equation}
+\overline w_S(n, c) \leq W < w_S(1, c),
+\end{equation}
+which means that it is not profitable for all $n$ active firms to continue, but
+the market is profitable enough for some (at least one) firm to continue.
+
+What we have not computed thus far is how firms mix between continuation and exit
+when the cost shock falls into this interval. The mixing probabilities $a_S$ are
+implicitly defined by the indifference condition
+\begin{equation} \label{eq:indifference1}
+\sum_{n'=1}^{n} {n - 1 \choose n' - 1} a_S^{n' - 1} \left(1-a_S\right)^{n-n'}
+\left(- \exp(w)+v_{S}(n',c)\right)=0.
+\end{equation}
+The indifference condition states that when $n$ active firms all use the
+survival rule |a_S|, the expected value from using survival rule |a_S| equals
+zero.
+
+We compute the solution to (\ref{eq:indifference1}) in |mixingProbabilities|.
+
+\input[2..end]{mixingProbabilities.m}
+
+\section{Compute Likelihood}
 
 Before turning to the computation of the likelihood, we first review the
 likelihood construction described in the paper. Suppose we have data for
@@ -350,51 +378,38 @@ not, we only discuss the computation of standard errors in the third step.
 
 \input[2..end]{likelihoodStep3.m}
 
-\section{Data generating process}
+\section{Generate Data}
 
-Here we describe how to generate a synthetic sample with firms and
-consumers for $\check r $ markets and $\check t $ time periods. The data
-generation process consists of three functions.
+Here we describe how to generate a synthetic sample with data on the number of
+active firms and the number of consumers for $\check r $ markets and
+$\check t $ time periods. The data generation process consists of two
+functions.
 
 \begin{itemize}
 
-\item |randomFirms| draws a vector of length $\check r$ with the
-number of firms next period $n'$ given the current realizations of demand
-$c$, cost shocks $w$, and the number of incumbents $n$.
-
-\item |mixingProbabilities| computes the purely mixed strategy
-survival probabilities.
-
-\item |dgp| puts the above functions together and returns a
-synthetic data set.
+\item |randomFirms| simulates firms' entry and exit decisions conditional on
+the current number of active firms, the realization of the demand state, and
+the realization of the cost shock.
+\item |dgp| generates a synthetic panel data set containing the demand state
+and number of active firms.
 
 \end{itemize}
 
-\subsection{Draw number of active firms}
+\subsection{Draw Number of Firms}
 
 \input[2..end]{randomFirms.m}
 
-\subsection{Compute mixing probabilities}
-
-\input[2..end]{mixingProbabilities.m}
-
-\subsection{Data generating process}
+\subsection{Assemble Data Set}
 
 \input[2..end]{dgp.m}
-
-The next section discusses how the three likelihood functions and the data
-generating function are used in the NFXP procedure.
 
 \section{The example script: |example.m|}
 \input[1..end]{example.m}
 
-
 \section{Appendix A: List of Structures}
 
-Throughout the Matlab code, the structures |Settings|, |Param|, and |Data|
-play an important role. We define their contents in this section.
-
-\subsection{|Settings|}
+Throughout the \textsc{Matlab} code, the structures |Settings|, |Param|, and
+|Data| play an important role. We define their contents in this section.
 
 The structure |Settings| contains parameters that govern the execution of
 the \textsc{Matlab}. All elements in  |Settings| need to be defined by hand
@@ -439,14 +454,14 @@ during the simulation.
 \item |Settings.fdStep| is the real valued step size used to compute finite
 differences, when we compute the score of the likelihood function.
 
-\item |Settings.truncOrder| is the integer valued of points used for the
-Gauss-Legendre integration.
+\item |Settings.integrationLength| is the integer valued number of points used
+for the Gauss-Legendre integration.
 
 \item |Settings.integrationNodes| is the real valued row vector of length
-|Settings.truncOrder| with Gauss-Legendre nodes.
+|Settings.integrationLength| with Gauss-Legendre nodes.
 
 \item |Settings.integrationWeights| is the real valued row vector of length
-|Settings.truncOrder| with Gauss-Legendre weights.
+|Settings.integrationLength| with Gauss-Legendre weights.
 
 \item |estimates2k(x)| is an anonymous function that maps the argument
 a vector of estimates |x| into the vector valued outcome |Param.k|,
@@ -461,8 +476,6 @@ a vector of estimates |x| into the real valued outcome
 |Param.omega|, which will be defined below.
 
 \end{itemize}
-
-\subsection{|Param|}
 
 The structure |Param| contains the primitives of the model.
 
@@ -506,8 +519,6 @@ during the Monte Carlo simulation.
 
 \end{itemize}
 
-\subsection{|Data|}
-
 The structure |Data| contains the following elements.
 
 \begin{itemize}
@@ -529,17 +540,17 @@ Monte Carlo simulation.
 
 \section{Appendix B: Auxiliary Functions}
 
-This Part of the appendix contains descriptions of all auxiliary functions used that were not described above.
+This part of the appendix contains descriptions of all auxiliary functions used that were not described above.
 
 \subsection{Compute Markov process}
 
 \input[2..end]{markov.m}
 
-\subsection{Draw from discrete distribution}
+\subsection{Draw from Discrete Distribution}
 
 \input[4..end]{randomDiscr.m}
 
-\subsection{Compute Gauss-Legendre weights}
+\subsection{Compute Gauss-Legendre Weights}
 
 \input[4..end]{lgwt.m}
 

@@ -4,6 +4,7 @@
 % the seed is set, users can make changes to the code and be sure that
 % changes in the results are not because different random values were
 % generated.
+
 s = RandStream('mlfg6331_64');
 RandStream.setGlobalStream(s);
 
@@ -69,12 +70,12 @@ Settings.fdStep = 1e-7;
 % To compute the likelihood contribution of purely mixed strategy play, we
 % will need to numerically integrate over the support of the survival
 % strategies, $(0,1)$. We will do so using Gauss-Legendre quadrature.
-% |truncOrder| refers to number of Gauss-Legendre nodes used. We document
+% |integrationLength| refers to number of Gauss-Legendre nodes used. We document
 % the function |lgwt| in the Appendix.
 
-Settings.truncOrder = 32;
+Settings.integrationLength = 32;
 [Settings.integrationNodes, Settings.integrationWeights] = ...
-    lgwt(Settings.truncOrder, 0, 1);
+    lgwt(Settings.integrationLength, 0, 1);
 
 % We can now define the settings for the optimizer used during the
 % estimation. Note that these options will be used for \textsc{Matlab}'s
@@ -103,7 +104,7 @@ Param.demand.sigma = 0.02;
 Param.truth.step1 = [Param.demand.mu, Param.demand.sigma];
 Param.truth.step2 = [Param.k, Param.phi(1), Param.omega];
 Param.truth.step3 = [Param.truth.step2, Param.truth.step1];
- 
+
 % We now generate a synthetic sample that we will then estimate using the
 % three step estimation procedure. We begin the data generation by computing
 % the transition matrix and the ergodic distribution of the demand process,

@@ -12,7 +12,7 @@ The term inside the integral is the probability mass function of a
 binomial distribution function with success probability $a_S(n,c,w)$.
 The survival strategies are defined by the indifference condition
 (equation (5) in the paper)
-\begin{equation} \label{indifference}
+\begin{equation} \label{eq:indifference2}
 \sum_{n'=1}^{n} {n - 1 \choose n' - 1} a_S^{n' - 1} \left(1-a_S\right)^{n-n'}
 \left(- \exp(w)+v_{S}(n',c)\right)=0.
 \end{equation}
@@ -27,7 +27,7 @@ and the variable of integration, which is just a scalar. We will refer
 to the latter as $p$. Thus, for a given value of $p$, we need to find the
 value of $w$ such that $p = a_S(n,c,w)$.
 
-Equation (\ref{indifference}) defines the inverse $a_S^{-1}(p;c,n)$ for which
+Equation (\ref{eq:indifference2}) defines the inverse $a_S^{-1}(p;c,n)$ for which
 
 \begin{equation}
 a_S^{-1}(a_S(n,c,w);c,n) = w.
@@ -75,7 +75,7 @@ Differentiation of $a_S^{-1}(p;c,n)$ gives
 \end{equation}
 
 Now, compute the matrix |mixingDensity| using (\ref{mixingDensity}). |mixingDensity| is of dimension
-|Settings.truncOrder| by |Settings.cCheck| by |Settings.nCheck|. It is
+|Settings.integrationLength| by |Settings.cCheck| by |Settings.nCheck|. It is
 defined as
 
 \begin{equation}
@@ -88,7 +88,7 @@ defined as
 The element $(p_{j}, c, n)$ gives us the density
 of the mixing probability $p_{j}$ when demand equals $c$ and the
 current number of incumbents is $n$.
- 
+
 In the function |mixingIntegral| we compute the integral in equation
 (\ref{eq:likelihood_mixing_integral}) for a range of different combinations
 of $n$, $n'$, and $c$ using the change of variable introduced above.
@@ -152,7 +152,7 @@ for n = 2:Settings.nCheck
         binomialPmf = nChoosek .* repmat(p .^ (nPrime - 1) .* (1 - p) .^ (n - nPrime), 1, Settings.cCheck);
         dbinomialPmfdP = nChoosek .* repmat(p .^ (nPrime-2) .* (1 - p) .^ (n - nPrime - 1) ...
                       .* ( (nPrime - 1) .* (1 - p) - p .* (n - nPrime)), 1, Settings.cCheck);
-        repvS =  repmat(vS(nPrime, :), Settings.truncOrder,1);
+        repvS =  repmat(vS(nPrime, :), Settings.integrationLength,1);
         expaSInv = expaSInv +  binomialPmf .* repvS ;
         dexpaSInvdP = dexpaSInvdP +  dbinomialPmfdP .* repvS;
 
