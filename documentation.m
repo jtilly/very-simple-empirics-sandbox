@@ -403,7 +403,7 @@ and number of active firms.
 
 \input[2..end]{dgp.m}
 
-\section{The example script: |example.m|}
+\section{Example Script: |example.m|}
 \input[1..end]{example.m}
 
 \section{Appendix A: List of Structures}
