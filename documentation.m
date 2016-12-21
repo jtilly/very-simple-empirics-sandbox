@@ -218,7 +218,7 @@ strategies whenever the cost shock falls into the interval
 \overline w_S(n, c) \leq w < w_S(1, c),
 \end{equation}
 which means that it is not profitable for all $n$ active firms to continue, but
-the market is profitable enough for some (at least one) firm to continue.
+the market is profitable enough for at least one firm to continue.
 
 What we have not computed thus far is how firms mix between continuation and exit
 when the cost shock falls into this interval. The mixing probabilities $a_S$ are
