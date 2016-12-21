@@ -161,7 +161,7 @@ tic;
     startValues.step1, [], [], [], [], [-inf, 0], [], [], options);
 computingTime.step1 = toc;
 
-% Now consider the second step, in which we estimate $(k,\varphi,\omega)$.
+% Now consider the second step, in which we estimate $(k,\varphi,\theta_W)$.
 % Start by creating anonymous functions which will be used in
 % |likelihoodStep2| to map the vector of parameter estimates into
 % the |Param| structure:
@@ -187,7 +187,7 @@ Param = markov(Param, Settings, Estimates.step1(1), Estimates.step1(2));
 objFunStep2 = @(estimates) likelihoodStep2(Data, Settings, Param, estimates);
 
 % The maximization is constrained by imposing that $(\hat k,\hat
-% \varphi,\hat \omega)$ are nonnegative. Store the negative log-likelihood
+% \varphi,\hat \theta_W)$ are nonnegative. Store the negative log-likelihood
 % at the true parameter values:
 
 lb = zeros(size(startValues.step2));

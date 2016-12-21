@@ -67,13 +67,13 @@ likeCont(selectInteriorTransitions ) ...
     - Settings.logGrid(from(selectInteriorTransitions)) + Settings.d / 2 - mu) / sigma)...
     - normcdf((Settings.logGrid(to(selectInteriorTransitions)) ...
     - Settings.logGrid(from(selectInteriorTransitions)) - Settings.d / 2 - mu) / sigma);
- 
+
 likeCont(to == 1) = normcdf((Settings.logGrid(1) -...
     Settings.logGrid(from(to == 1)) + Settings.d / 2 - mu) / sigma);
- 
+
 likeCont(to == Settings.cCheck) = 1 - normcdf((Settings.logGrid(Settings.cCheck) ...
     - Settings.logGrid(from(to == Settings.cCheck)) - Settings.d / 2 - mu) / sigma);
- 
+
 ll = -sum(log(likeCont));
 
 % This concludes |likelihoodStep1|.

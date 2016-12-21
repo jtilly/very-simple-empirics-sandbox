@@ -6,7 +6,7 @@ For a given survival strategy $a_S(n,c,w)$, the likelihood contribution from
 (purely) mixed strategy play is given by
 \begin{equation} \label{eq:likelihood_mixing_integral}
 \int_{\log v_S(n,c)}^{\log v_S(1,c)} {n \choose n'}  a_S(n,c,w)^{n'}
-\left(1-a_S(n,c,w)\right)^{n-n'} \tilde \varphi(w) dw.
+\left(1-a_S(n,c,w)\right)^{n-n'} g_W(w) dw.
 \end{equation}
 The term inside the integral is the probability mass function of a
 binomial distribution function with success probability $a_S(n,c,w)$.
@@ -46,15 +46,15 @@ We can write the likelihood contribution as an integral over $p$:
 \begin{equation}
 \begin{split}
 &\int_{1}^{0} {n \choose n'}  p^{n'} \left(1 - p\right)^{n-n'}
-      \times \frac{da_S^{-1}(p;c,n)}{dp}\tilde \varphi_{W}\left[a_S^{-1}(p;c,n)\right]
+      \times \frac{da_S^{-1}(p;c,n)}{dp}g_{W}\left[a_S^{-1}(p;c,n)\right]
       dp \\
 = &-\int_{0}^{1} {n \choose n'}  p^{n'} \left(1 - p\right)^{n-n'}
-      \times \frac{da_S^{-1}(p;c,n)}{dp}\tilde \varphi_{W}\left[a_S^{-1}(p;c,n)\right]
+      \times \frac{da_S^{-1}(p;c,n)}{dp}g_{W}\left[a_S^{-1}(p;c,n)\right]
       dp \\
 \approx &-\sum_{jX=1}^J {n \choose n'}  p_{jX}^{n'}
 \left(1 - p_{j}\right)^{n-n'} \times
 \underbrace{\underbrace{\frac{da_S^{-1}(p_{j};c,n)}{dp}}_{\textbf{daSinvdP}}
-\underbrace{\tilde \varphi_{W}\left[a_S^{-1}(p_{j};c,n)\right]}_{\textbf{normaSinv}}
+\underbrace{g_{W}\left[a_S^{-1}(p_{j};c,n)\right]}_{\textbf{normaSinv}}
 \underbrace{w_{j}}_{\textbf{intWeights}}}_{\textbf{mixingDensity}},
 \end{split}
 \label{llContrMixing}
@@ -80,7 +80,7 @@ defined as
 \begin{equation}
       \text{mixingDensity(j,c,n)} =
       \underbrace{\frac{da_S^{-1}(p_{j};c,n)}{dp}}_{\textbf{daSinvdP}}
-      \underbrace{\tilde \varphi_{W}\left[a_S^{-1}(p_{j};c,n)\right]}_{\textbf{normaSinv}}
+      \underbrace{g_{W}\left[a_S^{-1}(p_{j};c,n)\right]}_{\textbf{normaSinv}}
       \underbrace{w_{j}}_{\textbf{intWeights}}. \label{mixingDensity}
 \end{equation}
 
@@ -99,7 +99,8 @@ vector |llhContributionsMixing| that is of the same dimension as the inputs
 |from|, |to|, and |demand|.
 %}
 
-function [llhContributionsMixing] = mixingIntegral(from, to, demand, vS, Param, Settings)
+function [llhContributionsMixing] = ...
+    mixingIntegral(from, to, demand, vS, Param, Settings)
 
 %{
 Note that mixed strategy play is only relevant for markets with at least
@@ -121,7 +122,6 @@ indexing starts at one, not zero, so element $(1,1)$ corresponds to $0
 operations are computationally demanding.
 %}
 
-
 nchoosekMatrixPlusOne = ones(Settings.nCheck + 1);
 
 for nX=2:Settings.nCheck
@@ -133,9 +133,11 @@ end
 % We then set up to compute the matrix |mixingDensity|, as given by
 % (\ref{mixingDensity}).
 
-mixingDensity = zeros(length(Settings.integrationNodes), Settings.cCheck, Settings.nCheck);
-aSinv = zeros(length(Settings.integrationNodes), Settings.cCheck, Settings.nCheck);
-daSinvdP = zeros(length(Settings.integrationNodes), Settings.cCheck, Settings.nCheck);
+mixingDensity = zeros(Settings.integrationLength, ...
+                      Settings.cCheck, ...
+                      Settings.nCheck);
+aSinv = zeros(size(mixingDensity);
+daSinvdP = zeros(size(mixingDensity);
 
 p = Settings.integrationNodes;
 w = Settings.integrationWeights;
@@ -148,9 +150,11 @@ for n = 2:Settings.nCheck
     for nPrime = 1:n
 
         nChoosek = nchoosekMatrixPlusOne(n, nPrime);
-        binomialPmf = nChoosek .* repmat(p .^ (nPrime - 1) .* (1 - p) .^ (n - nPrime), 1, Settings.cCheck);
-        dbinomialPmfdP = nChoosek .* repmat(p .^ (nPrime-2) .* (1 - p) .^ (n - nPrime - 1) ...
-                      .* ( (nPrime - 1) .* (1 - p) - p .* (n - nPrime)), 1, Settings.cCheck);
+        binomialPmf = nChoosek .* repmat(p .^ (nPrime - 1) ...
+            .* (1 - p) .^ (n - nPrime), 1, Settings.cCheck);
+        dbinomialPmfdP = nChoosek .* repmat(p .^ (nPrime-2) ...
+            .* (1 - p) .^ (n - nPrime - 1) ...
+            .* ( (nPrime - 1) .* (1 - p) - p .* (n - nPrime)), 1, Settings.cCheck);
         repvS =  repmat(vS(nPrime, :), Settings.integrationLength,1);
         expaSInv = expaSInv +  binomialPmf .* repvS ;
         dexpaSInvdP = dexpaSInvdP +  dbinomialPmfdP .* repvS;

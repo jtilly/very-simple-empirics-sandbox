@@ -40,7 +40,7 @@ end
 
 % Now, consider the case, when exactly two output arguments are
 % requested. In this case, we want to compute the standard errors. As
-% discussed in section 4.4 of the paper, standard errors are computed using
+% discussed in the paper, standard errors are computed using
 % the outer-product-of-the-gradient estimator of the information matrix.
 % When two output arguments are requested when calling |likelihootStep3.m|,
 % the function will return standard errors in addition to the log
@@ -54,7 +54,7 @@ epsilon = eye(length(estimates)) * Settings.fdStep;
 % Next, get the likelihood contributions at the parameter values in
 % |estimates|:
 
-likeCont=likeCont1 .* likeCont2;
+likeCont = likeCont1 .* likeCont2;
 
 % Now, given the likelihood contribution $\ell(\theta) \equiv
 % \ell(\theta_j, \theta_{-j})$  we compute for each  parameter $\theta_j$

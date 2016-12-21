@@ -2,7 +2,7 @@
 % We now construct the likelihood contributions that result from the number
 % of firms evolving from $n$ to $n'$. Recall that we obtain cost-shock
 % thresholds for entry and survival, defined by $\overline w_{E}(n,c)
-% \equiv \log v_{S}(n,c) - \log\left(1 + \tilde \varphi\right)$ and
+% \equiv \log v_{S}(n,c) - \log\left(1 + \varphi\right)$ and
 % $\overline w_{S}(n,c)\equiv \log v_{S}(n,c)$. We consider five mutually
 % exclusive cases.
 %
@@ -10,10 +10,10 @@
 % \item \textbf{Case I: $\mathbf{n'>n}$.}
 % If the number of firms increases from $n$ to $n'$, then it must be
 % profitable for the $n'$th firm to enter, but not for the $(n'+1)$th:
-% $\overline w_{E}(n'+1,c)\leq W  < \overline w_{E}(n',c)$. The probability
+% $\overline w_{E}(n'+1,c)\leq w  < \overline w_{E}(n',c)$. The probability
 % of this event is
 % \begin{equation} \label{app:eq:llhcontr1}
-% \tilde \Phi\left[\overline w_{E}(n',c)\right]-\tilde \Phi\left[\overline w_{E}(n'+1,c)\right].
+% G_W\left[\overline w_{E}(n',c)\right]-G_W\left[\overline w_{E}(n'+1,c)\right].
 % \end{equation}
 %
 % \item \textbf{Case II: $\mathbf{0<n'<n}$.}
@@ -27,42 +27,42 @@
 % probability of observing a transition from $n$ to $n'$ with $0<n'<n$
 % equals
 % \begin{equation} \label{app:eq:llhcontr2}
-% \int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} {n \choose n'} a_{S}(n,c,w)^{n'} \left[1-a_{S}(n,c,w)\right]^{n-n'} \tilde \varphi(w)dw,
+% \int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} {n \choose n'} a_{S}(n,c,w)^{n'} \left[1-a_{S}(n,c,w)\right]^{n-n'} g_W(w)dw,
 % \end{equation}
 %
-% where $\tilde \varphi$ is the density of $\tilde \Phi$. The integrand in
+% where $g_W$ is the density of $G_W$. The integrand in
 % (\ref{app:eq:llhcontr2}) involves the mixing probabilities
 % $a_{S}(n,c,w)$. We discuss how we compute this integral in detail below.
 %
 % \item \textbf{Case III: $\mathbf{n'=0, n>0}$.}
 % All firms exiting can be the result of two events. First, it is not
-% profitable for even a single firm to continue, $W \geq \overline
+% profitable for even a single firm to continue, $w \geq \overline
 % w_{S}(1,c)$. Second, it is profitable for some but not all firms to
-% continue, $\overline w_{S}(n,c) \leq W <\overline w_{S}(1,c)$, firms exit
+% continue, $\overline w_{S}(n,c) \leq w <\overline w_{S}(1,c)$, firms exit
 % with probability $a_S(n,c)\in(0,1)$ as in Case II, and by chance none of
 % the $n$ firms survives. The probability of these events is
 % \begin{equation}
 % \label{app:eq:llhcontr3}
-% 1-\tilde \Phi\left[\overline w_{S}(1,c)\right] +\int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} \left[1-a_{S}(n,c,w)\right]^{n} \tilde \varphi(w)dw.
+% 1-G_W\left[\overline w_{S}(1,c)\right] +\int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} \left[1-a_{S}(n,c,w)\right]^{n} g_W(w)dw.
 % \end{equation}
 %
 % \item \textbf{Case IV: $\mathbf{n'=0, n=0}$.}
 % In this case, the market is populated by zero firms and it is not
-% profitable for any firm to enter. The probability of this event is given
+% profitable for a monopolist to enter. The probability of this event is given
 % by
 % \begin{equation}
 % \label{app:eq:llhcontr4}
-% 1-\tilde \Phi\left[\overline w_{E}(1,c)\right].
+% 1-G_W\left[\overline w_{E}(1,c)\right].
 % \end{equation}
 %
 % \item \textbf{Case V: $\mathbf{n' = n > 0}$.}
 % If there is neither entry nor exit, then either no firm finds it
 % profitable to enter and all $n$ incumbents find it profitable to stay,
-% $\overline w_{E}(n+1,c) \leq W <\overline w_{S}(n,c),$ or the $n$
+% $\overline w_{E}(n+1,c) \leq w <\overline w_{S}(n,c),$ or the $n$
 % incumbents mix as in Cases II and III, but by chance end up all staying.
 % The probability of these events is
 % \begin{equation} \label{app:eq:llhcontr5}
-% \tilde \Phi\left[\overline w_{S}(n,c)\right]-\tilde \Phi\left[\overline w_{E}(n+1,c)\right] + \int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} a_{S}(n,c,w)^{n} \tilde \varphi(w)dw.
+% G_W\left[\overline w_{S}(n,c)\right]-G_W\left[\overline w_{E}(n+1,c)\right] + \int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} a_{S}(n,c,w)^{n} g_W(w)dw.
 % \end{equation}
 % \end{itemize}
 % We compute the likelihood using the function |likelihoodStep2| that
@@ -119,7 +119,9 @@ llhContributionsCaseV = zeros(size(from));
 % resulting from entry in the vector |llhContributionsCaseI|.
 selectMarketsCaseI = to > from;
 llhContributionsCaseI(selectMarketsCaseI) = ...
-    pEntrySet(sub2ind(size(pEntrySet), to(selectMarketsCaseI), demand(selectMarketsCaseI)));
+    pEntrySet(sub2ind(size(pEntrySet), ...
+                      to(selectMarketsCaseI), ...
+                      demand(selectMarketsCaseI)));
 
 % \textbf{Case II:} We store all of the likelihood contributions resulting
 % from exit to a non-zero number of firms in the vector
@@ -128,7 +130,8 @@ selectMarketsCaseII = from > to & to > 0;
 llhContributionsCaseII(selectMarketsCaseII) =  ...
     mixingIntegral(from(selectMarketsCaseII), ...
                    to(selectMarketsCaseII), ...
-                   demand(selectMarketsCaseII), vS, Param, Settings);
+                   demand(selectMarketsCaseII), ...
+                   vS, Param, Settings);
 % Note that this case involves computing the integral over mixed strategy
 % play, which we do in the function |mixingIntegral|. We document its
 % content below.
@@ -141,7 +144,8 @@ llhContributionsCaseIII(selectMarketsCaseIII) = ...
     1 - pStay(1, demand(selectMarketsCaseIII))' + ...
     mixingIntegral(from(selectMarketsCaseIII), ...
                    to(selectMarketsCaseIII), ...
-                   demand(selectMarketsCaseIII), vS, Param, Settings);
+                   demand(selectMarketsCaseIII), ...
+                   vS, Param, Settings);
 
 % \textbf{Case IV:} We store all of the likelihood contributions resulting
 % from when the number of active firms remains at zero in
@@ -154,11 +158,16 @@ llhContributionsCaseIV(selectMarketsCaseIV) = ...
 % from the number of firms staying the same in |llhContributionsCaseV|.
 selectMarketsCaseV = from == to & to > 0;
 llhContributionsCaseV(selectMarketsCaseV) = ...
-    pStay(sub2ind(size(pStay), from(selectMarketsCaseV), demand(selectMarketsCaseV))) - ...
-    pEntry(sub2ind(size(pEntry), from(selectMarketsCaseV) + 1, demand(selectMarketsCaseV)))  + ...
+    pStay(sub2ind(size(pStay), ...
+                  from(selectMarketsCaseV), ...
+                  demand(selectMarketsCaseV))) - ...
+    pEntry(sub2ind(size(pEntry), ...
+                   from(selectMarketsCaseV) + 1, ...
+                   demand(selectMarketsCaseV)))  + ...
     mixingIntegral(from(selectMarketsCaseV), ...
                    to(selectMarketsCaseV), ...
-                   demand(selectMarketsCaseV), vS, Param, Settings);
+                   demand(selectMarketsCaseV), ...
+                   vS, Param, Settings);
 
 % Finally, we sum up the likelihood contributions from the five cases and
 % return the negative log likelihood function. When |ll| is not real
