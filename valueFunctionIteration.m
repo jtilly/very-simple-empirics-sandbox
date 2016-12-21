@@ -117,7 +117,7 @@ for n = Settings.nCheck:-1:1
     pEntrySet(n, :) = pEntry(n, :) - pEntry(n + 1, :);
  
 end
- 
+
 % Note that we only need to compute the entry probabilities outside of the
 % value function iteration. We use the variable |iter| to keep track of the
 % number of iterations for each value function iteration. Whenever |iter|
