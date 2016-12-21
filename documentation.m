@@ -1,20 +1,20 @@
 %{
 \documentclass{article}
-\title{Very Simple Markov-Perfect Industry Dynamics \thanks{We are grateful to Emanuel Marcu for his outstanding research assistance.}}
+\title{Matlab Documentation for Very Simple Markov-Perfect Industry Dynamics: Empirics \thanks{We thank Emanuel Marcu for excellent research assistance.}}
 \author{Jaap H. Abbring\thanks{CentER, Department of Econometrics \& OR, Tilburg University. E-mail: \url{mailto:jaap@abbring.org}{jaap@abbring.org}.}}
 \author{Jeffrey R. Campbell \thanks{Economic Research, Federal Reserve Bank of Chicago, and CentER, Tilburg University. E-mail: \url{mailto:jcampbell@frbchi.org}{jcampbell@frbchi.org}.}}
 \author{Jan Tilly \thanks{Department of Economics, University of Pennsylvania. E-mail: \url{jtilly@econ.upenn.edu}{jtilly@econ.upenn.edu}.}}
 \author{Nan Yang \thanks{Business School, National University of Singapore. E-mail: \url{yangnan@nus.edu.sg}{yangnan@nus.edu.sg}.}}
 
-\date{November, 2016}
+\date{December, 2016}
 
 \begin{abstract}
 This software package lists and describes the programs
-used in \cite{acty2014}.
+used in \cite{acty2016}.
 \end{abstract}
 
 In this software package, we present \textsc{Matlab} programs that implement
-the estimation algorithm introduced in \cite{acty2014}. We
+the estimation algorithm introduced in \cite{acty2016}. We
 show how to simulate a market level panel data set from our dynamic game. We
 then implement the nested fixed point (NFXP) algorithm and estimate the
 structural parameters from the simulated data. This code is intended to serve
@@ -24,168 +24,155 @@ The whole package can be downloaded from \url{http://jtilly.io/very-simple-marko
 The code can be executed in \textsc{Matlab} by running the script
 |example.m|.
 
-This documentation is structured as follows. We first introduce the algorithm that
-computes the equilibrium value functions. This algorithm is implemented by
-the function |valueFunctionIteration|. We then introduce the
-likelihood functions required for the three step estimation procedure. These
-are implemented by the functions |likelihoodStep1|,
+This documentation is structured as follows. We briefly review the model.
+We then introduce the algorithm that computes the equilibrium value functions.
+This algorithm is implemented by the function |valueFunctionIteration|. We then
+introduce the likelihood functions required for the three step estimation
+procedure. These are implemented by the functions |likelihoodStep1|,
 |likelihoodStep2|, and |likelihoodStep3|. We then discuss
 all the necessary ingredients to generate data from the model. This is
 implemented by the function |dgp|. Lastly, we put all of the above
 together in the script |example.m|, where we create a synthetic sample and
 estimate the underlying primitives.
 
-\section{Compute Equilibrium}
+\section{Model}
+
+Time is discrete and indexed by $t\in\mathbb{N}\equiv\{1,2,\ldots\}$. In period
+$t$, firms that have entered in the past and not yet exited serve the market.
+For expositional purpose, we name each firm $f\in{\cal F}\equiv\mathbb{N}
+\times\mathbb{N}$. The first component of a firm's name gives the date in which
+it has its only opportunity to enter the market, and the second component is
+its order in that date's entry queue. Firms are identical except for the timing
+of their entry opportunities.
+
+We divide each period into the entry and survival subgames. Period $t$ begins
+with the entry subgame. If $t=1$, nature sets $N_1$  (the number of firms
+serving the market in period $1$) and $C_1$  (the initial demand state);
+if $t>1$, these are inherited from the previous period. Throughout the paper,
+we refer to $C_t$ as \emph{demand}, but it can encompass any observed, relevant,
+and time-varying characteristics of the market, depending on the empirical
+context. We use $\cal C$ to denote the support of $C_t$.
+
+Each incumbent firm serves the market and earns a surplus $\pi(N_t,C_t)$. We assume that
+\begin{itemize}
+\item $\exists \check{\pi}<\infty$ such that $\forall n\in\mathbb{N}$ and $\forall c\in\cal C$,  $\mathbb{E}[\pi(n,C^\prime)|C=c]\leq\check{\pi}$;
+\item $\exists \check{n}\in\mathbb{N}$ such that $\forall n>\check{n}$ and $\forall c\in\cal C$, $\pi(n,c) = 0$; and
+\item $\forall n\in\mathbb{N}$ and $\forall c\in\cal C$, $\pi(n,c) \geq \pi(n+1,c)$.
+\end{itemize}
+Here and throughout; we denote the next period's value of a generic variable
+$Z$ with $Z^\prime$, random variables with capital Roman letters, and their
+realizations with the corresponding small Roman letters. The first assumption
+is technical and allows us to restrict equilibrium values to the space of
+bounded functions. The second assumption allows us to restrict equilibrium
+analysis to markets with at most $\check{n}$ firms. It is not restrictive in
+empirical applications to oligopolistic markets. The third assumption requires
+the addition of a competitor to reduce weakly each incumbent's surplus.
+
+After incumbents earn their surpluses, nature draws the current period's shock
+to continuation and entry costs, $W_t$, from a distribution $G_W$ with positive
+density everywhere on the real line. Then, entry can take place. Firms with
+names in $\{t\}\times\mathbb{N}$ form the cohort of potential entrants in
+period $t$. The second components of their names dictates the order of their
+entry decisions. We denote firm $f$'s entry decision with
+$a^f_E\in\left\{0,1\right\}$. An entrant ($a^f_E=1$) pays the sunk cost
+$\varphi \exp(W_{t})$, with $\varphi\geq 0$. A firm choosing not to enter
+($a^f_E=0$) earns a payoff of zero and never has another entry opportunity.
+Such a refusal to enter also ends the entry subgame, so firms remaining in this
+period's entry cohort that have not yet had an opportunity to enter \emph{never}
+get to do so. Since the next firm in line faces exactly the same choice as did
+the firm that refused to enter, it will make the same refusal decision in any
+symmetric equilibrium. Since every period has at least one firm refusing an
+available entry opportunity, the model is one of free entry.
+
+We denote the number of firms in the market after the entry stage, including
+both the incumbents and the fresh entrants, with $N_{E,t}.$ Suppose that the
+names of these active firms are $f_1,\ldots,f_{N_{E,t}}.$ In the subsequent
+survival subgame, they simultaneously decide on continuation with probabilities
+$a_S^{f_1},\ldots, a_S^{f_{N_{E,t}}}\in[0,1]$. After these decisions, all
+survival outcomes are realized independently across firms according to the
+chosen Bernoulli distributions. Firms that survive pay a fixed cost $\exp(W_t)$.
+A firm can avoid this cost by exiting to earn $0$. Exited firms cannot enter
+the market again. The $N_{t+1}$ surviving firms continue to the next period,
+$t+1$. The period ends with nature drawing a new demand state $C_{t+1}$ from
+the conditional distribution $G_C(\cdot\;|\;C_t)$. All firms discount
+future profits and costs with the discount factor $\rho\in[0,1)$.
+
+We will assume that, for each market, the data contain information on
+$N_t$, $C_t$, and possibly some time-invariant market characteristics $X$ that
+shift the market's primitives. The market-level cost shocks $W_t$ are not
+observed by the econometrician and serve as the model's structural econometric
+errors. Because they are observed by all firms and affect their payoffs from
+entry and survival, they make the relation between the observed demand state
+$C_t$ and the market structure $N_t$ statistically nondegenerate.
+
+\section{Equilibrium}
+
+We assume that firms play a symmetric Markov-perfect equilibrium, a subgame-perfect equilibrium in which all firms use the same Markov strategy.
+
+A Markov strategy maps \emph{payoff relevant states} into actions. When a potential entrant $(t,j)$ makes its entry decision in period $t$, the payoff-relevant states are the number of firms in the market plus the current period's potential entrants up to and including $(t,j)$, $M_t^j\equiv N_t+j$, the current demand $C_t$, and the cost shock $W_t$. We collect these into the vector $(M_t^j,C_t,W_t)\in\mathcal H \equiv \mathbb N \times {\cal C}\times {\mathbb{R}}$.  Similarly, we collect the payoff-relevant state variables of a firm $f$ contemplating survival in period $t$ in the ${\cal H}$-valued $(N_{E,t}, C_t, W_t)$. Since survival decisions are made simultaneously, this state is the same for all active firms. A Markov strategy is a pair of functions $a_{E}: \mathcal H \rightarrow \{0,1\}$ and $a_{S}: \mathcal H\rightarrow [0,1]$. The \emph{entry rule} $a_E$ assigns a binary indicator of entry to each possible state. Similarly, $a_S$ gives a survival \emph{probability} for each possible state. Since time and firms' names themselves are not payoff relevant, we henceforth drop the subscript $t$ and the superscript $j$ from the payoff-relevant states.
+
+In a symmetric Markov-perfect equilibrium, a firm's expected continuation value at a particular node of the game can be written as a function of that node's payoff-relevant state variables. Two of these value functions are particularly useful for the model's equilibrium analysis: the \textit{post-entry} value function, $v_E$, and the \textit{post-survival} value function, $v_S$. The post-entry value  $v_E(n_E, c, w)$ equals the expected discounted profits of a firm in a market with demand state $c$, cost shock $w$, and $n_E$ firms just after all entry decisions are made. The post-survival value $v_S(n', c)$ equals the expected discounted profits from being active in the same market with $n'$ firms just after the survival outcomes are realized. The post-survival value does not depend on $w$ because that cost shock has no forecasting value and is not directly payoff relevant after survival decisions are made.
+
+Because the payoff from leaving the market is zero, a firm's post-entry value in a state $(n_E,c,w)$ equals the probability that it survives, $a_S(n_E,c,w)$, times the expected payoff from surviving. The latter equals this firm's expected post-survival value net of its fixed costs of survival. So, $v_E$ and $v_S$ satisfy
+
+\begin{equation}
+    v_E(n_E, c, w) = a_S(n_E, c, w) \; \bigl(\mathbb E_{N'}\left[v_S(N', c) \big| N_E=n_E, C=c, W=w\right]- \exp(w)\bigr).
+\end{equation}
+
+The expectation ${\mathbb E}_{N'}$ over $N'$ takes survival of the firm of interest as given. That is, it takes $N'$ to be one plus the outcome of $n_E-1$ independent Bernoulli (survival) trials with success probability $a_S(n_E,c,w)$. It conditions on the current values of $C$ and $W$ because these influence the survival probability's value.
+
+A firm's post-survival value equals the expected sum of the surplus and post-entry value that accrue to the firm in the next period, discounted to the current period with $\rho$:
+\begin{equation}\label{eqn:v_S}
+    v_S(n, c) = \rho \mathbb E_{\{C', W', N_E\}}  \big[ \pi(n, C') + v_E(N_E, C', W') \big | N = n, C=c \big].
+\end{equation}
+
+Here, ${\mathbb E}_{\{C', W', N_E'\}}$ is an expectation over the next period's demand state $C'$, cost shock $W'$, and post-entry number of firms $N_E'$. The distribution of $N_E'$ depends on the equilibrium entry behavior $a_E$. In particular, given $N = n$, $N_E'$ is a deterministic function of $a_E(\cdot, c, w)$.
+
+A strategy $(a_E,a_S)$ forms a symmetric Markov-perfect equilibrium with payoffs $(v_E, v_S)$ if and only if no firm can gain from a one-shot deviation from its prescriptions. Thus, given the pair of payoff functions $(v_E, v_S)$, their corresponding strategy must satisfy
+
+\begin{equation}
+\begin{split}
+a_E(m, c, w) \in &\,\arg \max_{a \in \{0,1\}} & a \bigl(\mathbb E_{N_E} \left[  v_E(N_E, c, w) | M=m, C=c, W=w\right] -  \varphi \exp(w) \bigr), \\
+a_S(n_E, c, w) \in &\,\arg \max_{a \in [0,1]} & a \bigl(\mathbb E_{N'} \left[v_S(N', c) | N_E=n_E, C=c, W=w\right] - \exp(w) \bigr).
+\end{split}
+\end{equation}
+
 
 \subsection{Value Functions and Entry Rules}
 
-We begin by describing the computational algorithm that we use to compute
-the equilibrium value functions. The equilibrium computation procedure that is
-described in the paper involves iterating on the post-entry value function
-using the Bellman equation
+We begin by implementing the computational algorithm that we use to compute
+the equilibrium value functions. The post-entry survival function $v_S(n,c)$
+is computed recursively by iterating on a sequence of Bellman equations.
+
+Recall the definitions of the entry thresholds in the paper,
 
 \begin{equation}
-v_E(n,c,w)=\max\{0,-\exp (w)+\rho\mathbb{E}[\pi(n,C')+v_E(\mu(n,C',W'),C',W')|C=c]\} \label{vE}
+\overline w_{E}(n,c) = \log v_{S} \left( n,c \right) - \log \left(1+\varphi \right).
 \end{equation}
 
-where
-
-\begin{equation}
-\mu(n,c,w) \equiv n + \sum_{m=n+1}^{\check n} a_E(m, c, w)
-\end{equation}
-
-gives the current number of firms plus the number of
-next period's entrants. The equilibrium entry strategy $a_E(n,c,w)$ is
-given by
-
-\begin{equation}
-a_E(n,c,w) = \mathbf{1}[v_E(n,c,w)>\varphi \exp (w)].
-\end{equation}
-
-The post-entry value function $v_E(n,c,w)$ is then computed recursively by
-iterating on (\ref{vE}) in decreasing order of the number of active firms,
-starting with the maximal number of active firms $\check n$.
-
-What we do here in the \textsc{Matlab} code follows the same reasoning,
-however, we iterate on the post-survival value function $v_S(n,c)$ that
-does not depend on $w$. This reduces the dimensionality of the value
-function iteration and yields substantial computational benefits. We first
-derive the sequence of Bellman equations that characterizes the equilibrium
-post-survival value function $v_S(n,c)$.
-
-The post-survival value function is defined as the sum of next period's
-flow profit and next period's post-entry value function (both of which are
-discounted to the present by $\rho$),
-
-\begin{equation}
-v_S(n,c) = \rho \mathbb E_{C',W'}\big[ \pi(n,C' ) + v_E(\mu(n, C', W'), C',W') \big| C=c\big].
-\end{equation}
-
-When combined with equation (10) from the paper, which we repeat here for
-convenience
-
-\begin{equation}
-v_E(n,c,w) = \max\{0, -\exp(w) + v_S(n,c) \},
-\end{equation}
-
-we obtain a recursive expression of the post-survival value function
-
-\begin{equation}
-v_S(n,c) = \rho \mathbb E_{C',W'}\big[ \pi(n,C' ) + \max\{0, -\exp(W') + v_S(\mu(n, C', W'),C') \} \big| C=c\big].
-\end{equation}
-
-Since we assume that $W'$ is i.i.d., we can further rewrite this expression
-as:
-
-\begin{equation}
-v_S(n,c) = \rho \mathbb E_{C'}\big[ \pi(n,C' )
-      + \mathbb E_{W'} \left[ \max\{0, -\exp(W') + v_S(\mu(n, C', W'),C') \} \right] \big| C=c\big]
-\label{vS}
-\end{equation}
-
-Recall the definitions of the entry and survival thresholds in equations
-(14) and (15) in the main text of the paper, which are reproduced here:
+The post-survival value function is given by
 
 \begin{equation}
 \begin{split}
-\overline w_{E}(n,c) &\equiv \log v_{S} \left( n,c \right) - \log \left(1+\varphi \right) \\
-\overline w_{S}(n,c) &\equiv \log v_{S} \left( n,c \right).
-\end{split}
-\end{equation}
-
-We use the convention that
-
-\begin{equation}
-\overline w_S(\check n + 1, c) =
-\overline w_E(\check n + 1, c) = -\infty.
-\end{equation}
-
-From Lemma 2, it follows that the thresholds satisfy the monotonicity
-property
-
-\begin{equation}
-\overline w_S(1, c)         \geq
-\overline w_E(1, c)         \geq \cdots \geq
-\overline w_S(n, c)         \geq
-\overline w_E(n, c)         \geq \cdots \geq
-\overline w_S(\check n,c)   \geq
-\overline w_E(\check n, c)   \geq
-\overline w_S(\check n + 1, c) =
-\overline w_E(\check n + 1, c) = -\infty.
-\end{equation}
-
-The thresholds also yield a convenient representation of the number of
-active firms post-entry,
-
-\begin{equation}
-\mu(n,c',w') =
-    \begin{cases}
-        n    &\text{ if }  \overline w_E(n+1, c')\leq w'\\
-        n'>n &\text{ if }  \overline w_E(n'+1, c') \leq w' < \overline w_E(n',c').
-    \end{cases}
-\end{equation}
-
-To compute the expectation with respect to $W'$ on the RHS of equation
-(\ref{vS}), we can distinguish three cases:
-
-\begin{itemize}
-
-\item $w'>\overline w_S(n, c')$: The number of currently active firms
-is too large. Firms will leave the market with positive probability (with
-zero expected continuation value).
-
-\item $\overline w_S(n, c')\geq w'>\overline w_E(n+1, c')$: All
-incumbents remain active, but there is no entry.
-
-\item $\overline w_E(n', c') \geq w' > \overline w_E(n'+1, c')$ for
-$n'>n$: All incumbents remain active and there will be $n'-n$ additional
-entrants.
-
-\end{itemize}
-
-We can then write $v_S(n,c)$ as
-
-\begin{equation}
-\begin{split}
-v_S(n,c) &=  \rho \mathbb E_{C'}\bigg[ \; &\pi(n,C' )  \\
-         &+                               &\mathbb E_{W'}\big[ \left( -\exp(W') + v_S(n, C') \right) \mathbf 1 \left[ \overline w_E(n+1, C') \leq W' < \overline w_S(n, C') \right]  \\
-         &+ \sum_{n'=n+1}^{\check n}      &\mathbb E_{W'}\big[ \left( -\exp(W') + v_S(n', C') \right) \mathbf 1 \left[ \overline w_E(n'+1, C') \leq W' < \overline w_E(n', C') \right]    \big| C=c\bigg],
-\end{split}
-\end{equation}
-
-which is equivalent to
-
-\begin{equation}
-\begin{split}
-v_S(n,c) &=  \rho \mathbb E_{C'}\bigg[ \; &\pi(n,C' ) - \mathbb E_{W'}\big[  \exp(W')  \mathbf 1 \left[ W' < \overline w_S(n, C') \right] \big] \\
-         &+                               & v_S(n, C')  \Pr \left( \overline w_E(n+1, C') \leq W' < \overline w_S(n , C') \right)  \\
-         &+     \sum_{n'=n+1}^{\check n}  & v_S(n', C') \Pr \left( \overline w_E(n'+1,C') \leq W' < \overline w_E(n', C') \right)  \big| C=c\bigg].
+v_S(n, c) =  \rho \mathbb E_{C'}\big[ \pi(\check{n}, C')\;  +&\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')} &\left( - \exp(w) + v_S(n, C') \right) d G_W(w) \\
++ \sum_{n' = n+1}^{\check n}\;&\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')} &\left( - \exp(w) + v_S(n', C') \right) d G_W(w) \big| C=c\big],
 \end{split}
 \label{vS_2}
 \end{equation}
 
 The above is the key equation that we will use to numerically compute the
-equilibrium. Now, invoke the distributional assumption on $W$,
+equilibrium. First, we consolidate the econometric error and obtain
+
+\begin{equation}
+\begin{split}
+v_S(n, c) =  \rho \mathbb E_{C'}\big[ \pi(\check{n}, C')\;  +&v_S(n, C') \int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}   d G_W(w)
+ + \sum_{n' = n+1}^{\check n} v_S(n', C')\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')}  d G_W(w) \\
+ - \int_{-\infty}^{\log v_S(n, C')}  \;&\exp(w) d G_W(w) \big| C=c\big].
+\end{split}
+\label{vS_3}
+\end{equation}
+
+Second, we invoke the distributional assumption on $W$,
 
 \begin{equation}
 W \sim N(-\frac{1}{2}\omega^2,\omega^2 ),
@@ -193,34 +180,30 @@ W \sim N(-\frac{1}{2}\omega^2,\omega^2 ),
 
 which gives us a closed form solution for the
 \url{http://en.wikipedia.org/wiki/Log-normal_distribution#Partial_expectation}{partial
-expectation}:
+expectation},
 
 \begin{equation}
-\mathbb E_{W'} \left[  \exp(W') \mathbf 1 \left[  W' < \overline w_S(n, C') \right] \right] =
+\int_{-\infty}^{\log v_S(n, C')}  \exp(w) d G_W(w) =
 \left[ 1 - \Phi \left( \frac{ \frac{1}{2}\omega^2 - \log v_S(n,C')}{\omega} \right) \right]
 \label{partialExpectation}
 \end{equation}
 
 where $\Phi(\cdot)$ refers to the standard normal cumulative distribution
 function. Defining $\tilde \Phi[x] = \Phi\left[ \frac{x + 0.5\omega^2
-}{\omega} \right]$, the event probabilities in (\ref{vS_2}) are
+}{\omega} \right]$, we can compute the remaining two integrals in equation
+(\ref{vS_3}).
 
 \begin{equation}
-\Pr \left( \overline w_E(n+1, C') \leq W' < \overline w_S(n, C')\right) \\
-= \tilde \Phi\left[\log v_S(n,C')\right] - \tilde \Phi\left[\log v_S(n+1,C') - \log (1+\varphi) \right]
+\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}   d G_W(w) = \tilde \Phi\left[\log v_S(n,C')\right] - \tilde \Phi\left[\log v_S(n+1,C') - \log (1+\varphi) \right]
 \label{pSureSurvivalNoEntry}
 \end{equation}
 
-for the number of firms staying the same, and
-
 \begin{equation}
-\Pr \left( \overline w_E(n'+1, C') \leq W' < \overline w_E(n', C') \right) \\
-= \tilde \Phi\left[\log v_S(n',C')-\log (1+\varphi) \right] - \tilde \Phi\left[\log v_S(n'+1,C') - \log(1+ \varphi) \right]
+\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')}  d G_W(w) = \tilde \Phi\left[\log v_S(n',C')-\log (1+\varphi) \right] - \tilde \Phi\left[\log v_S(n'+1,C') - \log(1+ \varphi) \right]
 \label{pEntrySet}
 \end{equation}
 
-for the case of entry. We now implement the value function iteration on
-equation (\ref{vS_2}) in \textsc{Matlab}.
+We now implement the value function iteration on equation (\ref{vS_3}) in \textsc{Matlab}.
 
 \input[2..end]{valueFunctionIteration.m}
 
@@ -252,7 +235,7 @@ We compute the solution to (\ref{eq:indifference1}) in |mixingProbabilities|.
 
 \input[2..end]{mixingProbabilities.m}
 
-\section{Compute Likelihood}
+\section{Likelihood}
 
 Before turning to the computation of the likelihood, we first review the
 likelihood construction described in the paper. Suppose we have data for
@@ -286,9 +269,8 @@ densities:
 \end{equation}
 
 where $f_{C_{t+1,r}}$ and $f_{N_{t+1,r}}$ denote the conditional densities.
-The expression for the conditional density of $N_{t+1,r}$ is referred to in
-the paper as $p\left(N_{r,t+1}\;|\;N_{r,t},C_{r,t};\theta\right)$. That is,
-
+The expression for the conditional density of $N_{t+1,r}$ equals
+$p\left(N_{r,t+1}\;|\;N_{r,t},C_{r,t};\theta\right)$. That is,
 
 \begin{equation}
 f_{N_{t+1,r}} \left(n' | C_{t,r}=c,N_{t,r}=n;\theta_C,\theta_P,\theta_W \right)
@@ -378,7 +360,7 @@ not, we only discuss the computation of standard errors in the third step.
 
 \input[2..end]{likelihoodStep3.m}
 
-\section{Generate Data}
+\section{Data}
 
 Here we describe how to generate a synthetic sample with data on the number of
 active firms and the number of consumers for $\check r $ markets and
@@ -542,7 +524,7 @@ Monte Carlo simulation.
 
 This part of the appendix contains descriptions of all auxiliary functions used that were not described above.
 
-\subsection{Compute Markov process}
+\subsection{Compute Markov Process}
 
 \input[2..end]{markov.m}
 
@@ -555,7 +537,7 @@ This part of the appendix contains descriptions of all auxiliary functions used 
 \input[4..end]{lgwt.m}
 
 \begin{bibliography}
-\bibitem[Abbring et al. (2014)]{acty2014} Abbring, J. H., J. R. Campbell, J. Tilly, N. Yang (2014): "\url{http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2379468}{Very Simple Markov-Perfect Industry Dynamics}," \textit{CentER Discussion Paper Series} No. 2014-008.
+\bibitem[Abbring et al. (2016)]{acty2016} Abbring, J. H., J. R. Campbell, J. Tilly, N. Yang (2016): "Very Simple Markov-Perfect Industry Dynamics: Empirics" \textit{mimeo}.
 \bibitem[Dube et al. (2012)]{ecta2012DubeFoxSu} Dube, J.-P., J. T. Fox, and C.-L. Su (2012): "\url{http://onlinelibrary.wiley.com/doi/10.3982/ECTA8585/abstract}{Improving the Numerical Performance of Static and Dynamic Aggregate Discrete Choice Random Coefficients Demand Estimation}," \textit{Econometrica}, 80, 2231-2267.
 \bibitem[Rust (1987)]{ecta1987Rust} Rust, J. (1987): "\url{http://www.hss.caltech.edu/~mshum/stats/rust.pdf}{Optimal Replacement of GMC Bus Engines: An Empirical Model of Harold Zurcher}," \textit{Econometrica}, 55, 999-1033.
 \bibitem[Tauchen (1986)]{el1986Tauchen} Tauchen, G. (1986): "\url{http://www.sciencedirect.com/science/article/pii/0165176586901680}{Finite State Markov-Chain Approximations to Univariate and Vector Autoregressions}," \textit{Economic Letters}, 20, 177-181.

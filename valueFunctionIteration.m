@@ -2,38 +2,38 @@
 %{
 The function |valueFunctionIteration| requires the arguments
 |Settings| and |Param|. It returns the following four matrices:
-  
+
 \begin{itemize}
-  
+
 \item |vS| is a matrix of dimension $(\check n  + 1) \times \check c$ that
 stores the equilibrium post-survival value functions. By definition, the
 last row consists of zeros (and exists mostly for computational
 convenience).
-  
+
 \item |pEntry| is a matrix of dimension $(\check n  + 1) \times \check c$
 that stores the equilibrium entry probabilities, i.e. each element contains
 the probability that \emph{at least} |row| firms are active post-entry
 under demand state |column|. Again, the last row consists of zeros. Thus,
 the $n^{\text{th}}$ row of |pEntry| stores $\Pr \left(W' < \overline
 w_E(n, C')\right)$.
-  
+
 \item |pEntrySet| is a matrix of dimension $(\check n  + 1) \times \check c$
 that stores the equilibrium probabilities that \emph{exactly} |row| firms
 are active post-entry under demand state |column|. Thus, the
 $n^{\text{th}}$ row of |pEntrySet| stores $\Pr \left(\overline w_E(n + 1,
 C') \leq W' < \overline w_E(n, C')\right)$.
-  
+
 \item |pStay| is a matrix of dimension $\check n  \times \check c$ that
 stores the equilibrium probabilities that  |row| firms find \emph{certain}
 survival profitable under demand state |column|. Thus, the $n^{\text{th}}$
 row of |pStay| stores $\Pr \left(W' < \overline w_S(n, C')\right)$.
-  
+
 \end{itemize}
-  
+
 The goal is to construct the $(\check n  + 1) \times \check c$ matrix |vS|,
 in which the last row is set to zero by construction. Each column in |vS|
 constitutes a fixed point to the Bellman equation characterized by equation
-(\ref{vS_2}). The procedure will follow a backward recursion on the number
+(\ref{vS_3}). The procedure will follow a backward recursion on the number
 of firms, from $\check n $ back to 1. For $n = \check n$, the Bellman
 equation has $v_S(\check n ,c)$ on both sides as entry cannot occur. For
 $n<\check n$, the Bellman equation will depend only on $v_S(n',c)$ for
@@ -51,7 +51,7 @@ pEntrySet = zeros(Settings.nCheck + 1, Settings.cCheck);
 pStay = zeros(Settings.nCheck, Settings.cCheck);
 
 % Now we begin the backward recursion, starting from |nCheck|. We will
-% iterate on |vS(n, :)| using equation (\ref{vS_2}), which we map into the
+% iterate on |vS(n, :)| using equation (\ref{vS_3}), which we map into the
 % relevant \textsc{Matlab} variables below:
 %
 % \begin{equation}
@@ -73,36 +73,36 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % so we do not have to do so repeatedly inside the loops below.
 omega2 = Param.omega ^ 2;
 gridTrans = exp(Settings.logGrid)';
- 
+
 for n = Settings.nCheck:-1:1
-    
+
     iter = 0;
     vSdiff = 1;
 
     % % pre-compute flow surplus so we don't have to do so repeatedly inside the while loop
     flowSurplus = gridTrans * Param.k(n) / n;
-    
+
     while (vSdiff > Settings.tolInner && iter < Settings.maxIter)
-        
+
         iter = iter + 1;
         logvS = log(vS(n, :)');
         pStay(n, :) = normcdf(logvS, -0.5 * omega2, Param.omega);
         partialExp = 1 - normcdf(0.5 * omega2 - logvS, 0, Param.omega);
         valueSureSurvNoEntry = ((pStay(n, :) - pEntry(n + 1, :)) .* vS(n, :))';
         valueAdditionalEntry = sum(pEntrySet((n + 1):end, :) .* vS((n + 1):end, :) , 1)';
-        
+
         vSPrime = (Param.rho * Param.demand.transMat * ...
             (flowSurplus - partialExp + valueSureSurvNoEntry + valueAdditionalEntry))';
-        
+
         vSdiff = max(abs(vS(n, :) - vSPrime));
         vS(n, :) = vSPrime;
-        
+
     end
-    
+
     if (iter == Settings.maxIter)
        error('value function iteration failed');
     end
-    
+
     pEntry(n, :) = normcdf(logvS - log((1 + Param.phi(n))), -0.5 * omega2, Param.omega);
     pEntrySet(n, :) = pEntry(n, :) - pEntry(n + 1, :);
 

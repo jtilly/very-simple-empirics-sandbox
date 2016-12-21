@@ -14,7 +14,7 @@ function aS = mixingProbabilities(N, C, W, vS)
 The function will solve
 (\ref{eq:indifference1}) for $a_S$ using \textsc{Matlab's} |roots| function.
 For the |roots| function to work, we need to transform
-(\ref{indifference}) into polynomial form, which is given by
+(\ref{eq:indifference1}) into polynomial form, which is given by
 \begin{equation}
 \sum_{n'=0}^{n_E-1}
 \underbrace{\left[\sum_{i=0}^{n'} \underbrace{ \underbrace{(-1)^{n'-i}}_{\textbf{signCoef}}

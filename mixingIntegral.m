@@ -11,7 +11,6 @@ For a given survival strategy $a_S(n,c,w)$, the likelihood contribution from
 The term inside the integral is the probability mass function of a
 binomial distribution function with success probability $a_S(n,c,w)$.
 The survival strategies are defined by the indifference condition
-(equation (5) in the paper)
 \begin{equation} \label{eq:indifference2}
 \sum_{n'=1}^{n} {n - 1 \choose n' - 1} a_S^{n' - 1} \left(1-a_S\right)^{n-n'}
 \left(- \exp(w)+v_{S}(n',c)\right)=0.
