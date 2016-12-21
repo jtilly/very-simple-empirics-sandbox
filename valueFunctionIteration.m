@@ -14,19 +14,19 @@ convenience).
 that stores the equilibrium entry probabilities, i.e. each element contains
 the probability that \emph{at least} |row| firms are active post-entry
 under demand state |column|. Again, the last row consists of zeros. Thus,
-the $n^{\text{th}}$ row of |pEntry| stores $\Pr \left(W' < \overline
-w_E(n, C')\right)$.
+the $n^{\text{th}}$ row of |pEntry| stores $\Pr \left(w < \overline
+w_E(n, :)\right)$.
 
 \item |pEntrySet| is a matrix of dimension $(\check n  + 1) \times \check c$
 that stores the equilibrium probabilities that \emph{exactly} |row| firms
 are active post-entry under demand state |column|. Thus, the
 $n^{\text{th}}$ row of |pEntrySet| stores $\Pr \left(\overline w_E(n + 1,
-C') \leq W' < \overline w_E(n, C')\right)$.
+:) \leq w < \overline w_E(n, :)\right)$.
 
 \item |pStay| is a matrix of dimension $\check n  \times \check c$ that
 stores the equilibrium probabilities that  |row| firms find \emph{certain}
 survival profitable under demand state |column|. Thus, the $n^{\text{th}}$
-row of |pStay| stores $\Pr \left(W' < \overline w_S(n, C')\right)$.
+row of |pStay| stores $\Pr \left(w < \overline w_S(n, :)\right)$.
 
 \end{itemize}
 
@@ -41,7 +41,8 @@ $n'>n$, the values of which are already in memory because we are iterating
 backwards.
 
 %}
-function [vS, pEntry, pEntrySet, pStay] = valueFunctionIteration(Settings, Param)
+function [vS, pEntry, pEntrySet, pStay] = ...
+    valueFunctionIteration(Settings, Param)
 
 % We allocate the various matrices that will be returned by the function and
 % set their initial values to zero.
@@ -56,9 +57,9 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 %
 % \begin{equation}
 % \begin{split}
-% v_S(n,c) &=  \rho \mathbb E_{C'}\bigg[ \; & \overbrace{ \pi(n,C')}^{\textbf{flowSurplus}}  - \overbrace{\left[ 1 - \tilde \Phi \left(\omega ^ 2 - \log v_S(n,C') \right) \right]}^{\textbf{partialExp}} \\
-%          &                              + & \overbrace{v_S(n, C') \left(\tilde \Phi\left[\log v_S(n,C')\right] - \tilde \Phi\left[\log v_S(n + 1,C') - \log (1+\varphi)\right]\right)}^{\textbf{valueSureSurvNoEntry}}  \\
-%          &                              + & \overbrace{\sum_{n'=n + 1}^{\check n} v_S(n', C') \left(\tilde \Phi\left[\log v_S(n',C')-\log (1+\varphi) \right] - \tilde \Phi\left[\log v_S(n' + 1,C') - \log(1+ \varphi) \right]  \right) }^{\textbf{valueAdditionalEntry}} \bigg| C=c\bigg].
+% v_S(n,c) &=  \rho \mathbb E_{C'}\bigg[ \; & \overbrace{ \pi(n,C')}^{\textbf{flowSurplus}}  - \overbrace{\left[ 1 - G_W \left(\theta_W ^ 2 - \log v_S(n,C') \right) \right]}^{\textbf{partialExp}} \\
+%          &                              + & \overbrace{v_S(n, C') \left(G_W\left[\log v_S(n,C')\right] - G_W\left[\log v_S(n + 1,C') - \log (1+\varphi)\right]\right)}^{\textbf{valueSureSurvNoEntry}}  \\
+%          &                              + & \overbrace{\sum_{n'=n + 1}^{\check n} v_S(n', C') \left(G_W\left[\log v_S(n',C')-\log (1+\varphi) \right] - G_W\left[\log v_S(n' + 1,C') - \log(1+ \varphi) \right]  \right) }^{\textbf{valueAdditionalEntry}} \bigg| C=c\bigg].
 % \end{split}
 % \end{equation}
 %
@@ -69,7 +70,7 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % difference |vSdiff| between  |vS(n, :)| and its update |vSPrime| does not
 % exceed the stopping  criterion, |Settings.tolInner|.  Start by
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).
-% We pre-compute $\omega ^ 2$ and the demand grid (transposed) at the beginning,
+% We pre-compute $\theta_W ^ 2$ and the demand grid (transposed) at the beginning,
 % so we do not have to do so repeatedly inside the loops below.
 omega2 = Param.omega ^ 2;
 gridTrans = exp(Settings.logGrid)';
@@ -88,11 +89,13 @@ for n = Settings.nCheck:-1:1
         logvS = log(vS(n, :)');
         pStay(n, :) = normcdf(logvS, -0.5 * omega2, Param.omega);
         partialExp = 1 - normcdf(0.5 * omega2 - logvS, 0, Param.omega);
-        valueSureSurvNoEntry = ((pStay(n, :) - pEntry(n + 1, :)) .* vS(n, :))';
-        valueAdditionalEntry = sum(pEntrySet((n + 1):end, :) .* vS((n + 1):end, :) , 1)';
+        valueSureSurvNoEntry = ...
+            ((pStay(n, :) - pEntry(n + 1, :)) .* vS(n, :))';
+        valueAdditionalEntry = ...
+            sum(pEntrySet((n + 1):end, :) .* vS((n + 1):end, :) , 1)';
 
-        vSPrime = (Param.rho * Param.demand.transMat * ...
-            (flowSurplus - partialExp + valueSureSurvNoEntry + valueAdditionalEntry))';
+        vSPrime = (Param.rho * Param.demand.transMat * (flowSurplus ...
+            - partialExp + valueSureSurvNoEntry + valueAdditionalEntry))';
 
         vSdiff = max(abs(vS(n, :) - vSPrime));
         vS(n, :) = vSPrime;
@@ -103,7 +106,8 @@ for n = Settings.nCheck:-1:1
        error('value function iteration failed');
     end
 
-    pEntry(n, :) = normcdf(logvS - log((1 + Param.phi(n))), -0.5 * omega2, Param.omega);
+    pEntry(n, :) = normcdf(logvS - log((1 + Param.phi(n))), ...
+                           -0.5 * omega2, Param.omega);
     pEntrySet(n, :) = pEntry(n, :) - pEntry(n + 1, :);
 
 end

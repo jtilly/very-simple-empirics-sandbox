@@ -124,7 +124,7 @@ The expectation ${\mathbb E}_{N'}$ over $N'$ takes survival of the firm of inter
 
 A firm's post-survival value equals the expected sum of the surplus and post-entry value that accrue to the firm in the next period, discounted to the current period with $\rho$:
 \begin{equation}\label{eqn:v_S}
-    v_S(n, c) = \rho \mathbb E_{\{C', W', N_E\}}  \big[ \pi(n, C') + v_E(N_E, C', W') \big | N = n, C=c \big].
+    v_S(n, c) = \rho \mathbb E_{\{C', W', N_E'\}}  \big[ \pi(n, C') + v_E(N_E', C', W') \big | N = n, C=c \big].
 \end{equation}
 
 Here, ${\mathbb E}_{\{C', W', N_E'\}}$ is an expectation over the next period's demand state $C'$, cost shock $W'$, and post-entry number of firms $N_E'$. The distribution of $N_E'$ depends on the equilibrium entry behavior $a_E$. In particular, given $N = n$, $N_E'$ is a deterministic function of $a_E(\cdot, c, w)$.
@@ -176,7 +176,7 @@ v_S(n, c) =  \rho \mathbb E_{C'}\big[ \pi(\check{n}, C')\;  +&v_S(n, C') \int_{\
 Second, we invoke the distributional assumption on $W$,
 
 \begin{equation}
-W \sim N(-\frac{1}{2}\omega^2,\omega^2 ),
+W \sim N(-\frac{1}{2}\theta_W^2,\theta_W^2 ),
 \end{equation}
 
 which gives us a closed form solution for the
@@ -185,22 +185,21 @@ expectation},
 
 \begin{equation}
 \int_{-\infty}^{\log v_S(n, C')}  \exp(w) d G_W(w) =
-\left[ 1 - \Phi \left( \frac{ \frac{1}{2}\omega^2 - \log v_S(n,C')}{\omega} \right) \right]
+\left[ 1 - \Phi \left( \frac{ \frac{1}{2}\theta_W^2 - \log v_S(n,C')}{\theta_W} \right) \right]
 \label{partialExpectation}
 \end{equation}
 
 where $\Phi(\cdot)$ refers to the standard normal cumulative distribution
-function. Defining $\tilde \Phi[x] = \Phi\left[ \frac{x + 0.5\omega^2
-}{\omega} \right]$, we can compute the remaining two integrals in equation
-(\ref{vS_3}).
+function. The remaining two integrals in equation (\ref{vS_3}) can be
+expressed using the cumulative distribution function of $W$:
 
 \begin{equation}
-\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}   d G_W(w) = \tilde \Phi\left[\log v_S(n,C')\right] - \tilde \Phi\left[\log v_S(n+1,C') - \log (1+\varphi) \right]
+\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}   d G_W(w) = G_W\left[\log v_S(n,C')\right] - G_W\left[\log v_S(n+1,C') - \log (1+\varphi) \right]
 \label{pSureSurvivalNoEntry}
 \end{equation}
 
 \begin{equation}
-\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')}  d G_W(w) = \tilde \Phi\left[\log v_S(n',C')-\log (1+\varphi) \right] - \tilde \Phi\left[\log v_S(n'+1,C') - \log(1+ \varphi) \right]
+\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')}  d G_W(w) = G_W\left[\log v_S(n',C')-\log (1+\varphi) \right] - G_W\left[\log v_S(n'+1,C') - \log(1+ \varphi) \right]
 \label{pEntrySet}
 \end{equation}
 
@@ -216,7 +215,7 @@ equilibrium value functions. We know that \emph{when} firms mix between staying
 and exiting, the must receive a continuation value of zero. Firms use mixed
 strategies whenever the cost shock falls into the interval
 \begin{equation}
-\overline w_S(n, c) \leq W < w_S(1, c),
+\overline w_S(n, c) \leq w < w_S(1, c),
 \end{equation}
 which means that it is not profitable for all $n$ active firms to continue, but
 the market is profitable enough for some (at least one) firm to continue.
@@ -245,7 +244,7 @@ that include the demand state $C_{t,r}$ and the number of active firms
 $N_{t,r}$. We wish to estimate the parameter vector
 
 \begin{equation}
-\theta \equiv (\theta_C, \theta_P, \theta_W) \equiv ( (\mu_C, \sigma_C), (k, \varphi), \omega ).
+\theta \equiv (\theta_C, \theta_P, \theta_W) \equiv ( (\mu_C, \sigma_C), (k, \varphi), \theta_W ).
 \end{equation}
 
 The likelihood contribution of a single market-level observation, i.e. a
@@ -472,7 +471,7 @@ that parameterizes the surplus function, $k(n)$.
 \item |Param.phi| is a real valued row vector of length |Settings.nCheck|
 that parameterizes the median of the entry costs, $\varphi(n)$.
 
-\item |Param.omega| is a real and parameterizes the scale, $\omega$, of the
+\item |Param.omega| is a real and parameterizes the scale, $\theta_W$, of the
 cost shock distribution.
 
 \item |Param.demand.mu| is a real and parameterizes the mean, $\mu_C$, of the
