@@ -94,7 +94,7 @@ Param.rho = 1/1.05;
 
 Param.k = [1.8, 1.4, 1.2, 1, 0.9];
 Param.phi = [10, 10, 10, 10, 10];
-Param.omega = 1;
+Param.thetaW = 1;
 Param.demand.mu = 0;
 Param.demand.sigma = 0.02;
 
@@ -102,7 +102,7 @@ Param.demand.sigma = 0.02;
 % three steps of the estimation procedure.
 
 Param.truth.step1 = [Param.demand.mu, Param.demand.sigma];
-Param.truth.step2 = [Param.k, Param.phi(1), Param.omega];
+Param.truth.step2 = [Param.k, Param.phi(1), Param.thetaW];
 Param.truth.step3 = [Param.truth.step2, Param.truth.step1];
 
 % We now generate a synthetic sample that we will then estimate using the
@@ -168,7 +168,7 @@ computingTime.step1 = toc;
 
 Settings.estimates2k = @(x) x(1:Settings.nCheck);
 Settings.estimates2phi = @(x) x(6) * ones(1, Settings.nCheck);
-Settings.estimates2omega = @(x) x(7);
+Settings.estimates2thetaW = @(x) x(7);
 
 % Starting values are the same random draw from a uniform distribution on
 % $[1,5]$:

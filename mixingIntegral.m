@@ -171,7 +171,7 @@ for n = 2:Settings.nCheck
     daSinvdP(:, :, n) =  dexpaSInvdP ./ expaSInv;
 
     intWeights = repmat(w, 1, Settings.cCheck);
-    normaSinv = normpdf(aSinv(:, :, n), -.5*Param.omega^2, Param.omega);
+    normaSinv = normpdf(aSinv(:, :, n), -.5*Param.thetaW^2, Param.thetaW);
     mixingDensity(:, :, n) = daSinvdP(:, :, n) .* normaSinv .* intWeights;
 end
 

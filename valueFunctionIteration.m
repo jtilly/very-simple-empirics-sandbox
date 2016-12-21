@@ -72,7 +72,7 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).
 % We pre-compute $\theta_W ^ 2$ and the demand grid (transposed) at the beginning,
 % so we do not have to do so repeatedly inside the loops below.
-omega2 = Param.omega ^ 2;
+thetaW2 = Param.thetaW ^ 2;
 gridTrans = exp(Settings.logGrid)';
  
 for n = Settings.nCheck:-1:1
@@ -97,8 +97,8 @@ for n = Settings.nCheck:-1:1
  
         iter = iter + 1;
         logvSn = log(vSn);
-        pStayn = normcdf(logvSn, -0.5 * omega2, Param.omega);
-        partialExp = 1 - normcdf(0.5 * omega2 - logvSn, 0, Param.omega);
+        pStayn = normcdf(logvSn, -0.5 * thetaW2, Param.thetaW);
+        partialExp = 1 - normcdf(0.5 * thetaW2 - logvSn, 0, Param.thetaW);
         valueSureSurvNoEntry = (pStayn - pEntrynPlus1) .* vSn;
         vSnPrime = (Param.rho * Param.demand.transMat * (flowSurplus ...
             - partialExp + valueSureSurvNoEntry + valueAdditionalEntry));
@@ -113,7 +113,7 @@ for n = Settings.nCheck:-1:1
  
     vS(n, :) = vSn;
     pStay(n, :) = pStayn;
-    pEntry(n, :) = normcdf(logvSn - log((1 + Param.phi(n))), -0.5 * omega2, Param.omega);
+    pEntry(n, :) = normcdf(logvSn - log((1 + Param.phi(n))), -0.5 * thetaW2, Param.thetaW);
     pEntrySet(n, :) = pEntry(n, :) - pEntry(n + 1, :);
  
 end

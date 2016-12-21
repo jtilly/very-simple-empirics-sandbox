@@ -78,12 +78,12 @@ function [ll, likeCont] = likelihoodStep2(Data, Settings, Param, estimates)
 % We start by mapping the vector |estimates| into the corresponding
 % elements in the |Param| structure. We do this using anonymous functions
 % that are defined in the structure |Settings|. By construction, |Param.k|
-% and |Param.phi| are vectors of length $\check n$. |Param.omega| is a
+% and |Param.phi| are vectors of length $\check n$. |Param.thetaW| is a
 % scalar.
 
 Param.k = Settings.estimates2k(estimates);
 Param.phi = Settings.estimates2phi(estimates);
-Param.omega = Settings.estimates2omega(estimates);
+Param.thetaW = Settings.estimates2thetaW(estimates);
 
 % Now we use |valueFunctionIteration| to solve the model by
 % iterating on the post-survival value function.  We also retrieve |pStay|,

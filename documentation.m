@@ -453,9 +453,9 @@ which will be defined below.
 vector of estimates |x| into the vector valued outcome
 |Param.phi|, which will be defined below.
 
-\item |estimates2omega(x)| is an anonymous function that maps the argument
+\item |estimates2thetaW(x)| is an anonymous function that maps the argument
 a vector of estimates |x| into the real valued outcome
-|Param.omega|, which will be defined below.
+|Param.thetaW|, which will be defined below.
 
 \end{itemize}
 
@@ -471,7 +471,7 @@ that parameterizes the surplus function, $k(n)$.
 \item |Param.phi| is a real valued row vector of length |Settings.nCheck|
 that parameterizes the median of the entry costs, $\varphi(n)$.
 
-\item |Param.omega| is a real and parameterizes the scale, $\theta_W$, of the
+\item |Param.thetaW| is a real and parameterizes the scale, $\theta_W$, of the
 cost shock distribution.
 
 \item |Param.demand.mu| is a real and parameterizes the mean, $\mu_C$, of the
