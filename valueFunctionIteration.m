@@ -46,7 +46,7 @@ function [vS, pEntry, pEntrySet, pStay] = ...
 
 % We allocate the various matrices that will be returned by the function and
 % set their initial values to zero.
-vS = ones(Settings.nCheck + 1, Settings.cCheck);
+vS = zeros(Settings.nCheck + 1, Settings.cCheck);
 pEntry = zeros(Settings.nCheck + 1, Settings.cCheck);
 pEntrySet = zeros(Settings.nCheck + 1, Settings.cCheck);
 pStay = zeros(Settings.nCheck, Settings.cCheck);
@@ -67,62 +67,61 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % left-multiplying the inside of the expectation in the equation above (a
 % column vector with |cCheck| elements) by the transition probability
 % matrix |Param.demand.transMat|.  The iteration is complete when the
-% difference |vSdiff| between  |vS(n, :)| and its update |vSPrime| does not
+% difference |vSdiff| between  |vS(n, :)| and its update |n vSPrime| does not
 % exceed the stopping  criterion, |Settings.tolInner|.  Start by
 % initializing |vSdiff| to 1 (which exceeds |Settings.tolInner|).
 % We pre-compute $\theta_W ^ 2$ and the demand grid (transposed) at the beginning,
 % so we do not have to do so repeatedly inside the loops below.
 omega2 = Param.omega ^ 2;
 gridTrans = exp(Settings.logGrid)';
-
+ 
 for n = Settings.nCheck:-1:1
-
+ 
+    % % initialize
     iter = 0;
     vSdiff = 1;
-
+    vSn = ones(Settings.cCheck, 1);
+ 
     % % pre-compute flow surplus so we don't have to do so repeatedly inside the while loop
     flowSurplus = gridTrans * Param.k(n) / n;
-
-    while (vSdiff > Settings.tolInner && iter < Settings.maxIter)
-
-        iter = iter + 1;
-        logvS = log(vS(n, :)');
-        pStay(n, :) = normcdf(logvS, -0.5 * omega2, Param.omega);
-        partialExp = 1 - normcdf(0.5 * omega2 - logvS, 0, Param.omega);
-        valueSureSurvNoEntry = ...
-            ((pStay(n, :) - pEntry(n + 1, :)) .* vS(n, :))';
-        valueAdditionalEntry = ...
+     
+    % % pre-compute value from additional entry, because this is known
+    valueAdditionalEntry = ...
             sum(pEntrySet((n + 1):end, :) .* vS((n + 1):end, :) , 1)';
-
-        vSPrime = (Param.rho * Param.demand.transMat * (flowSurplus ...
-            - partialExp + valueSureSurvNoEntry + valueAdditionalEntry))';
-
-        vSdiff = max(abs(vS(n, :) - vSPrime));
-        vS(n, :) = vSPrime;
-
+            
+    % % get row (n+1) out of pEntry and store it as column
+    pEntrynPlus1 = pEntry(n + 1, :)';
+ 
+    % % iterate until convergence
+    while (vSdiff > Settings.tolInner && iter < Settings.maxIter)
+ 
+        iter = iter + 1;
+        logvSn = log(vSn);
+        pStayn = normcdf(logvSn, -0.5 * omega2, Param.omega);
+        partialExp = 1 - normcdf(0.5 * omega2 - logvSn, 0, Param.omega);
+        valueSureSurvNoEntry = (pStayn - pEntrynPlus1) .* vSn;
+        vSnPrime = (Param.rho * Param.demand.transMat * (flowSurplus ...
+            - partialExp + valueSureSurvNoEntry + valueAdditionalEntry));
+        vSdiff = max(abs(vSn - vSnPrime));
+        vSn = vSnPrime;
+ 
     end
-
+ 
     if (iter == Settings.maxIter)
        error('value function iteration failed');
     end
-
-    pEntry(n, :) = normcdf(logvS - log((1 + Param.phi(n))), ...
-                           -0.5 * omega2, Param.omega);
+ 
+    vS(n, :) = vSn;
+    pStay(n, :) = pStayn;
+    pEntry(n, :) = normcdf(logvSn - log((1 + Param.phi(n))), -0.5 * omega2, Param.omega);
     pEntrySet(n, :) = pEntry(n, :) - pEntry(n + 1, :);
-
+ 
 end
-
+ 
 % Note that we only need to compute the entry probabilities outside of the
 % value function iteration. We use the variable |iter| to keep track of the
 % number of iterations for each value function iteration. Whenever |iter|
 % exceeds |Settings.maxIter|, the value function iteration is terminated
 % and a error is returned. This concludes
 % |valueFunctionIteration|.
-%
-% The speed of our implementation of |valueFunctionIteration| could be
-% increased if we transposed the matrices |vS|, |pEntry|, |pEntrySet|, and
-% |pStay|. Since \textsc{Matlab} stores matrices in memory in column major order, \textsc{Matlab}
-% faster traverses through the first dimension of a matrix than through the second.
-% We use the slightly slower implementation in this package, because we
-% find it aligns better with the underlying mathematical expressions.
 end
