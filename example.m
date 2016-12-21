@@ -5,7 +5,7 @@
 % changes in the results are not because different random values were
 % generated.
 
-s = RandStream('mlfg6331_64');
+s = RandStream('mlfg6331_64', 'Seed', 12345);
 RandStream.setGlobalStream(s);
 
 % Next, we define two variable structures. The |Settings| structure
