@@ -15,6 +15,7 @@ install:
 script:
 - cd ${TRAVIS_BUILD_DIR}
 - perl ~/komments/kpp.pl documentation.m
+- perl -pi -e 's/\>documentation\.m\</\>Very\ Simple\ Markov-Perfect\ Industry\ Dynamics\:\ Empirics\</g' documentation.m.html
 - zip very-simple.zip *.m *.html
 after_success:
 - cd ~
