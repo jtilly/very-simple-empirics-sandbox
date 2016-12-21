@@ -6,7 +6,8 @@
 \author{Jan Tilly \thanks{Department of Economics, University of Pennsylvania. E-mail: \url{jtilly@econ.upenn.edu}{jtilly@econ.upenn.edu}.}}
 \author{Nan Yang \thanks{Business School, National University of Singapore. E-mail: \url{yangnan@nus.edu.sg}{yangnan@nus.edu.sg}.}}
 
-\date{December, 2016}
+\date{December 2016}
+\head{Very Simple Markov-Perfect Industry Dynamics: Empirics}
 
 \begin{abstract}
 This software package lists and describes the programs
