@@ -57,7 +57,7 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 %
 % \begin{equation}
 % \begin{split}
-% v_S(n,c) &=  \rho \mathbb E_{C'}\bigg[ \; & \overbrace{ \pi(n,C')}^{\textbf{flowSurplus}}  - \overbrace{\left[ 1 - G_W \left(\theta_W ^ 2 - \log v_S(n,C') \right) \right]}^{\textbf{partialExp}} \\
+% v_S(n,c) &=  \rho \mathbb E\bigg[ \; & \overbrace{ \pi(n,C')}^{\textbf{flowSurplus}}  - \overbrace{\left[ 1 - G_W \left(\theta_W ^ 2 - \log v_S(n,C') \right) \right]}^{\textbf{partialExp}} \\
 %          &                              + & \overbrace{v_S(n, C') \left(G_W\left[\log v_S(n,C')\right] - G_W\left[\log v_S(n + 1,C') - \log (1+\varphi)\right]\right)}^{\textbf{valueSureSurvNoEntry}}  \\
 %          &                              + & \overbrace{\sum_{n'=n + 1}^{\check n} v_S(n', C') \left(G_W\left[\log v_S(n',C')-\log (1+\varphi) \right] - G_W\left[\log v_S(n' + 1,C') - \log(1+ \varphi) \right]  \right) }^{\textbf{valueAdditionalEntry}} \bigg| C=c\bigg].
 % \end{split}
@@ -74,27 +74,27 @@ pStay = zeros(Settings.nCheck, Settings.cCheck);
 % so we do not have to do so repeatedly inside the loops below.
 thetaW2 = Param.thetaW ^ 2;
 gridTrans = exp(Settings.logGrid)';
- 
+
 for n = Settings.nCheck:-1:1
- 
+
     % % initialize
     iter = 0;
     vSdiff = 1;
     vSn = ones(Settings.cCheck, 1);
- 
+
     % % pre-compute flow surplus so we don't have to do so repeatedly inside the while loop
     flowSurplus = gridTrans * Param.k(n) / n;
-     
+
     % % pre-compute value from additional entry, because this is known
     valueAdditionalEntry = ...
             sum(pEntrySet((n + 1):end, :) .* vS((n + 1):end, :) , 1)';
-            
+
     % % get row (n+1) out of pEntry and store it as column
     pEntrynPlus1 = pEntry(n + 1, :)';
- 
+
     % % iterate until convergence
     while (vSdiff > Settings.tolInner && iter < Settings.maxIter)
- 
+
         iter = iter + 1;
         logvSn = log(vSn);
         pStayn = normcdf(logvSn, -0.5 * thetaW2, Param.thetaW);
@@ -104,18 +104,18 @@ for n = Settings.nCheck:-1:1
             - partialExp + valueSureSurvNoEntry + valueAdditionalEntry));
         vSdiff = max(abs(vSn - vSnPrime));
         vSn = vSnPrime;
- 
+
     end
- 
+
     if (iter == Settings.maxIter)
        error('value function iteration failed');
     end
- 
+
     vS(n, :) = vSn;
     pStay(n, :) = pStayn;
     pEntry(n, :) = normcdf(logvSn - log((1 + Param.phi(n))), -0.5 * thetaW2, Param.thetaW);
     pEntrySet(n, :) = pEntry(n, :) - pEntry(n + 1, :);
- 
+
 end
 
 % Note that we only need to compute the entry probabilities outside of the

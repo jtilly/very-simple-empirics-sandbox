@@ -117,24 +117,24 @@ In a symmetric Markov-perfect equilibrium, a firm's expected continuation value 
 Because the payoff from leaving the market is zero, a firm's post-entry value in a state $(n_E,c,w)$ equals the probability that it survives, $a_S(n_E,c,w)$, times the expected payoff from surviving. The latter equals this firm's expected post-survival value net of its fixed costs of survival. So, $v_E$ and $v_S$ satisfy
 
 \begin{equation}
-    v_E(n_E, c, w) = a_S(n_E, c, w) \; \bigl(\mathbb E_{N'}\left[v_S(N', c) \big| N_E=n_E, C=c, W=w\right]- \exp(w)\bigr).
+	v_E(n_E,c,w) = a_S(n_E, c,w) \; \left(\mathbb E_{a_S}\left[v_S(N', c) \big| N_E=n_E, C=c, W=w\right]-\exp(w)\right),
 \end{equation}
 
-The expectation ${\mathbb E}_{N'}$ over $N'$ takes survival of the firm of interest as given. That is, it takes $N'$ to be one plus the outcome of $n_E-1$ independent Bernoulli (survival) trials with success probability $a_S(n_E,c,w)$. It conditions on the current values of $C$ and $W$ because these influence the survival probability's value.
+The expectation ${\mathbb E}_{a_S}$ over $N'$ takes survival of the firm of interest as given. That is, it takes $N'$ to be one plus the outcome of $n_E-1$ independent Bernoulli (survival) trials with success probability $a_S(n_E,c,w)$. It conditions on the current values of $C$ and $W$ because these influence the survival probability's value.
 
 A firm's post-survival value equals the expected sum of the surplus and post-entry value that accrue to the firm in the next period, discounted to the current period with $\rho$:
-\begin{equation}\label{eqn:v_S}
-    v_S(n, c) = \rho \mathbb E_{\{C', W', N_E'\}}  \big[ \pi(n, C') + v_E(N_E', C', W') \big | N = n, C=c \big].
+\begin{equation}
+	v_S(n', c) = \rho \mathbb E_{a_E}  \big[ \pi(n', C')  +   v_E(N_E', C', W') \big | N'=n', C=c \big].  \label{eqn:vS}
 \end{equation}
 
-Here, ${\mathbb E}_{\{C', W', N_E'\}}$ is an expectation over the next period's demand state $C'$, cost shock $W'$, and post-entry number of firms $N_E'$. The distribution of $N_E'$ depends on the equilibrium entry behavior $a_E$. In particular, given $N = n$, $N_E'$ is a deterministic function of $a_E(\cdot, c, w)$.
+Here, ${\mathbb E}_{\{a_E\}}$ is an expectation over the next period's demand state $C'$, cost shock $W'$, and post-entry number of firms $N_E'$. The distribution of $N_E'$ depends on the equilibrium entry behavior $a_E$. In particular, given $N = n$, $N_E'$ is a deterministic function of $a_E(\cdot, c, w)$.
 
 A strategy $(a_E,a_S)$ forms a symmetric Markov-perfect equilibrium with payoffs $(v_E, v_S)$ if and only if no firm can gain from a one-shot deviation from its prescriptions. Thus, given the pair of payoff functions $(v_E, v_S)$, their corresponding strategy must satisfy
 
 \begin{equation}
 \begin{split}
-a_E(m, c, w) \in &\,\arg \max_{a \in \{0,1\}} & a \bigl(\mathbb E_{N_E} \left[  v_E(N_E, c, w) | M=m, C=c, W=w\right] -  \varphi \exp(w) \bigr), \\
-a_S(n_E, c, w) \in &\,\arg \max_{a \in [0,1]} & a \bigl(\mathbb E_{N'} \left[v_S(N', c) | N_E=n_E, C=c, W=w\right] - \exp(w) \bigr).
+a_E(m, c, w) \in &\,\arg\max_{a \in \{0,1\}} a \bigl(\mathbb E_{a_E} \left[  v_E(N_E, c, w) | M=m, C=c, W=w\right] -  \varphi \exp(w) \bigr), \\
+a_S(n_E, c, w) \in &\,\arg\max_{a \in [0,1]} a \bigl(\mathbb E_{a_S} \left[v_S(N', c) | N_E=n_E, C=c, W=w\right] - \exp(w) \bigr).
 \end{split}
 \end{equation}
 
@@ -155,7 +155,7 @@ The post-survival value function is given by
 
 \begin{equation}
 \begin{split}
-v_S(n, c) =  \rho \mathbb E_{C'}\big[ \pi(\check{n}, C')\;  +&\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')} &\left( - \exp(w) + v_S(n, C') \right) d G_W(w) \\
+v_S(n, c) =  \rho \mathbb E\big[ \pi(\check{n}, C')\;  +&\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')} &\left( - \exp(w) + v_S(n, C') \right) d G_W(w) \\
 + \sum_{n' = n+1}^{\check n}\;&\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')} &\left( - \exp(w) + v_S(n', C') \right) d G_W(w) \big| C=c\big],
 \end{split}
 \label{vS_2}
@@ -166,7 +166,7 @@ equilibrium. First, we consolidate the econometric error and obtain
 
 \begin{equation}
 \begin{split}
-v_S(n, c) =  \rho \mathbb E_{C'}\big[ \pi(\check{n}, C')\;  +&v_S(n, C') \int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}   d G_W(w)
+v_S(n, c) =  \rho \mathbb E\big[ \pi(\check{n}, C')\;  +&v_S(n, C') \int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}   d G_W(w)
  + \sum_{n' = n+1}^{\check n} v_S(n', C')\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')}  d G_W(w) \\
  - \int_{-\infty}^{\log v_S(n, C')}  \;&\exp(w) d G_W(w) \big| C=c\big].
 \end{split}
