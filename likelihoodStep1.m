@@ -23,13 +23,13 @@ to = Data.C(2:Settings.tCheck, 1:Settings.rCheck);
 % contribution vector and set its value to |NaN|:
 likeCont = NaN(size(from(:),1), 1);
 
-% Assign |mu| and |sigma|, the values with respect to which we will
+% Assign |muC| and |sigmaC|, the values with respect to which we will
 % maximize this likelihood function from the input |estimates|.
-mu = estimates(1);
-sigma = estimates(2);
+muC = estimates(1);
+sigmaC = estimates(2);
 
 % Now, compute the likelihood for each transition that is observed in the
-% data given |mu| and |sigma|. For all transitions, calculate likelihood
+% data given |muC| and |sigmaC|. For all transitions, calculate likelihood
 % contributions according to \cite{el1986Tauchen}. We make a distinction
 % between transitions to interior points of the demand grid and transitions
 % to points on the boundary.
@@ -37,22 +37,22 @@ sigma = estimates(2);
 % Transitions to an interior point yield a likelihood contribution of
 %
 % \begin{equation}
-% \Pi_{i,j} =   Pr\left[ C'=c_{[j]} |C=c_{[i]}\right]
+% \Pi_{i,j} =   Pr\left[C'=c_{[j]} |C=c_{[i]}\right]
 %           =   \Phi\left(\frac{\log c_{[j]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)
 %             - \Phi\left(\frac{\log c_{[j]} - \log c_{[i]} -\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 %
 % Similarly, transition to the lower and upper bound yield likelihood contributions of
 % \begin{equation}
-% \Pi_{i,1} =   Pr\left[ C'=c_{[1]} |C=c_{[i]}\right]
+% \Pi_{i,1} =   Pr\left[C'=c_{[1]} |C=c_{[i]}\right]
 %           =   \Phi\left(\frac{\log c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 %
 % and
 %
 % \begin{equation}
-% \Pi_{i,\check c} = Pr\left[ C'=c_{[\check c ]} |C=c_{[i]}\right]
-%                  = 1-\Phi\left(\frac{\log c_{[\check c ]} - \log c_{[i]} -\frac{d}{2}-\mu_C}{\sigma_C}\right),
+% \Pi_{i,\check c} = Pr\left[C'=c_{[\check c]} |C=c_{[i]}\right]
+%                  = 1-\Phi\left(\frac{\log c_{[\check c]} - \log c_{[i]} -\frac{d}{2}-\mu_C}{\sigma_C}\right),
 % \end{equation}
 %
 % respectively.
@@ -62,17 +62,17 @@ sigma = estimates(2);
 
 selectInteriorTransitions = to > 1 & to < Settings.cCheck;
 
-likeCont(selectInteriorTransitions ) ...
+likeCont(selectInteriorTransitions) ...
     = normcdf((Settings.logGrid(to(selectInteriorTransitions)) ...
-    - Settings.logGrid(from(selectInteriorTransitions)) + Settings.d / 2 - mu) / sigma)...
+    - Settings.logGrid(from(selectInteriorTransitions)) + Settings.d / 2 - muC) / sigmaC)...
     - normcdf((Settings.logGrid(to(selectInteriorTransitions)) ...
-    - Settings.logGrid(from(selectInteriorTransitions)) - Settings.d / 2 - mu) / sigma);
+    - Settings.logGrid(from(selectInteriorTransitions)) - Settings.d / 2 - muC) / sigmaC);
 
 likeCont(to == 1) = normcdf((Settings.logGrid(1) -...
-    Settings.logGrid(from(to == 1)) + Settings.d / 2 - mu) / sigma);
+    Settings.logGrid(from(to == 1)) + Settings.d / 2 - muC) / sigmaC);
 
 likeCont(to == Settings.cCheck) = 1 - normcdf((Settings.logGrid(Settings.cCheck) ...
-    - Settings.logGrid(from(to == Settings.cCheck)) - Settings.d / 2 - mu) / sigma);
+    - Settings.logGrid(from(to == Settings.cCheck)) - Settings.d / 2 - muC) / sigmaC);
 
 ll = -sum(log(likeCont));
 

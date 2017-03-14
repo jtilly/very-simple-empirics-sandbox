@@ -7,12 +7,12 @@ computed using the true values of the demand process parameters $(\mu_C, \sigma_
 that are stored in |Param.truth.step1|. This is used in |example.m| when
 we generate synthetic data on the number of consumers in each market. In this
 case, we will also compute the ergodic distribution |Param.demand.ergDist|.
-Alternatively, if the function is called with the additional inputs |mu|
-and |sigma|, then these parameter values will be used to compute
+Alternatively, if the function is called with the additional inputs |muC|
+and |sigmaC|, then these parameter values will be used to compute
 |Param.demand.transMat|. In this case, |Param.demand.ergDist| will not be
 computed.
 %}
-function Param = markov(Param, Settings, mu, sigma)
+function Param = markov(Param, Settings, muC, sigmaC)
 
 % The code starts with extracting the relevant variables from the
 % |Settings| structure for convenience. If only two input arguments are
@@ -23,8 +23,8 @@ logGrid = Settings.logGrid;
 d = Settings.d;
 
 if nargin == 2
-    mu = Param.demand.mu;
-    sigma = Param.demand.sigma;
+    muC = Param.demand.muC;
+    sigmaC = Param.demand.sigmaC;
 end
 
 %
@@ -36,7 +36,7 @@ end
 % transitioning from state $i$ (row) to state $j$ (column). The
 % transition matrix is of dimension $\check c \times \check c$. The idea of
 % the Tauchen method is intuitive - we assumed the growth of $C$ to be
-% normally distributed with parameters |mu| and |sigma|. Since this is a
+% normally distributed with parameters |muC| and |sigmaC|. Since this is a
 % continuous distribution, while the state space is discrete, we treat a
 % transition to a neighborhood around $c_{[j]}$ as a transition to
 % $c_{[j]}$ itself. These neighborhoods span from one mid-point between two
@@ -49,30 +49,30 @@ end
 transMat = NaN(cCheck, cCheck);
 
 % \begin{equation}
-% \Pi_{i,j}=Pr\left[ C'=c_{[j]} |C=c_{[i]}\right] = \Phi\left(\frac{\log
+% \Pi_{i,j}=Pr\left[C'=c_{[j]} |C=c_{[i]}\right] = \Phi\left(\frac{\log
 % c_{[j]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)-
 % \Phi\left(\frac{\log c_{[j]} - \log c_{[i]}
 % -\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 
 for jX = 2:(cCheck - 1)
-    transMat(:, jX) =  normcdf((logGrid(jX) - logGrid' + d / 2 - mu) / sigma) ...
-                            - normcdf((logGrid(jX) - logGrid'-d / 2-mu) / sigma);
+    transMat(:, jX) =  normcdf((logGrid(jX) - logGrid' + d / 2 - muC) / sigmaC) ...
+                            - normcdf((logGrid(jX) - logGrid'-d / 2-muC) / sigmaC);
 end
 
 %
 % \begin{equation}
-% \Pi_{i,1}=Pr\left[ C'=c_{[1]} |C=c_{[i]}\right] = \Phi\left(\frac{\log
+% \Pi_{i,1}=Pr\left[C'=c_{[1]} |C=c_{[i]}\right] = \Phi\left(\frac{\log
 % c_{[1]} - \log c_{[i]} +\frac{d}{2}-\mu_C}{\sigma_C}\right)
 % \end{equation}
 
-transMat(:, 1) = normcdf((logGrid(1) - logGrid' + d / 2 - mu) / sigma);
+transMat(:, 1) = normcdf((logGrid(1) - logGrid' + d / 2 - muC) / sigmaC);
 
-% \begin{equation} \Pi_{i,1}=Pr\left[ C'=c_{[\check c ]} |C=c_{[i]}\right]
-% = 1-\Phi\left(\frac{\log c_{[\check c ]} - \log c_{[i]}
+% \begin{equation} \Pi_{i,1}=Pr\left[C'=c_{[\check c]} |C=c_{[i]}\right]
+% = 1-\Phi\left(\frac{\log c_{[\check c]} - \log c_{[i]}
 % -\frac{d}{2}-\mu_C}{\sigma_C}\right) \end{equation}
 
-transMat(:,cCheck) = 1 - normcdf((logGrid(cCheck) - logGrid' - d / 2 - mu) / sigma);
+transMat(:,cCheck) = 1 - normcdf((logGrid(cCheck) - logGrid' - d / 2 - muC) / sigmaC);
 
 % This completes the construction of the transition matrix |transMat|,
 % which we now store in the |Param| structure.

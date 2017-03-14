@@ -61,7 +61,7 @@ for nX = 1:Settings.rCheck
         %\% All incumbents stay; there may be entry.
         case N(nX) < Settings.nCheck && (vS(max(1, N(nX)), C(nX)) > exp(W(nX)))
             Nprime(nX) = N(nX) + sum(vS((N(nX) + 1):Settings.nCheck, C(nX)) ...
-                - (1 + Param.phi((N(nX) + 1):Settings.nCheck)') .* exp(W(nX)) > 0);
+                - (1 + Param.phi) .* exp(W(nX)) > 0);
 
         %\% Remaining cases include N(nX)=0 and no entry, or N(nX)=Settings.nCheck and no exit).
         otherwise

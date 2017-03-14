@@ -12,7 +12,7 @@ The term inside the integral is the probability mass function of a
 binomial distribution function with success probability $a_S(n,c,w)$.
 The survival strategies are defined by the indifference condition
 \begin{equation} \label{eq:indifference2}
-\sum_{n'=1}^{n} {n - 1 \choose n' - 1} a_S^{n' - 1} \left(1-a_S\right)^{n-n'}
+\sum_{n'=1}^{n} {n - 1 \choose n' - 1} a_S^{n' - 1}\left(1-a_S\right)^{n-n'}
 \left(- \exp(w)+v_{S}(n',c)\right)=0.
 \end{equation}
 
@@ -36,8 +36,8 @@ This inverse function can be solved for analytically and it is given by
 
 \begin{equation}
 \underbrace{a_S^{-1}(p;c,n)}_{\textbf{aSinv}}
-= \log \left(\underbrace{\sum_{n'=1}^{n} {n - 1 \choose n' - 1}
-      p^{n' - 1} \left(1 - p\right)^{n-n'} v_{S}(n',c) }_{\textbf{expaSInv}}\right)
+= \log\left(\underbrace{\sum_{n'=1}^{n} {n - 1 \choose n' - 1}
+      p^{n' - 1}\left(1 - p\right)^{n-n'} v_{S}(n',c) }_{\textbf{expaSInv}}\right)
 \end{equation}
 
 Then note that $a_S^{-1}(1;c,n) = \log v_S(n,c)$ and $a_S^{-1}(0;c,n) =
@@ -45,10 +45,10 @@ Then note that $a_S^{-1}(1;c,n) = \log v_S(n,c)$ and $a_S^{-1}(0;c,n) =
 We can write the likelihood contribution as an integral over $p$:
 \begin{equation}
 \begin{split}
-&\int_{1}^{0} {n \choose n'}  p^{n'} \left(1 - p\right)^{n-n'}
+&\int_{1}^{0} {n \choose n'}  p^{n'}\left(1 - p\right)^{n-n'}
       \times \frac{da_S^{-1}(p;c,n)}{dp}g_{W}\left[a_S^{-1}(p;c,n)\right]
       dp \\
-= &-\int_{0}^{1} {n \choose n'}  p^{n'} \left(1 - p\right)^{n-n'}
+= &-\int_{0}^{1} {n \choose n'}  p^{n'}\left(1 - p\right)^{n-n'}
       \times \frac{da_S^{-1}(p;c,n)}{dp}g_{W}\left[a_S^{-1}(p;c,n)\right]
       dp \\
 \approx &-\sum_{jX=1}^J {n \choose n'}  p_{jX}^{n'}
@@ -70,7 +70,7 @@ Differentiation of $a_S^{-1}(p;c,n)$ gives
 \begin{equation}
 \underbrace{\frac{da_S^{-1}(p;c,n)}{dp}}_{\textbf{daSinvdP}} =
  \overbrace{ \sum_{n'=1}^{n} \overbrace{{n - 1 \choose n' - 1}
-\left(p^{n'-2} (1 - p)^{(n-n' - 1)} \left( (n' - 1) (1 - p) - p (n-n') \right) \right)}^{\textbf{dbinomialPmfdP}} v_{S}(n',c)}^{\textbf{dexpaSInvdP}} \frac{1}{\underbrace{\exp(a_S^{-1}(p;c,n))}_{\textbf{expaSInv}}}
+\left(p^{n'-2} (1 - p)^{(n-n' - 1)}\left((n' - 1) (1 - p) - p (n-n')\right)\right)}^{\textbf{dbinomialPmfdP}} v_{S}(n',c)}^{\textbf{dexpaSInvdP}} \frac{1}{\underbrace{\exp(a_S^{-1}(p;c,n))}_{\textbf{expaSInv}}}
 \end{equation}
 
 Now, compute the matrix |mixingDensity| using (\ref{mixingDensity}). |mixingDensity| is of dimension
@@ -136,11 +136,11 @@ end
 mixingDensity = zeros(Settings.integrationLength, ...
                       Settings.cCheck, ...
                       Settings.nCheck);
-                  
+
 aSinv = zeros(Settings.integrationLength, ...
                       Settings.cCheck, ...
                       Settings.nCheck);
-                  
+
 daSinvdP = zeros(Settings.integrationLength, ...
                       Settings.cCheck, ...
                       Settings.nCheck);
@@ -160,18 +160,18 @@ for n = 2:Settings.nCheck
             .* (1 - p) .^ (n - nPrime), 1, Settings.cCheck);
         dbinomialPmfdP = nChoosek .* repmat(p .^ (nPrime-2) ...
             .* (1 - p) .^ (n - nPrime - 1) ...
-            .* ( (nPrime - 1) .* (1 - p) - p .* (n - nPrime)), 1, Settings.cCheck);
+            .* ((nPrime - 1) .* (1 - p) - p .* (n - nPrime)), 1, Settings.cCheck);
         repvS =  repmat(vS(nPrime, :), Settings.integrationLength,1);
         expaSInv = expaSInv +  binomialPmf .* repvS ;
         dexpaSInvdP = dexpaSInvdP +  dbinomialPmfdP .* repvS;
 
     end
 
-    aSinv(:, :, n) =  log ( expaSInv );
+    aSinv(:, :, n) =  log(expaSInv);
     daSinvdP(:, :, n) =  dexpaSInvdP ./ expaSInv;
 
     intWeights = repmat(w, 1, Settings.cCheck);
-    normaSinv = normpdf(aSinv(:, :, n), -.5*Param.thetaW^2, Param.thetaW);
+    normaSinv = normpdf(aSinv(:, :, n), -.5*Param.omega^2, Param.omega);
     mixingDensity(:, :, n) = daSinvdP(:, :, n) .* normaSinv .* intWeights;
 end
 

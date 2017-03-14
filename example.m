@@ -81,7 +81,7 @@ Settings.integrationLength = 32;
 % estimation. Note that these options will be used for \textsc{Matlab}'s
 % constrained optimization function |fmincon|.
 
-options = optimset( 'Algorithm', 'interior-point', 'Display', 'iter', ...
+options = optimset('Algorithm', 'interior-point', 'Display', 'iter', ...
     'TolFun', Settings.tolOuter, 'TolX', Settings.tolOuter, ...
     'GradObj', 'off');
 
@@ -93,16 +93,16 @@ Param.rho = 1/1.05;
 % The true values for the estimated parameters in $\theta$ are defined as
 
 Param.k = [1.8, 1.4, 1.2, 1, 0.9];
-Param.phi = [10, 10, 10, 10, 10];
-Param.thetaW = 1;
-Param.demand.mu = 0;
-Param.demand.sigma = 0.02;
+Param.phi = 10;
+Param.omega = 1;
+Param.demand.muC = 0;
+Param.demand.sigmaC = 0.02;
 
 % We then collect the true parameter values into a vector for each of the
 % three steps of the estimation procedure.
 
-Param.truth.step1 = [Param.demand.mu, Param.demand.sigma];
-Param.truth.step2 = [Param.k, Param.phi(1), Param.thetaW];
+Param.truth.step1 = [Param.demand.muC, Param.demand.sigmaC];
+Param.truth.step2 = [Param.k, Param.phi, Param.omega];
 Param.truth.step3 = [Param.truth.step2, Param.truth.step1];
 
 % We now generate a synthetic sample that we will then estimate using the
@@ -131,9 +131,9 @@ from = Data.C(1:Settings.tCheck-1, 1:Settings.rCheck);
 % starting values for $(\mu_C, \sigma_C)$. These are stored in
 % |startValues.step1|
 
-logTransitions = log([from(:) to(:)]);
+logTransitions = log([from(:), to(:)]);
 innovLogC = logTransitions(:, 2) - logTransitions(:, 1);
-startValues.step1 = [mean(innovLogC)  std(innovLogC)];
+startValues.step1 = [mean(innovLogC), std(innovLogC)];
 
 % Declare the first step likelihood function to be the objective function.
 % This is an anonymous function with parameter vector |estimates|
@@ -151,7 +151,7 @@ llhTruth.step1 = objFunStep1(Param.truth.step1);
 % Next, maximize the likelihood function using |fmincon|.  The only
 % constraint under which we are maximizing is that $\sigma_C >0$. We impose
 % this constraint by specifying the lower bound of $(\mu_C, \sigma_C)$ to be
-% |[-inf,0]|. The estimates of $(\mu_C, \sigma_C)$ are stored in
+% |[-inf, 0]|. The estimates of $(\mu_C, \sigma_C)$ are stored in
 % |Estimates.step1|, the likelihood at the optimal value is stored in
 % |llh.step1| and the exit flag (the reason for which the optimization
 % ended) is stored in |exitFlag.step1|.
@@ -161,14 +161,14 @@ tic;
     startValues.step1, [], [], [], [], [-inf, 0], [], [], options);
 computingTime.step1 = toc;
 
-% Now consider the second step, in which we estimate $(k,\varphi,\theta_W)$.
+% Now consider the second step, in which we estimate $(k, \varphi,\omega)$.
 % Start by creating anonymous functions which will be used in
 % |likelihoodStep2| to map the vector of parameter estimates into
 % the |Param| structure:
 
 Settings.estimates2k = @(x) x(1:Settings.nCheck);
-Settings.estimates2phi = @(x) x(6) * ones(1, Settings.nCheck);
-Settings.estimates2thetaW = @(x) x(7);
+Settings.estimates2phi = @(x) x(6);
+Settings.estimates2omega = @(x) x(7);
 
 % Starting values are the same random draw from a uniform distribution on
 % $[1,5]$:
@@ -187,7 +187,7 @@ Param = markov(Param, Settings, Estimates.step1(1), Estimates.step1(2));
 objFunStep2 = @(estimates) likelihoodStep2(Data, Settings, Param, estimates);
 
 % The maximization is constrained by imposing that $(\hat k,\hat
-% \varphi,\hat \theta_W)$ are nonnegative. Store the negative log-likelihood
+% \varphi, \hat \omega)$ are nonnegative. Store the negative log-likelihood
 % at the true parameter values:
 
 lb = zeros(size(startValues.step2));
@@ -211,9 +211,9 @@ startValuesStep3 = [Estimates.step2, Estimates.step1];
 
 objFunStep3 = @(estimates) likelihoodStep3(Data, Settings, Param, estimates);
 
-% The lower bound for all parameter is zero, except for $\mu_C$ which is
-% unbounded. $\mu_C$ corresponds to the second-last entry in the list of
-% parameters:
+% The lower bound for all parameters is zero, except for $\mu_C$ which is
+% unbounded. $\mu_C$ corresponds to the second to last entry in the vector of
+% parameters.
 
 lb = zeros(size(startValuesStep3));
 lb(length(startValuesStep3) - 1) = -inf;

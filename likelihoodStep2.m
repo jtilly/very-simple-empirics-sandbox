@@ -27,7 +27,7 @@
 % probability of observing a transition from $n$ to $n'$ with $0<n'<n$
 % equals
 % \begin{equation} \label{app:eq:llhcontr2}
-% \int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} {n \choose n'} a_{S}(n,c,w)^{n'} \left[1-a_{S}(n,c,w)\right]^{n-n'} g_W(w)dw,
+% \int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} {n \choose n'} a_{S}(n,c,w)^{n'}\left[1-a_{S}(n,c,w)\right]^{n-n'} g_W(w)dw,
 % \end{equation}
 %
 % where $g_W$ is the density of $G_W$. The integrand in
@@ -43,7 +43,7 @@
 % the $n$ firms survives. The probability of these events is
 % \begin{equation}
 % \label{app:eq:llhcontr3}
-% 1-G_W\left[\overline w_{S}(1,c)\right] +\int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)} \left[1-a_{S}(n,c,w)\right]^{n} g_W(w)dw.
+% 1-G_W\left[\overline w_{S}(1,c)\right] +\int_{\overline w_{S}(n,c)}^{\overline w_{S}(1,c)}\left[1-a_{S}(n,c,w)\right]^{n} g_W(w)dw.
 % \end{equation}
 %
 % \item \textbf{Case IV: $\mathbf{n'=0, n=0}$.}
@@ -78,12 +78,11 @@ function [ll, likeCont] = likelihoodStep2(Data, Settings, Param, estimates)
 % We start by mapping the vector |estimates| into the corresponding
 % elements in the |Param| structure. We do this using anonymous functions
 % that are defined in the structure |Settings|. By construction, |Param.k|
-% and |Param.phi| are vectors of length $\check n$. |Param.thetaW| is a
-% scalar.
+% is a vector of length $\check{n}$. |Param.phi| and |Param.omega| are scalars.
 
 Param.k = Settings.estimates2k(estimates);
 Param.phi = Settings.estimates2phi(estimates);
-Param.thetaW = Settings.estimates2thetaW(estimates);
+Param.omega = Settings.estimates2omega(estimates);
 
 % Now we use |valueFunctionIteration| to solve the model by
 % iterating on the post-survival value function.  We also retrieve |pStay|,

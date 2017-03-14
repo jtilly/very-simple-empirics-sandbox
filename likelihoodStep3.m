@@ -9,10 +9,10 @@
 % likelihood contributions |likeCont|, and the covariance matrix
 % |covariance|.
 
-function [ ll, se, likeCont, covariance] = likelihoodStep3(data, Settings, Param, estimates)
+function [ll, se, likeCont, covariance] = likelihoodStep3(data, Settings, Param, estimates)
 
-% Create the transition probability matrix based on the estimates for |mu|
-% and |sigma| which are stored as the last two elements in |estimates|.
+% Create the transition probability matrix based on the estimates for |muC|
+% and |sigmaC| which are stored as the last two elements in |estimates|.
 % Then retrieve the vectors of likelihood contributions from the first two
 % steps and compute the negative log likelihood function of the third step:
 
@@ -65,14 +65,14 @@ likeCont = likeCont1 .* likeCont2;
 % differences:
 %
 % \begin{equation}
-% \frac{\partial \log \left(\ell \left(
-% \theta \right) \right)}{\partial \theta_j} = \frac{\partial \log \left(
-% \ell \left(\theta \right) \right)}{\partial \ell \left(\theta \right)}
-% \cdot \frac{d \ell \left(\theta \right))}{d \theta_j} \approx
-% \frac{\partial \log \left(\ell \left(\theta \right) \right)}{\partial
-% \ell \left(\theta \right)} \cdot \frac{ \ell \left(
-% \theta_j+\epsilon,\theta_{-j} \right) - \ell \left(
-% \theta_j-\epsilon,\theta_{-j} \right))}{2\epsilon}
+% \frac{\partial \log\left(\ell\left(
+% \theta\right)\right)}{\partial \theta_j} = \frac{\partial \log\left(
+% \ell\left(\theta\right)\right)}{\partial \ell\left(\theta\right)}
+% \cdot \frac{d \ell\left(\theta\right))}{d \theta_j} \approx
+% \frac{\partial \log\left(\ell\left(\theta\right)\right)}{\partial
+% \ell\left(\theta\right)} \cdot \frac{ \ell\left(
+% \theta_j+\epsilon,\theta_{-j}\right) - \ell\left(
+% \theta_j-\epsilon,\theta_{-j}\right))}{2\epsilon}
 % \end{equation}
 %
 % The matrix of gradient contributions |gradCont| has
@@ -83,8 +83,8 @@ likeCont = likeCont1 .* likeCont2;
 gradCont = zeros(Settings.rCheck*(Settings.tCheck - 1), length(estimates));
 
 for j = 1:length(estimates)
-    [~, ~, likeContribPlus] = likelihoodStep3(data, Settings, Param, estimates + epsilon(j, :) );
-    [~, ~, likeContribMinus] = likelihoodStep3(data, Settings, Param, estimates - epsilon(j, :) );
+    [~, ~, likeContribPlus] = likelihoodStep3(data, Settings, Param, estimates + epsilon(j, :));
+    [~, ~, likeContribMinus] = likelihoodStep3(data, Settings, Param, estimates - epsilon(j, :));
     gradCont(:, j) = (likeContribPlus - likeContribMinus) / (2 * Settings.fdStep) ./ likeCont;
 end
 

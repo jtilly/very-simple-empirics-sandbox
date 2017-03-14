@@ -29,7 +29,7 @@ vS = valueFunctionIteration(Settings,Param);
 % The cost shocks are iid across markets and periods, so we can draw them
 % all at once and store them in the matrix |W| which is of dimension
 % |Settings.tBurn + Settings.tCheck| by |Settings.rCheck|.
-W = Param.thetaW * randn(Settings.tBurn + Settings.tCheck, Settings.rCheck) -0.5 * Param.thetaW ^ 2;
+W = Param.omega * randn(Settings.tBurn + Settings.tCheck, Settings.rCheck) -0.5 * Param.omega ^ 2;
 
 % Next, we draw an initial demand state from the ergodic distribution of
 % the demand process for each market using the |randomDiscr|
@@ -43,7 +43,7 @@ for t = 2 : Settings.tBurn + Settings.tCheck
 end
 
 % The initial number of firms in each market is drawn randomly from a
-% discrete uniform distribution on $\{ {1,2,\ldots ,\check n } \}$. In each
+% discrete uniform distribution on $\{{1,2,\ldots ,\check n }\}$. In each
 % period following the first one, the number of firms is generated using
 % the |randomFirms| function, which randomly draws realizations of
 % the cost shocks and then uses the firms' equilibrium strategies to update
