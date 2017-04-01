@@ -505,10 +505,10 @@ used that were not described above.
 \begin{bibliography}
 
 \bibitem[Abbring et al. (2017a)]{acty2017a} Abbring, J. H., J. R. Campbell,
-J. Tilly, N. Yang (2017a): "\url{http://jtilly.io/acty1a.pdf}{Very Simple Markov-Perfect Industry Dynamics: Theory}" \textit{mimeo}.
+J. Tilly, N. Yang (2017a): "\url{http://jtilly.io/very-simple-theory.pdf}{Very Simple Markov-Perfect Industry Dynamics: Theory}" \textit{mimeo}.
 
 \bibitem[Abbring et al. (2017b)]{acty2017b} Abbring,
-J. H., J. R. Campbell, J. Tilly, N. Yang (2017b): "\url{http://jtilly.io/acty1b.pdf}{Very Simple
+J. H., J. R. Campbell, J. Tilly, N. Yang (2017b): "\url{http://jtilly.io/very-simple-empirics.pdf}{Very Simple
 Markov-Perfect Industry Dynamics: Empirics}" \textit{mimeo}.
 
 \bibitem[Dube et al. (2012)]{ecta2012DubeFoxSu} Dube, J.-P., J. T. Fox, and
