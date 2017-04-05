@@ -16,11 +16,13 @@ used in \cite{acty2017b}.\end{abstract}
 In this software package, we present \textsc{Matlab} programs that
 implement the estimation algorithm introduced in \cite{acty2017b} using
 simulated data. This software package is intended to serve as a platform
-for replication, experimentation, and teaching. The entire package can be
-downloaded from
-\url{http://jtilly.io/very-simple-markov-perfect/very-simple.zip}{here}.
+for experimentation and teaching. (In the paper, we use C++ code to 
+obtain estimation results for our empirical application on movie theaters 
+and to perform a large number of simulations.)
+
+This Matlab package can be downloaded from \url{http://jtilly.io/very-simple-markov-perfect/very-simple.zip}{here}.
 The code can be executed in \textsc{Matlab} by running the script
-|example.m|.
+|example.m|. 
 
 This documentation is structured as follows. First, we briefly review the
 model presented in \cite{acty2017b}, which is a special case of the model
@@ -100,7 +102,7 @@ nature drawing a new demand state $C_{t+1}$ from the conditional
 distribution $G_C(\cdot\; | \;C_t)$. All firms discount future profits and
 costs with the discount factor $\rho\in[0,1)$.
 
-we will assume that, for each market, the data contain information on
+We assume that, for each market, the data contain information on
 $N_t$, $C_t$, and possibly some time-invariant market characteristics $X$
 that shift the market's primitives. The market-level cost shocks $W_t$ are
 not observed by the econometrician and serve as the model's structural
