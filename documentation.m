@@ -14,15 +14,14 @@
 used in \cite{acty2017b}.\end{abstract}
 
 In this software package, we present \textsc{Matlab} programs that
-implement the estimation algorithm introduced in \cite{acty2017b} using
+implement the estimation algorithm introduced in \cite{acty2017b} on
 simulated data. This software package is intended to serve as a platform
-for experimentation and teaching. (In the paper, we use C++ code to 
-obtain estimation results for our empirical application on movie theaters 
-and to perform a large number of simulations.)
+for experimentation and teaching. In the paper, we use C++ code to obtain estimation results for our empirical application on movie theaters and to perform a large number of simulations. 
 
 This Matlab package can be downloaded from \url{http://jtilly.io/very-simple-markov-perfect/very-simple.zip}{here}.
 The code can be executed in \textsc{Matlab} by running the script
-|example.m|. 
+|example.m|.
+
 
 This documentation is structured as follows. First, we briefly review the
 model presented in \cite{acty2017b}, which is a special case of the model
@@ -35,25 +34,11 @@ primitives.
 
 \section{Model}
 
-Consider a local market. Time is discrete and indexed by
-$t\in\mathbb{N}\equiv\{1,2,\ldots\}$. In period $t$, firms that have
-entered in the past and not yet exited serve the market. We name each firm
-$f\in{\cal F}\equiv\left(\{0\}\cup\mathbb{N}\right)\times\mathbb{N}$. The
-first component of a firm's name gives the date in which it has its only
-opportunity to enter the market, and the second component is its order in
-that date's entry queue. Firms are identical except for the timing of their
-entry opportunities.
+Consider a local market. Time is discrete and indexed by $t\in\mathbb{N}\equiv\{1,2,\ldots\}$. In period $t$, firms that have entered in the past and not yet exited serve the market.  Each firm has a name
+$f\in{\cal F}\equiv{\cal F}_0 \cup\left(\mathbb{N}\times\{1,2,\ldots,\check{\jmath}\}\right).$
+Initial incumbents have distinct names in ${\cal F}_0$, while potential entrants' names are from $\mathbb{N}\times\{1,2,\ldots,\check{\jmath}\}$. The first component of a potential entrant's name gives the period in which it has its only opportunity to enter the market, and the second component gives its position in that period's queue of $\check{\jmath}<\infty$ firms. Aside from the timing of their entry opportunities, the firms are identical.
 
-We divide each period into two subperiods, the entry and survival stages.
-Period $t$ begins on the left with the entry stage. If $t=1$, nature sets
-the number $N_1$ of firms serving the market in period $1$, their names
-$(0,1),\ldots,(0,N_1)$ if $N_1>0$, and the initial demand state $C_1$. If
-$t>1$, these are inherited from the previous period. We assume that $C_t$
-follows a first-order Markov process and denote its support with $\cal C$.
-Throughout the paper, we refer to $C_t$ as ``demand,'' but it can encompass
-any observed, relevant, and time-varying characteristics of the market,
-depending on the empirical context. In our empirical application, $C_t$ is
-the local market's residential population.
+We divide each period into two subperiods, the entry and survival stages. Period $t$ begins on the left with the entry stage.  If $t=1$, nature sets the number $N_1$ of firms serving the market in period $1$ and the initial demand state $C_1$. If $t>1$, these are inherited from the previous period. We assume that $C_t$ follows a first-order Markov process and denote its support with $\cal C$. Throughout the paper, we refer to $C_t$ as ``demand,'' but it can encompass any observed, relevant, and time-varying characteristics of the market, depending on the empirical context. In our empirical application, $C_t$ is the local market's residential population.
 
 Each incumbent firm serves the market and earns a surplus $\pi(N_t,C_t)$.
 We assume that \begin{itemize} \item $\exists \check{\pi}<\infty$ such that
