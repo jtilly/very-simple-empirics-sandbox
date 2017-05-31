@@ -18,7 +18,7 @@ implement the estimation algorithm introduced in \cite{acty2017b} on
 simulated data. This software package is intended to serve as a platform
 for experimentation and teaching. In the paper, we use C++ code to obtain estimation results for our empirical application on movie theaters and to perform a large number of simulations. 
 
-This Matlab package can be downloaded from \url{http://jtilly.io/very-simple-markov-perfect/very-simple.zip}{here}.
+This Matlab package can be downloaded from \url{http://jtilly.io/very-simple-empirics-sandbox/very-simple.zip}{here}.
 The code can be executed in \textsc{Matlab} by running the script
 |example.m|.
 
