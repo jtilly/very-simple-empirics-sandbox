@@ -1,3 +1,6 @@
+# this config file instructs wercker to build the html documentation using a perl
+# script and then to deploy the html file and a zip file with the entire package
+# to my website
 box: ubuntu
 build:
     steps:
