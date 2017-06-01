@@ -1,5 +1,5 @@
 # Very Simple Markov-Perfect Industry Dynamics
-[![Build Status](https://travis-ci.org/jtilly/very-simple-markov-perfect.svg?branch=master)](https://travis-ci.org/jtilly/very-simple-markov-perfect)
+[![wercker status](https://app.wercker.com/status/ea54e79cdbff3000ce7e53b9ba795820/s/master "wercker status")](https://app.wercker.com/project/byKey/ea54e79cdbff3000ce7e53b9ba795820)
 
 [![Screenshot](https://raw.github.com/jtilly/very-simple-empirics-sandbox/master/screenshot.png)](http://jtilly.io/acty)
 
