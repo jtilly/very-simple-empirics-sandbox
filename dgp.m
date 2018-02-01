@@ -54,7 +54,7 @@ end
 N(1,:) = randsample(Settings.nCheck, Settings.rCheck, true);
 
 for t = 2:Settings.tBurn+Settings.tCheck
-    N(t, :) = randomFirms(N(t - 1, :)', C(t, :)', W(t, :)', Settings, Param, vS);
+    N(t, :) = randomFirms(N(t - 1, :)', C(t - 1, :)', W(t - 1, :)', Settings, Param, vS);
 end
 
 % Now we have the matrices |N|, |C|, and |W|; each of dimension

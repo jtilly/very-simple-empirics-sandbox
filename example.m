@@ -121,8 +121,8 @@ Param = markov(Param, Settings);
 % \check r $ as we did in |likelihoodStep1|.
 
 Data = dgp(Settings, Param);
+from = Data.C(1:Settings.tCheck - 1, 1:Settings.rCheck);
 to = Data.C(2:Settings.tCheck, 1:Settings.rCheck);
-from = Data.C(1:Settings.tCheck-1, 1:Settings.rCheck);
 
 % These matrices  include $C_{t,r}$  and $C_{t+1,r}$, respectively, for
 % $t=1,\ldots,\check t -1$ and $r=1,\ldots,\check r $, as given in the
@@ -131,7 +131,7 @@ from = Data.C(1:Settings.tCheck-1, 1:Settings.rCheck);
 % starting values for $(\mu_C, \sigma_C)$. These are stored in
 % |startValues.step1|
 
-logTransitions = log([from(:), to(:)]);
+logTransitions = log(Data.C([from(:), to(:)]));
 innovLogC = logTransitions(:, 2) - logTransitions(:, 1);
 startValues.step1 = [mean(innovLogC), std(innovLogC)];
 

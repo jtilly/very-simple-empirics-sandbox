@@ -99,7 +99,7 @@ Param.omega = Settings.estimates2omega(estimates);
 vec = @(x) x(:);
 from = vec(Data.N(1:Settings.tCheck - 1, 1:Settings.rCheck));
 to = vec(Data.N(2:Settings.tCheck, 1:Settings.rCheck));
-demand = vec(Data.C(2:Settings.tCheck, 1:Settings.rCheck));
+demand = vec(Data.C(1:(Settings.tCheck - 1), 1:Settings.rCheck));
 
 % Here and throughout we will
 % convert subscripts to linear indices using the Matlab function
