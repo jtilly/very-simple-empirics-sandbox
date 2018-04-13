@@ -11,10 +11,10 @@
 \head{Very Simple Markov-Perfect Industry Dynamics: Empirics}
 
 \begin{abstract} This software package lists and describes the programs
-used in \cite{acty2017b}.\end{abstract}
+used in \cite{acty2017}.\end{abstract}
 
 In this software package, we present \textsc{Matlab} programs that
-implement the estimation algorithm introduced in \cite{acty2017b} on
+implement the estimation algorithm introduced in \cite{acty2017} on
 simulated data. This software package is intended to serve as a platform
 for experimentation and teaching. In the paper, we use C++ code to obtain estimation results for our empirical application on movie theaters and to perform a large number of simulations. 
 
@@ -24,8 +24,8 @@ The code can be executed in \textsc{Matlab} by running the script
 
 
 This documentation is structured as follows. First, we briefly review the
-model presented in \cite{acty2017b}, which is a special case of the model
-presented in \cite{acty2017a}. Second, we introduce the algorithm that
+model presented in \cite{acty2017}, which is a special case of the model
+presented in \cite{acty2018}. Second, we introduce the algorithm that
 computes the equilibrium and show how to compute the model's likelihood
 function. Third, we discuss all the necessary ingredients to generate data
 from the model. Fourth, we put all of the above together in the script
@@ -491,12 +491,12 @@ used that were not described above.
 
 \begin{bibliography}
 
-\bibitem[Abbring et al. (2017a)]{acty2017a} Abbring, J. H., J. R. Campbell,
-J. Tilly, N. Yang (2017a): "\url{http://jtilly.io/very-simple-theory.pdf}{Very Simple Markov-Perfect Industry Dynamics: Theory}" \textit{mimeo}.
+\bibitem[Abbring et al. (2018)]{acty2018} Abbring, J. H., J. R. Campbell,
+J. Tilly, N. Yang (2018): "\url{http://jtilly.io/very-simple-theory.pdf}{Very Simple Markov-Perfect Industry Dynamics: Theory}," \textit{Econometrica}, 86, 721-735.
 
-\bibitem[Abbring et al. (2017b)]{acty2017b} Abbring,
-J. H., J. R. Campbell, J. Tilly, N. Yang (2017b): "\url{http://jtilly.io/very-simple-empirics.pdf}{Very Simple
-Markov-Perfect Industry Dynamics: Empirics}" \textit{mimeo}.
+\bibitem[Abbring et al. (2017)]{acty2017} Abbring,
+J. H., J. R. Campbell, J. Tilly, N. Yang (2017): "\url{http://jtilly.io/very-simple-empirics.pdf}{Very Simple
+Markov-Perfect Industry Dynamics: Empirics}," \textit{mimeo}.
 
 \bibitem[Dube et al. (2012)]{ecta2012DubeFoxSu} Dube, J.-P., J. T. Fox, and
 C.-L. Su (2012):
