@@ -7,7 +7,7 @@
 \author{Jan Tilly \thanks{Department of Economics, University of Pennsylvania. E-mail: \url{jtilly@econ.upenn.edu}{jtilly@econ.upenn.edu}.}}
 \author{Nan Yang \thanks{Business School, National University of Singapore. E-mail: \url{yangnan@nus.edu.sg}{yangnan@nus.edu.sg}.}}
 
-\date{April 2018}
+\date{May 2018}
 \head{Very Simple Markov-Perfect Industry Dynamics: Empirics}
 
 \begin{abstract} This software package lists and describes the programs
@@ -118,7 +118,7 @@ Recall the definitions of the entry thresholds in the paper,
 The post-survival value function is given by
 
 \begin{equation} \begin{split} v_S(n, c) = \rho \mathbb E\big[
-\pi(\check{n}, C')\; +&\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}
+\pi(n, C')\; +&\int_{\overline{w}_E(n + 1, C')}^{\log v_S(n, C')}
 &\left(- \exp(w) + v_S(n, C')\right) d G_W(w) \\ + \sum_{n' =
 n+1}^{\check n}\;&\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n',
 C')} &\left(- \exp(w) + v_S(n', C')\right) d G_W(w) \big| C=c\big],
@@ -128,7 +128,7 @@ The above is the key equation that we will use to numerically compute the
 equilibrium. First, we consolidate the econometric error and obtain
 
 \begin{equation} \begin{split} v_S(n, c) = \rho \mathbb E\big[
-\pi(\check{n}, C')\; +&v_S(n, C') \int_{\overline{w}_E(n + 1, C')}^{\log
+\pi(n, C')\; +&v_S(n, C') \int_{\overline{w}_E(n + 1, C')}^{\log
 v_S(n, C')}  d G_W(w) + \sum_{n' = n+1}^{\check n} v_S(n',
 C')\int_{\overline{w}_E(n' + 1, C')}^{\overline{w}_E(n', C')} d G_W(w) \\
 - \int_{-\infty}^{\log v_S(n, C')} \;&\exp(w) d G_W(w) \big| C=c\big].
