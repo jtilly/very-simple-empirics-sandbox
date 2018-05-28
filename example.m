@@ -131,7 +131,7 @@ to = Data.C(2:Settings.tCheck, 1:Settings.rCheck);
 % starting values for $(\mu_C, \sigma_C)$. These are stored in
 % |startValues.step1|
 
-logTransitions = log(Data.C([from(:), to(:)]));
+logTransitions = Settings.logGrid([from(:), to(:)]);
 innovLogC = logTransitions(:, 2) - logTransitions(:, 1);
 startValues.step1 = [mean(innovLogC), std(innovLogC)];
 
