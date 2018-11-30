@@ -1,6 +1,6 @@
 %{
 \documentclass{article}
-\title{Matlab Documentation for Very Simple Markov-Perfect Industry Dynamics: Empirics\thanks{We thank Emanuel Marcu for excellent research assistance.}}
+\title{Matlab Documentation for Very Simple Markov-Perfect Industry Dynamics: Empirics\thanks{We thank Emanuel Marcu for excellent research assistance. The research of Jaap Abbring is financially supported by the Netherlands Organisation for Scientific Research (NWO) through Vici grant 453-11-002.}}
 
 \author{Jaap H. Abbring\thanks{CentER, Department of Econometrics \& OR, Tilburg University. E-mail: \url{mailto:jaap@abbring.org}{jaap@abbring.org}.}}
 \author{Jeffrey R. Campbell \thanks{Economic Research, Federal Reserve Bank of Chicago, and CentER, Tilburg University. E-mail: \url{mailto:jcampbell@frbchi.org}{jcampbell@frbchi.org}.}}
