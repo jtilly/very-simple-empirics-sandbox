@@ -4,7 +4,7 @@
 
 \author{Jaap H. Abbring\thanks{CentER, Department of Econometrics \& OR, Tilburg University. E-mail: \url{mailto:jaap@abbring.org}{jaap@abbring.org}.}}
 \author{Jeffrey R. Campbell\thanks{Economic Research, Federal Reserve Bank of Chicago, and CentER, Tilburg University. E-mail: \url{mailto:jcampbell@frbchi.org}{jcampbell@frbchi.org}.}}
-\author{Jan Tilly\thanks{Department of Economics, University of Pennsylvania. E-mail: \url{jtilly@econ.upenn.edu}{jtilly@econ.upenn.edu}.}}
+\author{Jan Tilly\thanks{QuantCo, Inc. E-mail: \url{jan.tilly@quantco.com}{jan.tilly@quantco.com}.}}
 \author{Nan Yang\thanks{Business School, National University of Singapore. E-mail: \url{yangnan@nus.edu.sg}{yangnan@nus.edu.sg}.}}
 
 \date{December 2018}
