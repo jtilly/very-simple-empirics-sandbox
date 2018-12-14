@@ -205,7 +205,7 @@ computingTime.step2 = toc;
 % Now consider the third step, FIML. Start by declaring the estimates from
 % the first two steps to be the starting values for the third step:
 
-startValuesStep3 = [Estimates.step2, Estimates.step1];
+startValues.step3 = [Estimates.step2, Estimates.step1];
 
 % Declare the objective function:
 
@@ -215,8 +215,8 @@ objFunStep3 = @(estimates) likelihoodStep3(Data, Settings, Param, estimates);
 % unbounded. $\mu_C$ corresponds to the second to last entry in the vector of
 % parameters.
 
-lb = zeros(size(startValuesStep3));
-lb(length(startValuesStep3) - 1) = -inf;
+lb = zeros(size(startValues.step3));
+lb(length(startValues.step3) - 1) = -inf;
 
 % Store the negative log-likelihood at the true parameter values:
 
@@ -226,7 +226,7 @@ llhTruth.step3 = objFunStep3(Param.truth.step3);
 
 tic;
 [Estimates.step3, llh.step3, exitFlag.step3] = fmincon(objFunStep3,...
-    startValuesStep3, [], [], [], [], lb, [], [], options);
+    startValues.step3, [], [], [], [], lb, [], [], options);
 computingTime.step3 = toc;
 
 % Compute the standard errors by requesting two output arguments, and store
