@@ -1059,7 +1059,7 @@ sub xhtmlHeader {
 	push @xhtmlHeader, 'MathJax.Hub.Config({ tex2jax: {processClass: "inlineComment"}});';
 	push @xhtmlHeader, "\n";
         push @xhtmlHeader, "</script>";
-	push @xhtmlHeader,'<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>';
+	push @xhtmlHeader,'<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>';
 	push @xhtmlHeader, "\n";
 
 #Finding the |\backslash{}head| command and placing its contents in the |<title>| tag is the next task at hand. For this, we cycle through the lines of |@input|. Upon finding ``|\backslash{}head|,'' the program uses the |last| command to exit the loop. If the input contains no |\backslash{}head| command, then the program places the filename into the |<title>| tag.
