@@ -12,7 +12,6 @@ build:
                 remote="https://$GITHUB_TOKEN@github.com/$WERCKER_GIT_OWNER/dynamic-discrete-choice"
                 git clone $remote komments
                 cd komments
-                pwd
                 git checkout komments
                 cd ..
                 perl komments/kpp.pl dynamicDiscreteChoice.m
